@@ -1,0 +1,112 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+---
+
+<MarketingLayout
+  title="OpenClaw 安装与使用教程"
+  description="用 Astro Starlight 搭建的 OpenClaw 教程站骨架，覆盖安装、上手、案例演示和本地服务页面。"
+>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <article class="hero-copy">
+          <span class="eyebrow">教程网站骨架已就位</span>
+          <h1>安装教程、功能页面、案例演示，一套结构直接展开。</h1>
+          <p class="lead">
+            这个站点基于 Astro Starlight 搭建，适合持续更新 OpenClaw
+            的安装步骤、使用教程、功能说明和本地服务内容。文档和展示页在同一个项目里维护，后续直接从
+            GitHub 提交更新即可自动部署。
+          </p>
+          <div class="hero-actions">
+            <a class="cta cta-primary" href="/docs/">进入教程文档</a>
+            <a class="cta cta-secondary" href="/service/">查看服务页面</a>
+          </div>
+          <div class="hero-list">
+            <div>
+              <strong>教程结构</strong>
+              安装、准备、首次运行、常见问题都能持续扩展。
+            </div>
+            <div>
+              <strong>功能页面</strong>
+              后续加功能介绍、案例页、服务页，不需要换框架。
+            </div>
+            <div>
+              <strong>GitHub 更新</strong>
+              内容提交到单仓库后，可通过 Actions 自动构建发布。
+            </div>
+          </div>
+        </article>
+
+        <aside class="panel">
+          <h2>当前已预留的内容模块</h2>
+          <p>
+            这套骨架默认把教程放在 <code>/docs/</code>，展示型页面放在根路径下，便于后续继续增加业务内容。
+          </p>
+          <ul class="bullet-list">
+            <li><strong>安装教程：</strong> 准备条件、安装步骤、首次运行、FAQ</li>
+            <li><strong>功能页：</strong> 能承接 OpenClaw 功能卖点、适用人群、接入能力说明</li>
+            <li><strong>案例页：</strong> 放现场演示案例、典型使用场景、教学示例</li>
+            <li><strong>服务页：</strong> 放长沙上门安装、教学、报价和联系信息</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">站点结构</span>
+          <h2>文档型内容和展示型页面分开管理</h2>
+        </div>
+        <p>
+          这样做的好处是教程页适合长期维护，功能页适合持续做营销和服务承接，不会互相打架。
+        </p>
+      </div>
+      <div class="card-grid">
+        <article class="section-card">
+          <h3>教程文档</h3>
+          <p>使用 Starlight 的文档能力维护安装和使用说明，导航、搜索、侧边栏都已经就绪。</p>
+        </article>
+        <article class="section-card">
+          <h3>独立页面</h3>
+          <p>自定义首页、功能页、案例页、服务页，适合后续做成交型内容与服务承接。</p>
+        </article>
+        <article class="section-card">
+          <h3>自动部署</h3>
+          <p>已经放好 GitHub Actions 工作流，后续推送到 GitHub 即可自动构建发布到 Pages。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="spotlight">
+        <article class="section-card">
+          <span class="eyebrow">下一步建议</span>
+          <h2>你后面只需要继续填内容。</h2>
+          <ul>
+            <li>把真实安装步骤整理进 <code>src/content/docs/docs/install/</code></li>
+            <li>把使用案例写进 <code>src/content/docs/docs/usage/</code></li>
+            <li>把服务文案改进到 <code>src/pages/service.astro</code></li>
+            <li>把 GitHub 仓库地址替换掉配置里的占位链接</li>
+          </ul>
+        </article>
+        <article class="section-card">
+          <span class="eyebrow">技术方向</span>
+          <h2>为后续功能页面预留了扩展空间。</h2>
+          <p>
+            如果后面要接“套餐说明”“模型接入”“收费页面”“客户案例”“本地服务预约”等内容，可以继续在
+            <code>src/pages/</code> 下添加页面，不需要重新换站。
+          </p>
+          <div class="hero-actions">
+            <a class="cta cta-primary" href="/features/">看功能页骨架</a>
+            <a class="cta cta-secondary" href="/docs/install/overview/">看安装总览</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      当前为首版骨架，可直接继续补充内容并接入 GitHub Pages 自动发布。
+    </footer>
+  </main>
+</MarketingLayout>
