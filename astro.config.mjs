@@ -18,13 +18,6 @@ export default defineConfig({
       title: 'OpenClaw 交付与使用中心',
       description: '面向已交付客户和潜在客户的 OpenClaw 文档、案例、资源与支持中心。',
       pagefind,
-      social: [
-        {
-          icon: 'github',
-          label: 'GitHub',
-          href: 'https://github.com/ZhiBaiAI/openclaw'
-        }
-      ],
       editLink: {
         baseUrl: 'https://github.com/ZhiBaiAI/openclaw/edit/main/'
       },
