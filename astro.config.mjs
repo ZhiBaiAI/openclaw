@@ -52,6 +52,7 @@ export default defineConfig({
         {
           label: '支持资料',
           items: [
+            { label: 'Kimi / Moonshot 模型配置', link: '/docs/reference/model-config-kimi/' },
             { label: '常用命令速查', link: '/docs/reference/common-commands/' },
             { label: '安全清单', link: '/docs/reference/safety-checklist/' },
             { label: '常见问题', link: '/docs/faq/common-issues/' }

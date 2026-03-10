@@ -93,6 +93,7 @@ wsl --install
 
 - 用 Claude 订阅对应的接入方式
 - 或者使用 Anthropic API Key
+- 如果你想接 Kimi，可以直接看 [Kimi / Moonshot 模型配置](../reference/model-config-kimi/)
 - 如果你有其他兼容模型，也可以后面再换
 
 刚开始不需要为了模型选择纠结太久，先选一个稳定可用的方案。
