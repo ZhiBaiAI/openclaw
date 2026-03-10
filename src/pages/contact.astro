@@ -66,8 +66,51 @@ const withBase = (path: string) => `${base}${path}`;
       </div>
     </section>
 
+    <section class="section contact-qr-section">
+      <div class="spotlight">
+        <article class="section-card qr-card">
+          <span class="eyebrow">扫码联系</span>
+          <h2>需要预约交付或继续沟通，直接扫码就行。</h2>
+          <p>适合预约安装、补充需求、反馈使用问题。</p>
+        </article>
+
+        <article class="section-card qr-image-card">
+          <img src={withBase('/wechat-qr.png')} alt="微信联系二维码" />
+          <p>微信扫码添加，备注你的设备类型或问题场景，会更容易快速对上。</p>
+        </article>
+      </div>
+    </section>
+
     <footer class="footer">
       常见问题先自查，仍未解决时再通过现有沟通渠道联系。
     </footer>
   </main>
+
+  <style>
+    .contact-qr-section {
+      padding-top: 0;
+    }
+
+    .qr-card p,
+    .qr-image-card p {
+      margin: 14px 0 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .qr-image-card {
+      justify-items: center;
+      text-align: center;
+      gap: 0;
+    }
+
+    .qr-image-card img {
+      width: min(100%, 220px);
+      border-radius: 24px;
+      border: 1px solid rgba(217, 94, 57, 0.12);
+      background: rgba(255, 252, 247, 0.96);
+      padding: 12px;
+      box-shadow: 0 18px 34px rgba(127, 79, 47, 0.08);
+    }
+  </style>
 </MarketingLayout>
