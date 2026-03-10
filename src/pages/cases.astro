@@ -1,30 +1,282 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => `${base}${path}`;
+
+const cases = [
+  {
+    title: '用 OpenClaw 做小红书自动运营',
+    tag: '内容运营',
+    summary:
+      '把热点收集、选题整理、文案起草和发布准备串成一个流程，适合个人博主和小团队做半自动内容运营。',
+    highlights: [
+      '先收集热点和关键词，再生成适合平台语气的选题方向',
+      '把文案、标题、配图提示词整理成可直接改稿的草案',
+      '适合做日更选题池、账号灵感库和固定栏目运营'
+    ],
+    result:
+      '核心价值不是“完全无人值守”，而是把最耗时的内容准备环节交给 OpenClaw 先打底，人只负责判断和定稿。',
+    source: 'https://cloud.tencent.com/developer/article/2629870'
+  },
+  {
+    title: '10 分钟搭一个 AI 选股助手',
+    tag: '信息筛选',
+    summary:
+      '通过定时任务和规则筛选，让 OpenClaw 每天自动整理一份候选股票列表，适合把公开信息做成固定观察流。',
+    highlights: [
+      '设定固定选股条件和信息来源，按日自动收集与筛选',
+      '输出简洁的候选名单和观察理由，方便你自己二次判断',
+      '适合做每日简报、盘前观察和自定义提醒'
+    ],
+    result:
+      '它更像一个“自动整理投研线索”的助手，而不是替你做最终交易决定的系统。',
+    source: 'https://cloud.tencent.com/developer/article/2631336',
+    caution: '仅适合作为信息整理案例，不构成投资建议。'
+  },
+  {
+    title: '5 分钟把 OpenClaw 接进飞书',
+    tag: '办公协同',
+    summary:
+      '把 OpenClaw 放进飞书后，消息入口、日常协作和办公提醒会更集中，适合团队内部统一使用一个助手入口。',
+    highlights: [
+      '在飞书里直接发起问题、任务或查询，不用额外切换工具',
+      '适合承接日常问答、固定提醒和轻量协作流程',
+      '对经常在手机和电脑之间切换的人尤其友好'
+    ],
+    result:
+      '这类场景的重点是把 AI 放到你本来就在用的工作入口里，而不是再多开一个新系统。',
+    source: 'https://cloud.tencent.com/developer/article/2631667'
+  },
+  {
+    title: '把 OpenClaw 训练成专属营养师',
+    tag: '生活助理',
+    summary:
+      '把饮食偏好、热量目标和外卖选择整理成规则后，OpenClaw 可以先帮你做日常搭配建议和记录提醒。',
+    highlights: [
+      '结合你的减脂目标、饮食偏好和常点餐厅做建议',
+      '适合做“吃什么”“怎么点更稳”“今天还差多少”这类日常问题',
+      '可以把常见餐品整理成长期可复用的个人规则'
+    ],
+    result:
+      '它适合作为饮食记录和选择建议助手，尤其适合高频、重复、需要快速判断的生活场景。',
+    source: 'https://cloud.tencent.com/developer/article/2628308',
+    caution: '适合日常饮食管理，不替代专业医疗或营养建议。'
+  },
+  {
+    title: '配置 Skills 打通苹果生态',
+    tag: '设备联动',
+    summary:
+      '把 OpenClaw 和苹果设备常用能力串起来后，可以让它更像一个跨设备个人助理，而不是只会聊天的机器人。',
+    highlights: [
+      '适合把手机、云端文件和常用设备信息接入同一个助手',
+      '能把跨设备查询和固定操作收敛到一个入口里',
+      '对苹果全家桶用户价值会更明显'
+    ],
+    result:
+      '真正好用的点在于：你不需要记住每个设备各自怎么操作，而是把常见动作交给同一个助手入口。',
+    source: 'https://cloud.tencent.com/developer/article/2628079'
+  }
+];
 ---
 
-<MarketingLayout title="OpenClaw 案例演示">
-  <main class="container section">
-    <div class="section-head">
-      <div>
-        <span class="eyebrow">案例页面</span>
-        <h1>把“能做什么”直接展示出来</h1>
-      </div>
-      <p>建议把现场演示教学里常用的 1 到 2 个案例放到这里，方便用户快速理解。</p>
-    </div>
+<MarketingLayout
+  title="OpenClaw 实际案例"
+  description="把公开教程整理成更容易理解的文字版案例，直接看 OpenClaw 能落地到哪些真实场景。"
+>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <article class="hero-copy">
+          <span class="eyebrow">实际案例</span>
+          <h1>不是只讲概念，直接看能怎么落地。</h1>
+          <p class="lead">
+            下面这些案例，是根据公开教程重新整理的文字版场景说明。去掉了长图和分散步骤，保留真正值得参考的部分：
+            用在哪、怎么串起来、适合什么人、落地时要注意什么。
+          </p>
+          <div class="hero-actions">
+            <a class="cta cta-primary" href="#case-list">直接看案例</a>
+            <a class="cta cta-secondary" href={withBase('/links/')}>看资源导航</a>
+          </div>
+          <div class="hero-list">
+            <div>
+              <strong>偏实战</strong>
+              都是具体可落地的使用方向，不是抽象卖点。
+            </div>
+            <div>
+              <strong>偏文字</strong>
+              全部整理成文字版，适合快速扫一遍抓重点。
+            </div>
+            <div>
+              <strong>偏普通用户</strong>
+              重点看能带来什么结果，不堆太多底层术语。
+            </div>
+          </div>
+        </article>
 
-    <div class="card-grid">
-      <article class="section-card">
-        <h2>案例一：信息整理</h2>
-        <p>演示 OpenClaw 如何搜索信息、提取结果并整理成可复制的内容。</p>
-      </article>
-      <article class="section-card">
-        <h2>案例二：日常助理</h2>
-        <p>演示基础指令、流程联动和个人电脑上的常见使用方式。</p>
-      </article>
-      <article class="section-card">
-        <h2>案例三：企业工作流</h2>
-        <p>后续可扩展成团队协作、数据处理、自动执行类案例页面。</p>
-      </article>
-    </div>
+        <aside class="panel">
+          <h2>怎么看这页更有效</h2>
+          <p>
+            不建议一次把所有案例都照着做。更好的方式是先挑一个和你最接近的场景，跑通后再把规则、工具和 Skill
+            慢慢扩进去。
+          </p>
+          <ul class="bullet-list">
+            <li><strong>内容型用户：</strong> 先看小红书自动运营</li>
+            <li><strong>办公型用户：</strong> 先看飞书接入和苹果生态</li>
+            <li><strong>个人效率型：</strong> 先看营养师和每日筛选系统</li>
+            <li><strong>做演示教学：</strong> 可以直接选 1 到 2 个案例现场演示</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="case-list">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">案例清单</span>
+          <h2>五个方向，覆盖内容、办公、生活和设备联动</h2>
+        </div>
+        <p>每个案例都保留了参考链接，方便你后面继续深挖原始教程。</p>
+      </div>
+
+      <div class="case-grid">
+        {cases.map((item) => (
+          <article class="case-card">
+            <div class="case-head">
+              <span class="case-tag">{item.tag}</span>
+              <h2>{item.title}</h2>
+            </div>
+            <p class="case-summary">{item.summary}</p>
+            <div class="case-box">
+              <strong>这个案例通常怎么用</strong>
+              <ul>
+                {item.highlights.map((point) => (
+                  <li>{point}</li>
+                ))}
+              </ul>
+            </div>
+            <p class="case-result">{item.result}</p>
+            {item.caution && <p class="case-caution">{item.caution}</p>}
+            <a class="resource-link" href={item.source} target="_blank" rel="noreferrer">
+              查看原始教程
+              <span>{item.source.replace(/^https?:\/\//, '')}</span>
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="spotlight">
+        <article class="section-card">
+          <span class="eyebrow">现场演示建议</span>
+          <h2>如果要做教学，优先演示这两类。</h2>
+          <ul>
+            <li>内容运营类：容易看出“收集信息 → 整理结果 → 输出草案”的连贯价值</li>
+            <li>办公协同类：更贴近日常工作，用户也更容易想象自己怎么用</li>
+            <li>生活助理类：适合技术小白，门槛低，代入感强</li>
+          </ul>
+        </article>
+
+        <article class="section-card">
+          <span class="eyebrow">落地提醒</span>
+          <h2>案例能跑起来，不代表可以无脑全自动。</h2>
+          <p>
+            内容发布、投资判断、饮食建议和设备联动这几类场景，都建议保留人工确认环节。真正稳定的用法，
+            通常是让 OpenClaw 先做收集、整理、提醒和草案，人再做最后判断。
+          </p>
+          <div class="hero-actions">
+            <a class="cta cta-primary" href={withBase('/service/')}>看上门服务</a>
+            <a class="cta cta-secondary" href={withBase('/docs/')}>看 7 步教程</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      以上案例根据公开教程整理为文字版，重组了结构和表达，适合站内快速阅读与现场讲解。
+    </footer>
   </main>
+
+  <style>
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .case-card {
+      display: grid;
+      gap: 16px;
+      padding: 26px;
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(126, 72, 42, 0.14);
+      background:
+        radial-gradient(circle at top right, rgba(239, 143, 71, 0.12), transparent 30%),
+        linear-gradient(180deg, rgba(255, 252, 247, 0.96), rgba(255, 246, 238, 0.9));
+      box-shadow: var(--shadow);
+    }
+
+    .case-head {
+      display: grid;
+      gap: 10px;
+    }
+
+    .case-head h2 {
+      font-size: 1.8rem;
+    }
+
+    .case-tag {
+      width: fit-content;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-deep);
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+    }
+
+    .case-summary,
+    .case-result,
+    .case-caution {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .case-box {
+      padding: 16px 18px;
+      border-radius: 20px;
+      background: rgba(255, 248, 241, 0.9);
+      border: 1px solid rgba(217, 94, 57, 0.12);
+    }
+
+    .case-box strong {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--accent-deep);
+    }
+
+    .case-box ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .case-caution {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(95, 137, 103, 0.1);
+      color: #486750;
+      border: 1px solid rgba(95, 137, 103, 0.16);
+    }
+
+    @media (max-width: 960px) {
+      .case-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </MarketingLayout>
