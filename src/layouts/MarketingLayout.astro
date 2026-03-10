@@ -4,7 +4,7 @@ export interface Props {
   description?: string;
 }
 
-const { title, description = 'OpenClaw 安装教程、案例演示与本地部署服务说明。' } =
+const { title, description = 'OpenClaw 交付、使用文档、案例与客户支持中心。' } =
   Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const withBase = (path: string) => `${base}${path}`;
@@ -441,15 +441,16 @@ const withBase = (path: string) => `${base}${path}`;
         <div class="container nav-inner">
           <a class="brand" href={withBase('/')}>
             <span class="brand-mark"></span>
-            <span>OpenClaw 教程站</span>
+            <span>OpenClaw 交付中心</span>
           </a>
           <nav class="nav-links">
-            <a href={withBase('/docs/')}>安装教程</a>
-            <a href={withBase('/links/')}>官方导航</a>
-            <a href={withBase('/features/')}>功能页面</a>
-            <a href={withBase('/cases/')}>案例演示</a>
-            <a href={withBase('/service/')}>上门服务</a>
-            <a class="cta cta-secondary" href={withBase('/contact/')}>联系与更新</a>
+            <a href={withBase('/')}>首页</a>
+            <a href={withBase('/features/')}>方案能力</a>
+            <a href={withBase('/cases/')}>真实案例</a>
+            <a href={withBase('/docs/')}>使用文档</a>
+            <a href={withBase('/links/')}>资源导航</a>
+            <a href={withBase('/service/')}>交付服务</a>
+            <a class="cta cta-secondary" href={withBase('/contact/')}>交付支持</a>
           </nav>
         </div>
       </header>

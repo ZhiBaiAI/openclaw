@@ -1,42 +1,86 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => `${base}${path}`;
+
+const supportDevices = ['Windows 电脑', 'macOS 电脑', 'Linux / 云服务器', '旧主机 / 小型常驻设备'];
+const serviceItems = [
+  ['交付前沟通', '先确认设备、使用场景、聊天入口和你最想先跑通的能力。'],
+  ['部署与调试', '完成环境配置、模型接入、聊天渠道、基础调试和功能验证。'],
+  ['案例演示', '根据你的实际用途做 1 到 2 个小案例现场演示，避免装完不会用。'],
+  ['文档与支持', '交付后继续通过站内文档、资源导航、命令速查和支持页维护使用。']
+];
 ---
 
-<MarketingLayout title="长沙 OpenClaw 上门安装服务">
-  <main class="container section">
-    <div class="hero-grid">
-      <article class="hero-copy">
-        <span class="eyebrow">长沙本地服务页</span>
-        <h1>上门部署、现场调试、案例教学，一次讲清楚。</h1>
-        <p class="lead">
-          这个页面适合承接你当前的本地安装服务内容。现在先放一版骨架，后面你可以继续补价格、联系方式、预约方式和客户案例。
-        </p>
-        <div class="hero-list">
-          <div>
-            <strong>安装前</strong>
-            先沟通使用需求和设备情况，再选合适方案。
+<MarketingLayout
+  title="OpenClaw 交付服务"
+  description="把交付范围、支持设备、服务流程和交付后支持方式集中说明，方便客户判断是否适合。"
+>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <article class="hero-copy">
+          <span class="eyebrow">交付服务</span>
+          <h1>上门或远程都可以，但目标始终是交付一个真正能用的助手。</h1>
+          <p class="lead">
+            这页不是单纯卖安装，而是把交付范围说明白：交付前会沟通需求，交付时会完成部署和演示，
+            交付后还能继续通过文档和支持页维护使用。适合未交付客户先看清楚，也适合已交付客户回头确认支持边界。
+          </p>
+          <div class="hero-actions">
+            <a class="cta cta-primary" href={withBase('/contact/')}>看交付支持</a>
+            <a class="cta cta-secondary" href={withBase('/cases/')}>看真实案例</a>
           </div>
-          <div>
-            <strong>安装中</strong>
-            完成环境配置、部署、调试和功能验证。
-          </div>
-          <div>
-            <strong>安装后</strong>
-            提供教程、案例参考和现场演示，方便快速上手。
-          </div>
-        </div>
-      </article>
+        </article>
 
-      <aside class="panel">
-        <h2>页面后续可补充内容</h2>
-        <ul class="bullet-list">
-          <li>服务内容与支持设备</li>
-          <li>长沙本地服务范围</li>
-          <li>价格与预约方式</li>
-          <li>案例演示与使用教学</li>
-          <li>FAQ 与售后说明</li>
-        </ul>
-      </aside>
-    </div>
+        <aside class="panel">
+          <h2>支持设备</h2>
+          <ul class="bullet-list">
+            {supportDevices.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">交付内容</span>
+          <h2>交付不是一次性安装，而是一套清晰流程</h2>
+        </div>
+        <p>重点是先跑通你的真实使用场景，而不是一开始把所有扩展项都塞进去。</p>
+      </div>
+      <div class="card-grid">
+        {serviceItems.map(([title, text]) => (
+          <article class="section-card">
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="spotlight">
+        <article class="section-card">
+          <span class="eyebrow">适合的客户</span>
+          <ul>
+            <li>想把 OpenClaw 用进真实工作和生活流程，而不是只停留在尝鲜阶段</li>
+            <li>不想自己从零排坑，想直接拿到能用的部署方案</li>
+            <li>希望交付后还有文档、案例和支持入口可持续使用</li>
+          </ul>
+        </article>
+        <article class="section-card">
+          <span class="eyebrow">交付原则</span>
+          <ul>
+            <li>优先跑通 1 到 2 个最贴近你需求的实际场景</li>
+            <li>高风险能力默认保守，不做无边界放权</li>
+            <li>交付后仍以站内文档和支持入口做长期维护</li>
+          </ul>
+        </article>
+      </div>
+    </section>
   </main>
 </MarketingLayout>

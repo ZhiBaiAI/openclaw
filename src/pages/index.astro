@@ -3,59 +3,85 @@ import MarketingLayout from '../layouts/MarketingLayout.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const withBase = (path: string) => `${base}${path}`;
+
+const quickLinks = [
+  {
+    title: '未交付客户',
+    text: '先看方案能力、真实案例和交付服务，判断适不适合你的场景。',
+    href: withBase('/features/'),
+    action: '先看方案能力'
+  },
+  {
+    title: '已交付客户',
+    text: '直接进入 7 步文档、常用命令、FAQ 和交付支持页面。',
+    href: withBase('/docs/'),
+    action: '进入使用文档'
+  }
+];
+
+const capabilityCards = [
+  ['部署交付', '本地电脑、旧设备、云服务器都能规划成可长期运行的 OpenClaw 环境。'],
+  ['接入能力', '聊天入口、邮箱、日历、搜索、浏览器、飞书等能力可按场景逐步接入。'],
+  ['规则调校', '把助手调成更符合你的语言风格、提醒节奏和安全边界。'],
+  ['案例教学', '交付现场会用真实小案例演示，避免装完不会用。'],
+  ['后续更新', '文档、案例、导航和交付支持集中在同一个站里，方便长期维护。'],
+  ['资源入口', '官方站点、SkillHub、精选文章和站内文档已经分好类。']
+];
+
+const deliverySteps = [
+  ['交付前沟通', '先确认设备、使用场景、聊天入口和你最想先跑通的 1 到 2 个功能。'],
+  ['环境部署', '完成系统环境、模型接入、聊天渠道和基础调试。'],
+  ['现场演示', '根据你的使用方式做 1 到 2 个现场小案例，方便直接上手。'],
+  ['文档与支持', '交付后继续通过站内文档、命令速查和支持页维护使用。']
+];
 ---
 
 <MarketingLayout
-  title="OpenClaw 安装与使用教程"
-  description="用 Astro Starlight 搭建的 OpenClaw 教程站骨架，覆盖安装、上手、案例演示和本地服务页面。"
+  title="OpenClaw 交付与使用中心"
+  description="给未交付客户看方案和案例，给已交付客户看文档、案例、资源和支持。"
 >
   <main class="container">
     <section class="hero">
       <div class="hero-grid">
         <article class="hero-copy">
-          <span class="eyebrow">教程网站骨架已就位</span>
-          <h1>安装教程、功能页面、案例演示，一套结构直接展开。</h1>
+          <span class="eyebrow">交付与使用中心</span>
+          <h1>未交付客户看价值，已交付客户直接找文档和支持。</h1>
           <p class="lead">
-            这个站点基于 Astro Starlight 搭建，适合持续更新 OpenClaw
-            的安装步骤、使用教程、功能说明和本地服务内容。文档和展示页在同一个项目里维护，后续直接从
-            GitHub 提交更新即可自动部署。
+            这个站点现在就是给客户实际使用的交付入口。未交付客户可以先看方案能力、
+            案例和交付方式；已交付客户可以直接查 7 步教程、常用命令、资源导航和后续支持。
           </p>
           <div class="hero-actions">
-            <a class="cta cta-primary" href={withBase('/docs/')}>进入教程文档</a>
-            <a class="cta cta-secondary" href={withBase('/links/')}>查看官方导航</a>
-            <a class="cta cta-secondary" href={withBase('/service/')}>查看服务页面</a>
+            <a class="cta cta-primary" href={withBase('/docs/')}>进入使用文档</a>
+            <a class="cta cta-secondary" href={withBase('/service/')}>查看交付服务</a>
+            <a class="cta cta-secondary" href={withBase('/cases/')}>看真实案例</a>
           </div>
           <div class="hero-list">
             <div>
-              <strong>教程结构</strong>
-              安装、准备、首次运行、常见问题都能持续扩展。
+              <strong>先看价值</strong>
+              未交付客户先看方案能力、案例和资源，再决定怎么部署。
             </div>
             <div>
-              <strong>功能页面</strong>
-              后续加功能介绍、案例页、服务页，不需要换框架。
+              <strong>再看文档</strong>
+              已交付客户直接从 7 步教程、命令速查和 FAQ 开始。
             </div>
             <div>
-              <strong>GitHub 更新</strong>
-              内容提交到单仓库后，可通过 Actions 自动构建发布。
-            </div>
-            <div>
-              <strong>官方入口</strong>
-              单独整理了官网、文档、SkillHub 和 GitHub 入口。
+              <strong>持续支持</strong>
+              后续更新、使用问题和资源入口都集中在同一个站里。
             </div>
           </div>
         </article>
 
         <aside class="panel">
-          <h2>当前已预留的内容模块</h2>
-          <p>
-            这套骨架默认把教程放在 <code>/docs/</code>，展示型页面放在根路径下，便于后续继续增加业务内容。
-          </p>
-          <ul class="bullet-list">
-            <li><strong>安装教程：</strong> 准备条件、安装步骤、首次运行、FAQ</li>
-            <li><strong>功能页：</strong> 能承接 OpenClaw 功能卖点、适用人群、接入能力说明</li>
-            <li><strong>案例页：</strong> 放现场演示案例、典型使用场景、教学示例</li>
-            <li><strong>服务页：</strong> 放长沙上门安装、教学、报价和联系信息</li>
-          </ul>
+          <h2>推荐查看路径</h2>
+          <div class="path-grid">
+            {quickLinks.map((item) => (
+              <a class="path-card" href={item.href}>
+                <strong>{item.title}</strong>
+                <span>{item.text}</span>
+                <em>{item.action}</em>
+              </a>
+            ))}
+          </div>
         </aside>
       </div>
     </section>
@@ -63,58 +89,167 @@ const withBase = (path: string) => `${base}${path}`;
     <section class="section">
       <div class="section-head">
         <div>
-          <span class="eyebrow">站点结构</span>
-          <h2>文档型内容和展示型页面分开管理</h2>
+          <span class="eyebrow">你在这里能找到什么</span>
+          <h2>把交付前、交付中、交付后的入口都收在一起</h2>
         </div>
-        <p>
-          这样做的好处是教程页适合长期维护，功能页适合持续做营销和服务承接，不会互相打架。
-        </p>
+        <p>站点结构按客户视角整理，不再让人先理解技术结构，而是先找到自己当前需要的内容。</p>
       </div>
-      <div class="card-grid">
-        <article class="section-card">
-          <h3>教程文档</h3>
-          <p>使用 Starlight 的文档能力维护安装和使用说明，导航、搜索、侧边栏都已经就绪。</p>
-        </article>
-        <article class="section-card">
-          <h3>独立页面</h3>
-          <p>自定义首页、功能页、案例页、服务页，适合后续做成交型内容与服务承接。</p>
-        </article>
-        <article class="section-card">
-          <h3>自动部署</h3>
-          <p>已经放好 GitHub Actions 工作流，后续推送到 GitHub 即可自动构建发布到 Pages。</p>
-        </article>
+      <div class="capability-grid">
+        {capabilityCards.map(([title, text]) => (
+          <article class="capability-card">
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">典型交付</span>
+          <h2>从需求沟通到实际使用，通常会经过这四步</h2>
+        </div>
+        <p>这样设计的目的，是避免“只装上了，但没法真正进入日常流程”。</p>
+      </div>
+      <div class="process-grid">
+        {deliverySteps.map(([title, text], index) => (
+          <article class="process-card">
+            <span class="process-index">0{index + 1}</span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
       </div>
     </section>
 
     <section class="section">
       <div class="spotlight">
         <article class="section-card">
-          <span class="eyebrow">下一步建议</span>
-          <h2>你后面只需要继续填内容。</h2>
+          <span class="eyebrow">如果你还没交付</span>
+          <h2>先判断适不适合你的场景，再决定怎么部署。</h2>
           <ul>
-            <li>把真实安装步骤整理进 <code>src/content/docs/docs/install/</code></li>
-            <li>把使用案例写进 <code>src/content/docs/docs/usage/</code></li>
-            <li>把服务文案改进到 <code>src/pages/service.astro</code></li>
-            <li>把 GitHub 仓库地址替换掉配置里的占位链接</li>
+            <li>先看<a href={withBase('/features/')}>方案能力</a>，对照你自己的使用场景</li>
+            <li>再看<a href={withBase('/cases/')}>真实案例</a>，感受它能怎么落地</li>
+            <li>最后看<a href={withBase('/service/')}>交付服务</a>，确认支持设备和交付方式</li>
           </ul>
         </article>
+
         <article class="section-card">
-          <span class="eyebrow">技术方向</span>
-          <h2>为后续功能页面预留了扩展空间。</h2>
-          <p>
-            如果后面要接“套餐说明”“模型接入”“收费页面”“客户案例”“本地服务预约”等内容，可以继续在
-            <code>src/pages/</code> 下添加页面，不需要重新换站。
-          </p>
-          <div class="hero-actions">
-            <a class="cta cta-primary" href={withBase('/features/')}>看功能页骨架</a>
-            <a class="cta cta-secondary" href={withBase('/docs/install/overview/')}>看安装总览</a>
-          </div>
+          <span class="eyebrow">如果你已经交付</span>
+          <h2>直接进入文档和支持，不用再到处翻入口。</h2>
+          <ul>
+            <li>从<a href={withBase('/docs/')}>7 步教程</a>开始补齐安装和使用流程</li>
+            <li>遇到问题先看<a href={withBase('/docs/reference/common-commands/')}>命令速查</a>和 FAQ</li>
+            <li>需要资源、技能和文章入口时再进<a href={withBase('/links/')}>资源导航</a></li>
+          </ul>
         </article>
       </div>
     </section>
 
     <footer class="footer">
-      当前为首版骨架，可直接继续补充内容并接入 GitHub Pages 自动发布。
+      这个首页现在承担两类角色：对外展示价值，对内承接交付后的实际使用。
     </footer>
   </main>
+
+  <style>
+    .path-grid,
+    .capability-grid,
+    .process-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .path-grid {
+      margin-top: 20px;
+    }
+
+    .path-card,
+    .capability-card,
+    .process-card {
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(217, 94, 57, 0.12);
+      background: rgba(255, 248, 241, 0.88);
+    }
+
+    .path-card strong,
+    .capability-card h3,
+    .process-card h3 {
+      color: var(--accent-deep);
+    }
+
+    .path-card span,
+    .path-card em,
+    .capability-card p,
+    .process-card p {
+      color: var(--muted);
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    .path-card em {
+      font-style: normal;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .capability-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .capability-card {
+      padding: 22px;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      background:
+        radial-gradient(circle at top right, rgba(239, 143, 71, 0.1), transparent 32%),
+        linear-gradient(180deg, rgba(255, 252, 247, 0.96), rgba(255, 247, 239, 0.9));
+    }
+
+    .process-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .process-card {
+      padding: 22px;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      background:
+        linear-gradient(180deg, rgba(255, 252, 247, 0.96), rgba(255, 248, 241, 0.88));
+    }
+
+    .process-index {
+      width: fit-content;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-deep);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .section-card ul {
+      margin-top: 16px;
+    }
+
+    .section-card li {
+      margin-bottom: 10px;
+    }
+
+    .section-card li a {
+      margin: 0 0.18rem;
+      color: var(--accent-deep);
+      font-weight: 800;
+    }
+
+    @media (max-width: 960px) {
+      .capability-grid,
+      .process-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </MarketingLayout>

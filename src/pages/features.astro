@@ -1,30 +1,99 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => `${base}${path}`;
+
+const scenarios = [
+  ['个人效率', '把邮件、日历、搜索、浏览器和提醒收进一个长期可用的个人助手。'],
+  ['内容运营', '适合做选题整理、素材收集、草案生成和固定栏目工作流。'],
+  ['办公协同', '接入飞书、Telegram 等聊天入口，把问答和提醒直接放进日常沟通工具。'],
+  ['信息筛选', '把公开信息整理成固定观察流，减少每天重复查看和汇总的时间。'],
+  ['设备联动', '把手机、电脑、旧设备或云服务器串起来，做长期在线的助手入口。'],
+  ['规则化执行', '通过 SOUL.md、USER.md、AGENTS.md 把助手调成更符合你的工作方式。']
+];
+
+const deliverables = [
+  '可长期运行的部署环境',
+  '可用的聊天入口和模型接入',
+  '基础规则和使用边界',
+  '1 到 2 个现场演示案例',
+  '文档、命令速查和后续支持入口'
+];
 ---
 
-<MarketingLayout title="OpenClaw 功能页面">
-  <main class="container section">
-    <div class="section-head">
-      <div>
-        <span class="eyebrow">功能页骨架</span>
-        <h1>后续可继续加的功能说明页面</h1>
-      </div>
-      <p>这里适合承接产品卖点、适用场景、接入方式和套餐信息。</p>
-    </div>
+<MarketingLayout
+  title="OpenClaw 方案能力"
+  description="给未交付客户快速看清 OpenClaw 适合什么场景、通常会交付什么，以及能怎么长期使用。"
+>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <article class="hero-copy">
+          <span class="eyebrow">方案能力</span>
+          <h1>不是只装一个程序，而是交付一套能长期使用的 AI 助手方案。</h1>
+          <p class="lead">
+            OpenClaw 的价值不在“会聊天”，而在“能接工具、能记规则、能逐步进入你的真实流程”。如果你想知道
+            这套方案适不适合自己，先看这页会比先看安装命令更高效。
+          </p>
+          <div class="hero-actions">
+            <a class="cta cta-primary" href={withBase('/cases/')}>先看真实案例</a>
+            <a class="cta cta-secondary" href={withBase('/service/')}>看交付服务</a>
+          </div>
+        </article>
 
-    <div class="card-grid">
-      <article class="section-card">
-        <h2>自动化工作流</h2>
-        <p>整理浏览器操作、信息搜索、任务处理、常见命令流等可展示能力。</p>
-      </article>
-      <article class="section-card">
-        <h2>场景接入</h2>
-        <p>后续可以补充飞书、Telegram、邮箱、云服务器部署等扩展能力介绍。</p>
-      </article>
-      <article class="section-card">
-        <h2>套餐说明</h2>
-        <p>后续如需区分基础安装、高级调试、企业部署，可在这里单独做承接页面。</p>
-      </article>
-    </div>
+        <aside class="panel">
+          <h2>这页适合谁</h2>
+          <ul class="bullet-list">
+            <li><strong>还没交付：</strong> 想先判断这套方案有没有价值</li>
+            <li><strong>准备部署：</strong> 想知道通常会交付哪些内容</li>
+            <li><strong>已经交付：</strong> 想回头整理自己后续还能扩什么能力</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">适合场景</span>
+          <h2>这些方向最容易先做出明显价值</h2>
+        </div>
+        <p>不建议一开始把所有能力都接上，先从最贴近你日常流程的场景入手，效果会更稳。</p>
+      </div>
+      <div class="card-grid">
+        {scenarios.map(([title, text]) => (
+          <article class="section-card">
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="spotlight">
+        <article class="section-card">
+          <span class="eyebrow">通常交付什么</span>
+          <h2>交付结果应该是能用、会用、后面也找得到入口。</h2>
+          <ul>
+            {deliverables.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </article>
+
+        <article class="section-card">
+          <span class="eyebrow">不建议期待什么</span>
+          <h2>真正稳的方案，通常都保留人工确认环节。</h2>
+          <ul>
+            <li>不建议一开始就追求全自动、零确认</li>
+            <li>高风险操作不建议直接放权给助手</li>
+            <li>先跑通一个入口和一个场景，再慢慢扩技能和自动化</li>
+            <li>长期好用的关键在于规则和流程，而不是一次性功能堆满</li>
+          </ul>
+        </article>
+      </div>
+    </section>
   </main>
 </MarketingLayout>

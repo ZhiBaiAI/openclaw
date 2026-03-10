@@ -1,20 +1,73 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => `${base}${path}`;
 ---
 
-<MarketingLayout title="联系与更新">
-  <main class="container section">
-    <div class="spotlight">
-      <article class="section-card">
-        <span class="eyebrow">联系页</span>
-        <h1>把对外信息集中在这里</h1>
-        <p>建议后续在这里补充微信、电话、预约时间、常见问题和服务说明。</p>
-      </article>
-      <article class="section-card">
-        <span class="eyebrow">GitHub 更新</span>
-        <h2>内容更新方式</h2>
-        <p>把站点推到 GitHub 后，修改 Markdown 或页面文件并提交，即可通过 Actions 自动部署。</p>
-      </article>
-    </div>
+<MarketingLayout
+  title="OpenClaw 交付支持"
+  description="把未交付客户的沟通方式和已交付客户的支持路径分开说明，便于长期使用。"
+>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <article class="hero-copy">
+          <span class="eyebrow">交付支持</span>
+          <h1>未交付客户先沟通需求，已交付客户优先走文档和问题排查。</h1>
+          <p class="lead">
+            这页专门解决“下一步找谁、先看哪里、出现问题怎么提”的问题。这样做能减少来回沟通，也方便后续客户自己先做一轮定位。
+          </p>
+        </article>
+
+        <aside class="panel">
+          <h2>建议先准备这些信息</h2>
+          <ul class="bullet-list">
+            <li>你的设备类型和系统版本</li>
+            <li>你想先跑通的 1 到 2 个实际场景</li>
+            <li>当前已经接入或准备接入的聊天工具</li>
+            <li>如果有问题，附上报错现象、截图和日志</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card-grid">
+        <article class="section-card">
+          <span class="eyebrow">未交付客户</span>
+          <h2>先发需求，不要先发一堆环境细节。</h2>
+          <ul>
+            <li>先说明你想解决什么问题，而不是先贴一堆命令输出</li>
+            <li>告诉我设备类型、常用聊天入口和最希望先跑通的场景</li>
+            <li>通过你当前已经建立的沟通渠道发起预约即可</li>
+          </ul>
+        </article>
+
+        <article class="section-card">
+          <span class="eyebrow">已交付客户</span>
+          <h2>先自查一轮，再发问题会更快定位。</h2>
+          <ul>
+            <li>先看 7 步文档、命令速查和 FAQ</li>
+            <li>再附上你的设备、现象、截图和日志</li>
+            <li>如果是接入、提醒、规则类问题，尽量描述“预期是什么、现在发生了什么”</li>
+          </ul>
+        </article>
+
+        <article class="section-card">
+          <span class="eyebrow">站内支持路径</span>
+          <h2>推荐先按这个顺序找入口。</h2>
+          <ul>
+            <li>先看 <a href={withBase('/docs/')}>使用文档</a></li>
+            <li>再看 <a href={withBase('/docs/reference/common-commands/')}>常用命令速查</a></li>
+            <li>补充看 <a href={withBase('/links/')}>资源导航</a> 和 <a href={withBase('/cases/')}>真实案例</a></li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      当前支持仍以你和我已经建立的沟通渠道为准，站内文档负责承接长期使用和自助排查。
+    </footer>
   </main>
 </MarketingLayout>

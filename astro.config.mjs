@@ -15,8 +15,8 @@ export default defineConfig({
   base,
   integrations: [
     starlight({
-      title: 'OpenClaw 安装与使用教程',
-      description: '面向普通用户的 OpenClaw 安装、使用与本地服务说明网站。',
+      title: 'OpenClaw 交付与使用中心',
+      description: '面向已交付客户和潜在客户的 OpenClaw 文档、案例、资源与支持中心。',
       pagefind,
       social: [
         {
@@ -31,9 +31,9 @@ export default defineConfig({
       customCss: ['./src/styles/starlight.css'],
       sidebar: [
         {
-          label: '开始阅读',
+          label: '交付后开始',
           items: [
-            { label: '从这里开始', link: '/docs/' },
+            { label: '交付后从这里开始', link: '/docs/' },
             { label: '7 步总览', link: '/docs/guide/' }
           ]
         },
@@ -50,7 +50,7 @@ export default defineConfig({
           ]
         },
         {
-          label: '参考资料',
+          label: '支持资料',
           items: [
             { label: '常用命令速查', link: '/docs/reference/common-commands/' },
             { label: '安全清单', link: '/docs/reference/safety-checklist/' },
