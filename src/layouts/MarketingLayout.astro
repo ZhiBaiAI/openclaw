@@ -233,11 +233,12 @@ const withBase = (path: string) => `${base}${path}`;
       }
 
       .split-hero h1 {
-        max-width: 10ch;
+        max-width: 15ch;
         margin-top: 16px;
-        font-size: clamp(2.1rem, 5vw, 3.9rem);
-        line-height: 1;
-        letter-spacing: -0.04em;
+        font-size: clamp(2.2rem, 4.3vw, 3.75rem);
+        line-height: 1.15;
+        letter-spacing: -0.015em;
+        text-wrap: balance;
       }
 
       .split-hero .lead {
@@ -310,7 +311,9 @@ const withBase = (path: string) => `${base}${path}`;
         margin: 0;
         font-family: 'Noto Serif SC', 'Songti SC', serif;
         font-weight: 900;
-        line-height: 1.08;
+        line-height: 1.16;
+        letter-spacing: -0.015em;
+        text-wrap: balance;
       }
 
       h1 {
@@ -492,6 +495,12 @@ const withBase = (path: string) => `${base}${path}`;
 
         .container {
           width: min(calc(100% - 20px), var(--max-width));
+        }
+
+        .split-hero h1 {
+          max-width: none;
+          font-size: clamp(2rem, 8vw, 2.8rem);
+          line-height: 1.18;
         }
       }
     </style>
