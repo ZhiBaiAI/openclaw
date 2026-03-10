@@ -212,6 +212,67 @@ const withBase = (path: string) => `${base}${path}`;
         backdrop-filter: blur(16px);
       }
 
+      .split-hero .hero-grid {
+        grid-template-columns: minmax(0, 1.45fr) 320px;
+        align-items: start;
+        gap: 32px;
+      }
+
+      .split-hero .hero-copy {
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+        overflow: visible;
+      }
+
+      .split-hero .hero-copy::before {
+        display: none;
+      }
+
+      .split-hero h1 {
+        max-width: 10ch;
+        margin-top: 16px;
+        font-size: clamp(2.1rem, 5vw, 3.9rem);
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      .split-hero .lead {
+        max-width: 42rem;
+        margin-top: 14px;
+        font-size: 0.98rem;
+        line-height: 1.75;
+      }
+
+      .split-hero .hero-actions {
+        margin-top: 18px;
+      }
+
+      .split-hero .hero-list {
+        margin-top: 20px;
+      }
+
+      .split-hero .hero-list div {
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+      }
+
+      .split-hero .panel {
+        padding: 16px;
+        border-radius: 20px;
+        background: rgba(255, 250, 245, 0.68);
+        box-shadow: 0 12px 24px rgba(127, 79, 47, 0.06);
+      }
+
+      .split-hero .panel h2 {
+        font-size: 1.1rem;
+      }
+
       .hero-copy {
         padding: 34px;
         position: relative;
@@ -398,6 +459,7 @@ const withBase = (path: string) => `${base}${path}`;
       }
 
       @media (max-width: 960px) {
+        .split-hero .hero-grid,
         .hero-grid,
         .spotlight,
         .card-grid,
