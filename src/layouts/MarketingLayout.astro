@@ -233,7 +233,8 @@ const withBase = (path: string) => `${base}${path}`;
       }
 
       .split-hero h1 {
-        max-width: 15ch;
+        width: min(100%, 820px);
+        max-width: 100%;
         margin-top: 16px;
         font-size: clamp(2.2rem, 4.3vw, 3.75rem);
         line-height: 1.15;
