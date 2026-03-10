@@ -22,6 +22,7 @@ const withBase = (path: string) => `${base}${path}`;
           </p>
           <div class="hero-actions">
             <a class="cta cta-primary" href={withBase('/docs/')}>进入教程文档</a>
+            <a class="cta cta-secondary" href={withBase('/links/')}>查看官方导航</a>
             <a class="cta cta-secondary" href={withBase('/service/')}>查看服务页面</a>
           </div>
           <div class="hero-list">
@@ -36,6 +37,10 @@ const withBase = (path: string) => `${base}${path}`;
             <div>
               <strong>GitHub 更新</strong>
               内容提交到单仓库后，可通过 Actions 自动构建发布。
+            </div>
+            <div>
+              <strong>官方入口</strong>
+              单独整理了官网、文档、ClawHub 和 GitHub 入口。
             </div>
           </div>
         </article>
