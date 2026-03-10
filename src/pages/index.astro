@@ -45,28 +45,12 @@ const deliverySteps = [
       <div class="hero-grid">
         <article class="hero-copy">
           <span class="eyebrow">交付与使用中心</span>
-          <h1>未交付客户看价值，已交付客户直接找文档和支持。</h1>
-          <p class="lead">
-            未交付客户先看方案和案例，已交付客户直接看文档、命令和支持入口。
-          </p>
+          <h1>客户入口</h1>
+          <p class="lead">未交付客户看方案，已交付客户直接看文档和支持。</p>
           <div class="hero-actions">
             <a class="cta cta-primary" href={withBase('/docs/')}>进入使用文档</a>
             <a class="cta cta-secondary" href={withBase('/service/')}>查看交付服务</a>
             <a class="cta cta-secondary" href={withBase('/cases/')}>看真实案例</a>
-          </div>
-          <div class="hero-list">
-            <div>
-              <strong>先看价值</strong>
-              先判断适不适合你的场景。
-            </div>
-            <div>
-              <strong>再看文档</strong>
-              已交付客户直接从文档开始。
-            </div>
-            <div>
-              <strong>持续支持</strong>
-              后续问题和入口都留在站内。
-            </div>
           </div>
         </article>
 
@@ -162,7 +146,7 @@ const deliverySteps = [
     .landing-hero .hero-grid {
       grid-template-columns: minmax(0, 1.5fr) 320px;
       align-items: start;
-      gap: 36px;
+      gap: 28px;
     }
 
     .landing-hero .hero-copy {
@@ -180,40 +164,29 @@ const deliverySteps = [
     }
 
     .landing-hero h1 {
-      max-width: 8ch;
-      margin-top: 20px;
-      font-size: clamp(2.9rem, 8vw, 5.9rem);
-      line-height: 0.96;
-      letter-spacing: -0.05em;
+      max-width: none;
+      margin-top: 16px;
+      font-size: clamp(2rem, 4.8vw, 3.6rem);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
     }
 
     .landing-hero .lead {
-      max-width: 42rem;
-      margin-top: 20px;
-      font-size: 1rem;
-      line-height: 1.82;
+      max-width: 34rem;
+      margin-top: 14px;
+      font-size: 0.98rem;
+      line-height: 1.7;
     }
 
     .landing-hero .hero-actions {
-      margin-top: 24px;
-    }
-
-    .landing-hero .hero-list {
-      margin-top: 24px;
-    }
-
-    .landing-hero .hero-list div {
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
+      margin-top: 18px;
     }
 
     .landing-hero .panel {
-      padding: 18px;
-      border-radius: 24px;
+      padding: 16px;
+      border-radius: 20px;
       background: rgba(255, 250, 245, 0.68);
-      box-shadow: 0 16px 34px rgba(127, 79, 47, 0.08);
+      box-shadow: 0 12px 24px rgba(127, 79, 47, 0.06);
     }
 
     .landing-hero .panel h2 {
