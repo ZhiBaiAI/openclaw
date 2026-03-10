@@ -212,13 +212,15 @@ const withBase = (path: string) => `${base}${path}`;
         backdrop-filter: blur(16px);
       }
 
-      .split-hero .hero-grid {
-        grid-template-columns: minmax(0, 1.45fr) 320px;
+      .split-hero .hero-grid,
+      .landing-hero .hero-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 300px);
         align-items: start;
         gap: 32px;
       }
 
-      .split-hero .hero-copy {
+      .split-hero .hero-copy,
+      .landing-hero .hero-copy {
         padding: 0;
         border: 0;
         border-radius: 0;
@@ -228,11 +230,13 @@ const withBase = (path: string) => `${base}${path}`;
         overflow: visible;
       }
 
-      .split-hero .hero-copy::before {
+      .split-hero .hero-copy::before,
+      .landing-hero .hero-copy::before {
         display: none;
       }
 
-      .split-hero h1 {
+      .split-hero h1,
+      .landing-hero h1 {
         width: min(100%, 820px);
         max-width: 100%;
         margin-top: 16px;
@@ -242,14 +246,16 @@ const withBase = (path: string) => `${base}${path}`;
         text-wrap: balance;
       }
 
-      .split-hero .lead {
+      .split-hero .lead,
+      .landing-hero .lead {
         max-width: 42rem;
         margin-top: 14px;
         font-size: 0.98rem;
         line-height: 1.75;
       }
 
-      .split-hero .hero-actions {
+      .split-hero .hero-actions,
+      .landing-hero .hero-actions {
         margin-top: 18px;
       }
 
@@ -264,14 +270,16 @@ const withBase = (path: string) => `${base}${path}`;
         background: transparent;
       }
 
-      .split-hero .panel {
+      .split-hero .panel,
+      .landing-hero .panel {
         padding: 16px;
         border-radius: 20px;
         background: rgba(255, 250, 245, 0.68);
         box-shadow: 0 12px 24px rgba(127, 79, 47, 0.06);
       }
 
-      .split-hero .panel h2 {
+      .split-hero .panel h2,
+      .landing-hero .panel h2 {
         font-size: 1.1rem;
       }
 
@@ -464,6 +472,7 @@ const withBase = (path: string) => `${base}${path}`;
 
       @media (max-width: 960px) {
         .split-hero .hero-grid,
+        .landing-hero .hero-grid,
         .hero-grid,
         .spotlight,
         .card-grid,
@@ -498,7 +507,8 @@ const withBase = (path: string) => `${base}${path}`;
           width: min(calc(100% - 20px), var(--max-width));
         }
 
-        .split-hero h1 {
+        .split-hero h1,
+        .landing-hero h1 {
           max-width: none;
           font-size: clamp(2rem, 8vw, 2.8rem);
           line-height: 1.18;
