@@ -40,13 +40,13 @@ export default defineConfig({
         {
           label: '7 步上手',
           items: [
-            { label: '第 1 步：先明白 OpenClaw 能帮你做什么', link: '/docs/guide/day-1-what-openclaw-can-do/' },
-            { label: '第 2 步：把助手装起来并连上聊天工具', link: '/docs/guide/day-2-install-and-connect/' },
-            { label: '第 3 步：让它更像“你的助手”', link: '/docs/guide/day-3-make-it-yours/' },
-            { label: '第 4 步：接入邮箱、日历、搜索和浏览器', link: '/docs/guide/day-4-connect-tools/' },
-            { label: '第 5 步：用技能包继续扩展能力', link: '/docs/guide/day-5-add-skills/' },
-            { label: '第 6 步：让它开始主动工作', link: '/docs/guide/day-6-make-it-proactive/' },
-            { label: '第 7 步：进阶、安全和后续路线', link: '/docs/guide/day-7-next-steps/' }
+            { label: '第 1 步：先明白 OpenClaw 能帮你做什么', link: '/docs/guide/step-1-what-openclaw-can-do/' },
+            { label: '第 2 步：把助手装起来并连上聊天工具', link: '/docs/guide/step-2-install-and-connect/' },
+            { label: '第 3 步：让它更像“你的助手”', link: '/docs/guide/step-3-make-it-yours/' },
+            { label: '第 4 步：接入邮箱、日历、搜索和浏览器', link: '/docs/guide/step-4-connect-tools/' },
+            { label: '第 5 步：用技能包继续扩展能力', link: '/docs/guide/step-5-add-skills/' },
+            { label: '第 6 步：让它开始主动工作', link: '/docs/guide/step-6-make-it-proactive/' },
+            { label: '第 7 步：进阶、安全和后续路线', link: '/docs/guide/step-7-next-steps/' }
           ]
         },
         {

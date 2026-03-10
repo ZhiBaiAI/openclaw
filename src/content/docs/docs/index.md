@@ -13,8 +13,8 @@ description: 给普通用户看的 OpenClaw 入门文档，先看清它能做什
 
 ## 时间不多，先看这几篇
 
-- [第 1 步：先明白 OpenClaw 能帮你做什么](./guide/day-1-what-openclaw-can-do/)
-- [第 2 步：把助手装起来并连上聊天工具](./guide/day-2-install-and-connect/)
+- [第 1 步：先明白 OpenClaw 能帮你做什么](./guide/step-1-what-openclaw-can-do/)
+- [第 2 步：把助手装起来并连上聊天工具](./guide/step-2-install-and-connect/)
 - [常用命令速查](./reference/common-commands/)
 - [常见问题](./faq/common-issues/)
 
