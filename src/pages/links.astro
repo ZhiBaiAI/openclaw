@@ -10,7 +10,7 @@ const officialLinks = [
     tag: '官方首页',
     url: 'https://openclaw.ai/',
     summary: '先看产品定位、安装方式、平台支持和官方下载安装入口。',
-    note: '适合第一次了解 OpenClaw 的用户'
+    note: '先用它了解 OpenClaw 能做什么'
   },
   {
     title: 'OpenClaw 官方文档',
@@ -23,7 +23,7 @@ const officialLinks = [
     title: '腾讯 SkillHub',
     tag: '技能入口',
     url: 'https://skillhub.tencent.com/',
-    summary: '统一跳转到腾讯 SkillHub 查找和获取可用技能，不在本站单独做技能市场。',
+    summary: '去腾讯 SkillHub 查找和获取可用技能。',
     note: '需要扩展能力时，从这里找现成技能'
   },
   {
@@ -76,9 +76,9 @@ const localLinks = [
     summary: '从安装到上手的中文整理版教程。'
   },
   {
-    title: '功能页面',
+    title: '方案能力',
     url: withBase('/features/'),
-    summary: '用于展示能力、使用场景和卖点说明。'
+    summary: '先看适合哪些场景、通常会交付什么。'
   },
   {
     title: '案例演示',
@@ -95,16 +95,16 @@ const localLinks = [
 
 <MarketingLayout
   title="OpenClaw 资源导航"
-  description="把 OpenClaw 官方站点、腾讯 SkillHub、精选文章和站内入口集中到一个页面，少走弯路。"
+  description="集中整理 OpenClaw 官方站点、腾讯 SkillHub、精选文章和站内入口。"
 >
   <main class="container">
     <section class="hero split-hero">
       <div class="hero-grid">
         <article class="hero-copy">
           <span class="eyebrow">资源导航</span>
-          <h1>官网、文档、 SkillHub 和精选文章都在这里。</h1>
+          <h1>官网、文档、SkillHub 和精选文章都在这里。</h1>
           <p class="lead">
-            需要查官方入口、技能资源或补充教程时，从这里开始。
+            查官方入口、技能资源和补充教程时，先看这一页。
           </p>
           <div class="hero-actions">
             <a class="cta cta-primary" href="https://openclaw.ai/" target="_blank" rel="noreferrer">
@@ -124,7 +124,7 @@ const localLinks = [
             </div>
             <div>
               <strong>技能入口</strong>
-              技能统一跳转到 SkillHub，不在本站单独做技能市场。
+              需要扩展能力时，直接到 SkillHub 找合适的技能。
             </div>
             <div>
               <strong>更新入口</strong>
@@ -152,7 +152,7 @@ const localLinks = [
           <span class="eyebrow">官方站点</span>
           <h2>先看官方，再按需要找技能和补充文章</h2>
         </div>
-        <p>优先放官方入口，减少找错站。</p>
+        <p>安装、配置和升级，优先以官方信息为准。</p>
       </div>
       <div class="resource-grid">
         {officialLinks.map((item) => (
@@ -198,8 +198,8 @@ const localLinks = [
     <section class="section">
       <div class="spotlight">
         <article class="section-card">
-          <span class="eyebrow">站内入口</span>
-          <h2>站内内容也能从这里继续看。</h2>
+          <span class="eyebrow">站内内容</span>
+          <h2>你还可以继续看这些内容。</h2>
           <div class="mini-grid">
             {localLinks.map((item) => (
               <a class="mini-card" href={item.url}>

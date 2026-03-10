@@ -127,7 +127,7 @@ wsl --install
 - `openclaw daemon restart`
 - `openclaw daemon logs`
 
-如果后面你只记得这几条，已经足够处理大部分入门阶段的问题。
+先记住这几条，已经足够处理大部分入门阶段的问题。
 
 ## 先不要追求“功能全”
 

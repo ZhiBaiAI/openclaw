@@ -42,7 +42,7 @@ const deliverables = [
         </article>
 
         <aside class="panel">
-          <h2>这页适合谁</h2>
+          <h2>适合这些需求</h2>
           <ul class="bullet-list">
             <li><strong>还没交付：</strong> 想先判断这套方案有没有价值</li>
             <li><strong>准备部署：</strong> 想知道通常会交付哪些内容</li>
@@ -58,7 +58,7 @@ const deliverables = [
           <span class="eyebrow">适合场景</span>
           <h2>这些方向最容易先做出明显价值</h2>
         </div>
-        <p>先选最贴近你日常流程的场景。</p>
+        <p>先从你每天都会遇到的高频问题开始。</p>
       </div>
       <div class="card-grid">
         {scenarios.map(([title, text]) => (
@@ -74,7 +74,7 @@ const deliverables = [
       <div class="spotlight">
         <article class="section-card">
           <span class="eyebrow">通常交付什么</span>
-          <h2>交付结果应该是能用、会用、找得到入口。</h2>
+          <h2>交付完成后，你应该能直接开始使用。</h2>
           <ul>
             {deliverables.map((item) => (
               <li>{item}</li>
