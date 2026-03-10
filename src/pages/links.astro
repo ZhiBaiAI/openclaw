@@ -42,6 +42,33 @@ const officialLinks = [
   }
 ];
 
+const articleLinks = [
+  {
+    title: '小白也能轻松入手！OpenClaw + QQ，激活你的第一个 AI 助手',
+    tag: '腾讯云文章',
+    url: 'https://cloud.tencent.com/developer/article/2625147',
+    summary: '更偏入门向，适合想先把 OpenClaw 跟 QQ 接起来、快速跑通第一个聊天入口的用户。'
+  },
+  {
+    title: '让 OpenClaw 接入微信？',
+    tag: '腾讯云文章',
+    url: 'https://cloud.tencent.com/developer/article/2626045',
+    summary: '围绕微信接入思路展开，适合把 OpenClaw 进一步接到日常高频沟通工具里的用户。'
+  },
+  {
+    title: 'OpenClaw 接入飞书：从入门到高效使用',
+    tag: '腾讯云文章',
+    url: 'https://cloud.tencent.com/developer/article/2626151',
+    summary: '偏办公协作场景，适合想把 OpenClaw 用在团队通知、流程协作和企业沟通里的用户。'
+  },
+  {
+    title: 'OpenClaw × 钉钉：让 AI 助手 7×24 小时在线值守',
+    tag: '腾讯云文章',
+    url: 'https://cloud.tencent.com/developer/article/2626553',
+    summary: '偏企业和值守场景，适合关注钉钉接入、自动提醒和长期在线能力的用户。'
+  }
+];
+
 const localLinks = [
   {
     title: '7 步教程',
@@ -143,6 +170,29 @@ const localLinks = [
             <a class="resource-link" href={item.url} target="_blank" rel="noreferrer">
               打开站点
               <span>{item.url.replace(/^https?:\/\//, '')}</span>
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">精选中文文章</span>
+          <h2>补充一些值得收藏的实战教程</h2>
+        </div>
+        <p>这组内容更偏中文经验分享和具体接入场景，适合在官方文档之外继续扩展思路。</p>
+      </div>
+      <div class="article-grid">
+        {articleLinks.map((item) => (
+          <article class="article-card">
+            <span class="site-tag article-tag">{item.tag}</span>
+            <h3>{item.title}</h3>
+            <p>{item.summary}</p>
+            <a class="article-link" href={item.url} target="_blank" rel="noreferrer">
+              查看文章
+              <span>cloud.tencent.com</span>
             </a>
           </article>
         ))}
@@ -263,6 +313,64 @@ const localLinks = [
       margin-top: 16px;
     }
 
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .article-card {
+      display: grid;
+      gap: 14px;
+      padding: 24px;
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(126, 72, 42, 0.14);
+      background:
+        radial-gradient(circle at top left, rgba(217, 94, 57, 0.08), transparent 28%),
+        linear-gradient(180deg, rgba(255, 251, 246, 0.96), rgba(255, 245, 236, 0.88));
+      box-shadow: var(--shadow);
+    }
+
+    .article-card h3 {
+      font-size: 1.5rem;
+    }
+
+    .article-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .article-tag {
+      background: rgba(141, 52, 36, 0.1);
+    }
+
+    .article-link {
+      display: grid;
+      gap: 4px;
+      width: fit-content;
+      padding: 13px 17px;
+      border-radius: 18px;
+      background: rgba(255, 248, 241, 0.92);
+      border: 1px solid rgba(217, 94, 57, 0.14);
+      color: var(--accent-deep);
+      font-weight: 800;
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease;
+    }
+
+    .article-link:hover {
+      transform: translateY(-2px);
+      border-color: rgba(217, 94, 57, 0.24);
+    }
+
+    .article-link span {
+      font-size: 0.84rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
     .mini-card {
       display: grid;
       gap: 8px;
@@ -291,6 +399,7 @@ const localLinks = [
 
     @media (max-width: 960px) {
       .resource-grid,
+      .article-grid,
       .mini-grid {
         grid-template-columns: 1fr;
       }
