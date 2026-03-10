@@ -16,8 +16,7 @@ const cases = [
       '适合做日更选题池、账号灵感库和固定栏目运营'
     ],
     result:
-      '核心价值不是“完全无人值守”，而是把最耗时的内容准备环节交给 OpenClaw 先打底，人只负责判断和定稿。',
-    source: 'https://cloud.tencent.com/developer/article/2629870'
+      '核心价值不是“完全无人值守”，而是把最耗时的内容准备环节交给 OpenClaw 先打底，人只负责判断和定稿。'
   },
   {
     title: '10 分钟搭一个 AI 选股助手',
@@ -31,7 +30,6 @@ const cases = [
     ],
     result:
       '它更像一个“自动整理投研线索”的助手，而不是替你做最终交易决定的系统。',
-    source: 'https://cloud.tencent.com/developer/article/2631336',
     caution: '仅适合作为信息整理案例，不构成投资建议。'
   },
   {
@@ -45,8 +43,7 @@ const cases = [
       '对经常在手机和电脑之间切换的人尤其友好'
     ],
     result:
-      '这类场景的重点是把 AI 放到你本来就在用的工作入口里，而不是再多开一个新系统。',
-    source: 'https://cloud.tencent.com/developer/article/2631667'
+      '这类场景的重点是把 AI 放到你本来就在用的工作入口里，而不是再多开一个新系统。'
   },
   {
     title: '把 OpenClaw 训练成专属营养师',
@@ -60,7 +57,6 @@ const cases = [
     ],
     result:
       '它适合作为饮食记录和选择建议助手，尤其适合高频、重复、需要快速判断的生活场景。',
-    source: 'https://cloud.tencent.com/developer/article/2628308',
     caution: '适合日常饮食管理，不替代专业医疗或营养建议。'
   },
   {
@@ -74,8 +70,7 @@ const cases = [
       '对苹果全家桶用户价值会更明显'
     ],
     result:
-      '真正好用的点在于：你不需要记住每个设备各自怎么操作，而是把常见动作交给同一个助手入口。',
-    source: 'https://cloud.tencent.com/developer/article/2628079'
+      '真正好用的点在于：你不需要记住每个设备各自怎么操作，而是把常见动作交给同一个助手入口。'
   }
 ];
 ---
@@ -90,13 +85,9 @@ const cases = [
         <article class="hero-copy">
           <span class="eyebrow">真实案例</span>
           <h1>不是只讲概念，直接看能怎么落地。</h1>
-          <p class="lead">
-            下面这些案例，是根据公开教程重新整理的文字版场景说明。去掉了长图和分散步骤，保留真正值得参考的部分：
-            用在哪、怎么串起来、适合什么人、落地时要注意什么。
-          </p>
+          <p class="lead">只看结果和用法，不放原始教程链接，不堆细节图文。</p>
           <div class="hero-actions">
             <a class="cta cta-primary" href="#case-list">直接看案例</a>
-            <a class="cta cta-secondary" href={withBase('/links/')}>看资源导航</a>
           </div>
           <div class="hero-list">
             <div>
@@ -116,10 +107,7 @@ const cases = [
 
         <aside class="panel">
           <h2>怎么看这页更有效</h2>
-          <p>
-            不建议一次把所有案例都照着做。更好的方式是先挑一个和你最接近的场景，跑通后再把规则、工具和 Skill
-            慢慢扩进去。
-          </p>
+          <p>先挑一个最接近你场景的案例看就够了。</p>
           <ul class="bullet-list">
             <li><strong>内容型用户：</strong> 先看小红书自动运营</li>
             <li><strong>办公型用户：</strong> 先看飞书接入和苹果生态</li>
@@ -136,7 +124,7 @@ const cases = [
           <span class="eyebrow">案例清单</span>
           <h2>五个方向，覆盖内容、办公、生活和设备联动</h2>
         </div>
-        <p>每个案例都保留了参考链接，方便你后面继续深挖原始教程。</p>
+        <p>一页看清楚能做什么。</p>
       </div>
 
       <div class="case-grid">
@@ -157,10 +145,6 @@ const cases = [
             </div>
             <p class="case-result">{item.result}</p>
             {item.caution && <p class="case-caution">{item.caution}</p>}
-            <a class="resource-link" href={item.source} target="_blank" rel="noreferrer">
-              查看原始教程
-              <span>{item.source.replace(/^https?:\/\//, '')}</span>
-            </a>
           </article>
         ))}
       </div>
@@ -186,7 +170,7 @@ const cases = [
             通常是让 OpenClaw 先做收集、整理、提醒和草案，人再做最后判断。
           </p>
           <div class="hero-actions">
-            <a class="cta cta-primary" href={withBase('/service/')}>看上门服务</a>
+            <a class="cta cta-primary" href={withBase('/service/')}>看交付服务</a>
             <a class="cta cta-secondary" href={withBase('/docs/')}>看 7 步教程</a>
           </div>
         </article>

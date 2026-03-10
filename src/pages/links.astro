@@ -104,8 +104,7 @@ const localLinks = [
           <span class="eyebrow">资源导航</span>
           <h1>官方入口、SkillHub、精选文章，统一从这里进入。</h1>
           <p class="lead">
-            这页是给已交付客户和准备交付客户共用的资源入口。第一次安装、查配置、找技能、补充阅读或看更新，
-            都可以从这里直接跳到对应站点。
+            需要官网、文档、技能和补充文章时，直接从这里进。
           </p>
           <div class="hero-actions">
             <a class="cta cta-primary" href="https://openclaw.ai/" target="_blank" rel="noreferrer">
@@ -136,10 +135,7 @@ const localLinks = [
 
         <aside class="panel">
           <h2>使用建议</h2>
-          <p>
-            如果你是第一次接触 OpenClaw，建议先按这个顺序看：官网了解定位，文档查安装，SkillHub 找能力，
-            最后再去 GitHub 跟踪更新和问题。
-          </p>
+          <p>建议顺序：官网 -> 文档 -> SkillHub -> GitHub。</p>
           <ul class="bullet-list">
             <li><strong>先了解：</strong> 用官网快速判断它适不适合你的场景</li>
             <li><strong>再安装：</strong> 具体步骤、配置细节以官方文档为准</li>
@@ -156,7 +152,7 @@ const localLinks = [
           <span class="eyebrow">官方站点</span>
           <h2>按用途分好类，直接点进去就行</h2>
         </div>
-        <p>外部链接会新开标签页。这里优先收录官方维护的入口，减少搜错站和版本不一致的问题。</p>
+        <p>优先放官方入口，减少找错站。</p>
       </div>
       <div class="resource-grid">
         {officialLinks.map((item) => (
@@ -182,7 +178,7 @@ const localLinks = [
           <span class="eyebrow">精选中文文章</span>
           <h2>补充一些值得收藏的实战教程</h2>
         </div>
-        <p>这组内容更偏中文经验分享和具体接入场景，适合在官方文档之外继续扩展思路。</p>
+        <p>适合补充看具体接入场景。</p>
       </div>
       <div class="article-grid">
         {articleLinks.map((item) => (
@@ -203,7 +199,7 @@ const localLinks = [
       <div class="spotlight">
         <article class="section-card">
           <span class="eyebrow">站内入口</span>
-          <h2>本地整理内容也可以从这里继续看。</h2>
+          <h2>站内内容也能从这里继续看。</h2>
           <div class="mini-grid">
             {localLinks.map((item) => (
               <a class="mini-card" href={item.url}>
@@ -217,8 +213,7 @@ const localLinks = [
           <span class="eyebrow">小提醒</span>
           <h2>不要把第三方教程当成唯一依据。</h2>
           <p>
-            尤其是安装脚本、OAuth 授权、插件和 Skill 相关内容，最好还是以官方站点和官方文档为准。
-            这能减少版本不一致、配置过期和权限设置错误的问题。
+            安装、授权和技能相关内容，优先以官方文档为准。
           </p>
           <div class="hero-actions">
             <a class="cta cta-primary" href={withBase('/docs/')}>看中文教程</a>
@@ -228,7 +223,7 @@ const localLinks = [
       </div>
     </section>
 
-    <footer class="footer">如果后面还要补社区插件、视频教程或常用模型入口，可以继续往这个页面加分组。</footer>
+    <footer class="footer">后面还要补资源时，继续往这页加分组就行。</footer>
   </main>
 
   <style>
