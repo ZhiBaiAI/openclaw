@@ -41,7 +41,7 @@ const deliverySteps = [
   description="给未交付客户看方案和案例，给已交付客户看文档、案例、资源和支持。"
 >
   <main class="container">
-    <section class="hero">
+    <section class="hero landing-hero">
       <div class="hero-grid">
         <article class="hero-copy">
           <span class="eyebrow">交付与使用中心</span>
@@ -159,8 +159,69 @@ const deliverySteps = [
       gap: 16px;
     }
 
-    .path-grid {
+    .landing-hero .hero-grid {
+      grid-template-columns: minmax(0, 1.5fr) 320px;
+      align-items: start;
+      gap: 36px;
+    }
+
+    .landing-hero .hero-copy {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+      overflow: visible;
+    }
+
+    .landing-hero .hero-copy::before {
+      display: none;
+    }
+
+    .landing-hero h1 {
+      max-width: 8ch;
       margin-top: 20px;
+      font-size: clamp(2.9rem, 8vw, 5.9rem);
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+    }
+
+    .landing-hero .lead {
+      max-width: 42rem;
+      margin-top: 20px;
+      font-size: 1rem;
+      line-height: 1.82;
+    }
+
+    .landing-hero .hero-actions {
+      margin-top: 24px;
+    }
+
+    .landing-hero .hero-list {
+      margin-top: 24px;
+    }
+
+    .landing-hero .hero-list div {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .landing-hero .panel {
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255, 250, 245, 0.68);
+      box-shadow: 0 16px 34px rgba(127, 79, 47, 0.08);
+    }
+
+    .landing-hero .panel h2 {
+      font-size: 1.1rem;
+    }
+
+    .path-grid {
+      margin-top: 10px;
     }
 
     .path-card,
@@ -193,6 +254,14 @@ const deliverySteps = [
       font-style: normal;
       font-weight: 800;
       color: var(--accent);
+    }
+
+    .path-card {
+      gap: 6px;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 252, 247, 0.92);
+      box-shadow: none;
     }
 
     .capability-grid {
@@ -245,9 +314,14 @@ const deliverySteps = [
     }
 
     @media (max-width: 960px) {
+      .landing-hero .hero-grid,
       .capability-grid,
       .process-grid {
         grid-template-columns: 1fr;
+      }
+
+      .landing-hero h1 {
+        max-width: none;
       }
     }
   </style>
