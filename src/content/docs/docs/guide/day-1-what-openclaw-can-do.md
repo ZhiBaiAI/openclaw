@@ -1,5 +1,5 @@
 ---
-title: 第 1 天：先明白 OpenClaw 能帮你做什么
+title: 第 1 步：先明白 OpenClaw 能帮你做什么
 description: 在安装之前，先判断 OpenClaw 适不适合你，避免装了以后发现用不上。
 ---
 

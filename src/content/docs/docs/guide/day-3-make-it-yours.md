@@ -1,5 +1,5 @@
 ---
-title: 第 3 天：让它更像“你的助手”
+title: 第 3 步：让它更像“你的助手”
 description: 学会用 SOUL.md、USER.md 和 AGENTS.md 把通用 AI 调成真正适合你的人设和工作方式。
 ---
 
