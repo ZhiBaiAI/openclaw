@@ -11,6 +11,15 @@
 
 ## 本地启动
 
+先拉取仓库：
+
+```bash
+git clone https://github.com/ZhiBaiAI/openclaw.git
+cd openclaw
+```
+
+再安装依赖并启动：
+
 ```bash
 npm install
 npm run dev
