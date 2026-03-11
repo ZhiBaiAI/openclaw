@@ -45,6 +45,7 @@ export default defineConfig({
         {
           label: '支持资料',
           items: [
+            { label: '百炼平台模型配置示例', link: '/docs/reference/bailian-model-config-example/' },
             { label: '企业微信支持配置', link: '/docs/reference/wecom-support-setup/' },
             { label: '常用命令速查', link: '/docs/reference/common-commands/' },
             { label: '安全清单', link: '/docs/reference/safety-checklist/' },
