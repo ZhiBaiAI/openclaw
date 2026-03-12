@@ -45,6 +45,10 @@ export default defineConfig({
         {
           label: '支持资料',
           items: [
+            { label: 'OpenClaw 安装详细教程', link: '/docs/reference/openclaw-install-detailed/' },
+            { label: 'SOUL USER AGENTS 三件套实战教程', link: '/docs/reference/soul-user-agents-workshop/' },
+            { label: '飞书多机器人虚拟团队教程', link: '/docs/reference/feishu-multi-bot-virtual-team/' },
+            { label: 'macOS 国内手动安装 Homebrew', link: '/docs/reference/homebrew-manual-install-macos-cn/' },
             { label: '百炼平台模型配置示例', link: '/docs/reference/bailian-model-config-example/' },
             { label: '企业微信支持配置', link: '/docs/reference/wecom-support-setup/' },
             { label: '常用命令速查', link: '/docs/reference/common-commands/' },

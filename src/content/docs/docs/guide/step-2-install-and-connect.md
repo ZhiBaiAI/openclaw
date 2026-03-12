@@ -65,6 +65,8 @@ wsl --install
 
 安装完成后，按提示重启电脑，再进入 WSL 继续后面的安装步骤。
 
+如果你用的是 macOS，而且 Homebrew 在国内网络里总是安装失败，或者还需要按情况补 `node`、`vips`、国内 npm 源和 `sharp` 的兜底安装，直接看 [macOS 国内手动安装 Homebrew](../reference/homebrew-manual-install-macos-cn/)。
+
 ## 一键安装
 
 原站给出的安装方式是执行官方安装脚本，自动补依赖并进入向导：
@@ -72,6 +74,8 @@ wsl --install
 `curl -fsSL https://openclaw.ai/install.sh | bash`
 
 实际体验上，这一步的好处是你不用先手动装一堆依赖，再一个个配置。
+
+如果你想看一份把官方安装页、macOS 国内网络兜底、`node` / `vips` / npm 源 / `sharp` 问题都整理在一起的版本，可以直接看 [OpenClaw 安装详细教程](../reference/openclaw-install-detailed/)。
 
 ## 向导里最关键的几步
 
@@ -103,6 +107,7 @@ wsl --install
 最常见的入门方式是接 Telegram。
 
 如果你想接企业微信，可以直接看 [企业微信支持配置](../reference/wecom-support-setup/)。
+如果你想用多个飞书机器人做分角色协作，可以直接看 [飞书多机器人虚拟团队教程](../reference/feishu-multi-bot-virtual-team/)。
 
 原因很简单：
 

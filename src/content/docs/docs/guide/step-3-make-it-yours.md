@@ -9,6 +9,8 @@ description: 学会用 SOUL.md、USER.md 和 AGENTS.md 把通用 AI 调成真正
 
 这一步的关键不是再装插件，而是把规则写清楚。
 
+如果你想看一份真正可以跟着写的实操版教程，可以直接看 [SOUL USER AGENTS 三件套实战教程](../reference/soul-user-agents-workshop/)。
+
 ## 先理解三个文件分别管什么
 
 ### SOUL.md
