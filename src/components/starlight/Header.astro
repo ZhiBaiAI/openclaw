@@ -1,0 +1,166 @@
+---
+import config from 'virtual:starlight/user-config';
+
+import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
+import Search from 'virtual:starlight/components/Search';
+import SiteTitle from 'virtual:starlight/components/SiteTitle';
+import SocialIcons from 'virtual:starlight/components/SocialIcons';
+import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+
+const shouldRenderSearch =
+  config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
+
+const navItems = [
+  { href: '/docs/', label: '文档教程', match: '/docs/' },
+  { href: '/links/', label: '资源导航', match: '/links/' },
+  { href: '/cases/', label: '案例', match: '/cases/' },
+  { href: '/service/', label: '安装交付服务', match: '/service/' }
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<div class="header-shell">
+  <div class="header-top">
+    <div class="title-wrapper sl-flex">
+      <SiteTitle />
+    </div>
+    <div class="sl-flex print:hidden header-search">
+      {shouldRenderSearch && <Search />}
+    </div>
+    <div class="sl-hidden md:sl-flex print:hidden right-group">
+      <div class="sl-flex social-icons">
+        <SocialIcons />
+      </div>
+      <ThemeSelect />
+      <LanguageSelect />
+    </div>
+  </div>
+
+  <nav class="docs-top-nav print:hidden" aria-label="站点导航">
+    {
+      navItems.map((item) => {
+        const isActive = currentPath === item.match || currentPath.startsWith(item.match);
+        return (
+          <a class:list={['docs-top-link', { active: isActive }]} href={item.href}>
+            {item.label}
+          </a>
+        );
+      })
+    }
+  </nav>
+</div>
+
+<style>
+  @layer starlight.core {
+    .header-shell {
+      display: grid;
+      gap: 0.8rem;
+      width: 100%;
+    }
+
+    .header-top {
+      display: flex;
+      gap: var(--sl-nav-gap);
+      justify-content: space-between;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .title-wrapper {
+      overflow: clip;
+      padding: 0.25rem;
+      margin: -0.25rem;
+      min-width: 0;
+    }
+
+    .header-search {
+      min-width: min(32rem, 100%);
+    }
+
+    .right-group,
+    .social-icons {
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .social-icons::after {
+      content: '';
+      height: 2rem;
+      border-inline-end: 1px solid var(--sl-color-gray-5);
+    }
+
+    .docs-top-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      align-items: center;
+    }
+
+    .docs-top-link {
+      padding: 0.5rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      color: var(--sl-color-gray-2);
+      text-decoration: none;
+      font-size: 0.92rem;
+      transition:
+        border-color 180ms ease,
+        background-color 180ms ease,
+        color 180ms ease,
+        transform 180ms ease;
+    }
+
+    .docs-top-link:hover,
+    .docs-top-link:focus-visible {
+      color: var(--sl-color-white);
+      border-color: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-1px);
+    }
+
+    .docs-top-link.active {
+      color: var(--sl-color-white);
+      border-color: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    @media (min-width: 50rem) {
+      :global(:root[data-has-sidebar]) {
+        --__sidebar-pad: calc(2 * var(--sl-nav-pad-x));
+      }
+
+      :global(:root:not([data-has-toc])) {
+        --__toc-width: 0rem;
+      }
+
+      .header-top {
+        --__sidebar-width: max(0rem, var(--sl-content-inline-start, 0rem) - var(--sl-nav-pad-x));
+        --__main-column-fr: calc(
+          (
+              100% + var(--__sidebar-pad, 0rem) - var(--__toc-width, var(--sl-sidebar-width)) -
+                (2 * var(--__toc-width, var(--sl-nav-pad-x))) - var(--sl-content-inline-start, 0rem) -
+                var(--sl-content-width)
+            ) / 2
+        );
+        display: grid;
+        grid-template-columns:
+          minmax(calc(var(--__sidebar-width) + max(0rem, var(--__main-column-fr) - var(--sl-nav-gap))), auto)
+          1fr
+          auto;
+        align-content: center;
+      }
+    }
+
+    @media (max-width: 50rem) {
+      .header-top {
+        flex-wrap: wrap;
+      }
+
+      .header-search {
+        order: 3;
+        width: 100%;
+      }
+    }
+  }
+</style>
