@@ -23,7 +23,10 @@ const currentPath = Astro.url.pathname;
 <div class="header-shell">
   <div class="header-top">
     <div class="title-wrapper sl-flex">
-      <SiteTitle />
+      <div class="docs-brand">
+        <SiteTitle />
+        <span class="docs-slogan">AI江湖，从这里开始</span>
+      </div>
     </div>
     <div class="sl-flex print:hidden header-search">
       {shouldRenderSearch && <Search />}
@@ -74,6 +77,12 @@ const currentPath = Astro.url.pathname;
       min-width: 0;
     }
 
+    .docs-brand {
+      display: grid;
+      gap: 0.35rem;
+      min-width: 0;
+    }
+
     .title-wrapper :global(.site-title) {
       position: relative;
       align-items: center;
@@ -102,6 +111,14 @@ const currentPath = Astro.url.pathname;
 
     .title-wrapper :global(.site-title span) {
       overflow: visible;
+    }
+
+    .docs-slogan {
+      padding-left: 0.25rem;
+      color: #6c5a4e;
+      font-size: 0.8rem;
+      line-height: 1.2;
+      white-space: nowrap;
     }
 
     .header-search {
@@ -216,6 +233,10 @@ const currentPath = Astro.url.pathname;
 
       .docs-top-link {
         font-size: 0.88rem;
+      }
+
+      .docs-slogan {
+        white-space: normal;
       }
     }
   }
