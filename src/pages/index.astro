@@ -36,7 +36,7 @@ const coreRoutes = [
     tag: '自己装或找我做',
     title: '安装交付服务',
     href: withBase('/service/'),
-    summary: '把自己安装、找我交付、已在使用后的排错和支持，全都收进一个入口页。',
+    summary: '想自己安装、预约交付，或在使用中需要支持时，都可以先看这里。',
     audience: '适合准备上手、已经上手、或需要交付支持的人。',
     bullets: ['自己安装路线', '交付服务说明', '排错与联系入口'],
     action: '进入安装交付服务'
@@ -44,41 +44,41 @@ const coreRoutes = [
 ];
 
 const useFlows = [
-  ['第一次来', '先去文档教程，再把资源导航收藏起来。'],
-  ['想判断值不值得', '先看案例，再看安装交付服务页决定自己装还是找我交付。'],
-  ['已经在使用', '把这里当成固定首页，四个入口足够覆盖日常大多数需求。']
+  ['刚开始了解', '先看案例，确认 OpenClaw 能不能帮你解决真实问题。'],
+  ['准备动手安装', '先去文档教程，按步骤把第一个可用入口跑通。'],
+  ['想省时间少踩坑', '直接看安装交付服务，判断是自己继续装还是找我来做。']
 ];
 
-const reasons = [
+const nextSteps = [
   {
-    title: '这不是一堆零散页面',
-    text: '首页只做导航，不再把交付、案例、说明混在一块。你一进来就知道该往哪走。'
+    title: '先看案例',
+    text: '适合还在判断值不值得学、值不值得装的人，先看真实场景最直接。'
   },
   {
-    title: '它是给技术小白准备的',
-    text: '默认你不懂太多技术术语，所以优先讲“怎么开始、怎么用、遇到问题怎么办”。'
+    title: '先走教程',
+    text: '适合准备自己动手的人，从安装、接入、规则到排错都有对应文档。'
   },
   {
-    title: '也能服务已经在用的人',
-    text: '已经交付的用户也可以把这里当日常入口，查文档、看命令、找资源、补场景都方便。'
+    title: '直接预约交付',
+    text: '适合已经确定要用，但不想自己配环境或希望更快落地的人。'
   }
 ];
 ---
 
 <MarketingLayout
   title="虾客AI"
-  description="给对 OpenClaw 感兴趣的技术小白准备的导航首页：文档教程、资源导航、案例、安装交付服务四个核心入口。"
+  description="围绕 OpenClaw 的文档教程、资源导航、案例和安装交付服务四个核心入口。"
 >
   <main class="page">
     <div class="container">
       <section class="page-hero">
         <div class="hero-grid">
           <article>
-            <span class="eyebrow">导航首页</span>
-            <h1>把 OpenClaw 养起来，从这四个入口走就够了。</h1>
+            <span class="eyebrow">虾客AI</span>
+            <h1>想了解、安装或用好 OpenClaw，从这里开始。</h1>
             <p class="lead">
-              这里不是只给新客户看的介绍页，也不是只给已交付用户看的说明页。
-              它应该同时服务三类人：刚感兴趣的人、准备开始的人、已经在日常使用的人。
+              先看案例判断适不适合自己，再按教程安装，或者直接了解交付服务。
+              不管你是刚接触，还是已经在使用中，都能很快找到下一步。
             </p>
             <div class="action-row">
               <a class="button button-primary" href={withBase('/docs/')}>先去文档教程</a>
@@ -87,7 +87,7 @@ const reasons = [
           </article>
 
           <aside class="hero-aside">
-            <span class="section-kicker">怎么用这个站</span>
+            <span class="section-kicker">你现在可以这样开始</span>
             <ul class="simple-list">
               {useFlows.map(([title, text]) => (
                 <li>
@@ -105,10 +105,10 @@ const reasons = [
         <div class="section-header">
           <div>
             <span class="section-kicker">四个核心入口</span>
-            <h2>以后不再分“营销页”和“交付页”，统一从这里分流。</h2>
+            <h2>按你当前最需要的事情，选择对应入口。</h2>
           </div>
           <p class="section-copy">
-            四块内容分别承担学习、查资料、看场景、决定安装与交付。结构简单，长期也更好维护。
+            文档教程负责上手和排错，资源导航负责外部资料，案例帮你判断场景，安装交付服务负责落地支持。
           </p>
         </div>
 
@@ -133,10 +133,10 @@ const reasons = [
       <section class="section">
         <div class="split-grid">
           <article class="summary-card">
-            <span class="section-kicker">为什么这样改</span>
-            <h2>首页只做导航，交付相关全部收进一个入口页。</h2>
+            <span class="section-kicker">建议顺序</span>
+            <h2>多数人只需要先做这三个判断。</h2>
             <div class="mini-grid">
-              {reasons.map((item) => (
+              {nextSteps.map((item) => (
                 <article class="mini-card">
                   <strong>{item.title}</strong>
                   <span>{item.text}</span>
@@ -146,11 +146,10 @@ const reasons = [
           </article>
 
           <article class="note-card">
-            <span class="status-chip support">建议收藏</span>
-            <h3 class="card-title">如果你已经开始用 OpenClaw，这个站应该是你的固定起点。</h3>
+            <span class="status-chip support">日常使用</span>
+            <h3 class="card-title">已经开始用 OpenClaw 时，这里也能继续帮你排错和补资料。</h3>
             <p class="card-meta">
-              以后需要查命令、回看教程、找外部链接、补看案例、决定要不要找我帮你做交付，
-              都不需要再重新找聊天记录或翻仓库页面。
+              需要查命令、回看教程、补外部资料或继续扩展场景时，直接从这里进入对应页面就够了。
             </p>
             <div class="action-row">
               <a class="button button-primary" href={withBase('/links/')}>打开资源导航</a>

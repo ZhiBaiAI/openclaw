@@ -2,7 +2,7 @@ export const DOCS_SIDEBAR = [
   {
     label: '交付后开始',
     items: [
-      { id: 'index', label: '交付后从这里开始' },
+      { id: 'home', label: '交付后从这里开始' },
       { id: 'guide', label: '7 步总览' }
     ]
   },
@@ -41,7 +41,7 @@ export const DOCS_FLAT_ITEMS = DOCS_SIDEBAR.flatMap((section) =>
 export function docHref(id, base = '') {
   const prefix = base.replace(/\/$/, '');
 
-  if (id === 'index') {
+  if (id === 'home') {
     return `${prefix}/docs/`;
   }
 

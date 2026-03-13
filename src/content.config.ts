@@ -8,7 +8,7 @@ export const collections = {
       base: './src/content/docs/docs',
       generateId: ({ entry }) => {
         const normalized = entry.replace(/\\/g, '/').replace(/\.md$/, '').replace(/\/index$/, '');
-        return normalized === 'index' ? 'index' : normalized;
+        return normalized === 'index' ? 'home' : normalized;
       }
     }),
     schema: z.object({
