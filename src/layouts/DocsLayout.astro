@@ -1,0 +1,454 @@
+---
+import MarketingLayout from './MarketingLayout.astro';
+import { DOCS_SIDEBAR, docHref } from '../data/docs.mjs';
+
+export interface Props {
+  title: string;
+  description?: string;
+  currentId: string;
+  currentSection?: string;
+  headings?: Array<{ depth: number; slug: string; text: string }>;
+  prevItem?: { id: string; label: string } | null;
+  nextItem?: { id: string; label: string } | null;
+}
+
+const {
+  title,
+  description = 'OpenClaw 文档教程',
+  currentId,
+  currentSection = '文档教程',
+  headings = [],
+  prevItem = null,
+  nextItem = null
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const outlineItems = headings.filter((item) => item.depth === 2 || item.depth === 3);
+---
+
+<MarketingLayout title={`${title} | 虾客AI`} description={description}>
+  <main class="page docs-page">
+    <div class="container docs-shell">
+      <aside class="docs-sidebar">
+        <div class="docs-sidebar__panel">
+          <div class="docs-sidebar__intro">
+            <span class="section-kicker">文档导航</span>
+            <h2>从教程到排错，统一在这里走。</h2>
+            <p class="docs-sidebar__copy">
+              文档区不再是独立产品，而是虾客AI这四个入口中的“上手与日常使用中心”。
+            </p>
+          </div>
+
+          <nav aria-label="文档目录" class="docs-sidebar__nav">
+            {
+              DOCS_SIDEBAR.map((section) => (
+                <section class="docs-sidebar__section">
+                  <h3>{section.label}</h3>
+                  <div class="docs-sidebar__links">
+                    {section.items.map((item) => (
+                      <a class:list={['docs-sidebar__link', { active: item.id === currentId }]} href={docHref(item.id, base)}>
+                        {item.label}
+                      </a>
+                    ))}
+                  </div>
+                </section>
+              ))
+            }
+          </nav>
+        </div>
+      </aside>
+
+      <section class="docs-main">
+        <header class="docs-hero">
+          <div>
+            <span class="eyebrow">{currentSection}</span>
+            <h1>{title}</h1>
+            {description && <p class="lead docs-hero__lead">{description}</p>}
+          </div>
+
+          <div class="docs-hero__meta">
+            <div class="docs-hero__meta-card">
+              <span class="card-tag">给技术小白看的</span>
+              <p>
+                先跑通一个能用的入口，再继续补规则、工具接入、技能和自动化，不要一上来追求全部功能。
+              </p>
+            </div>
+            <div class="docs-hero__meta-card">
+              <span class="card-tag">遇到不会的</span>
+              <p>
+                先看当前文档页对应章节，再去安装交付服务页判断是自己继续排，还是直接找我处理。
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <div class="docs-content-grid">
+          <article class="docs-article content-panel">
+            <slot />
+
+            <div class="docs-pagination">
+              {prevItem && (
+                <a class="docs-pagination__card" href={docHref(prevItem.id, base)}>
+                  <span class="docs-pagination__label">上一篇</span>
+                  <strong>{prevItem.label}</strong>
+                </a>
+              )}
+              {nextItem && (
+                <a class="docs-pagination__card" href={docHref(nextItem.id, base)}>
+                  <span class="docs-pagination__label">下一篇</span>
+                  <strong>{nextItem.label}</strong>
+                </a>
+              )}
+            </div>
+          </article>
+
+          <aside class="docs-rail">
+            <div class="docs-rail__panel">
+              <span class="section-kicker">页内索引</span>
+              {outlineItems.length > 0 ? (
+                <nav class="docs-outline" aria-label="页内目录">
+                  {outlineItems.map((item) => (
+                    <a class:list={['docs-outline__link', `depth-${item.depth}`]} href={`#${item.slug}`}>
+                      {item.text}
+                    </a>
+                  ))}
+                </nav>
+              ) : (
+                <p class="docs-rail__copy">这页内容较短，按正文顺着读即可。</p>
+              )}
+            </div>
+
+            <div class="docs-rail__panel">
+              <span class="section-kicker">快捷入口</span>
+              <div class="docs-shortcuts">
+                <a href={`${base}/service/`}>
+                  <strong>安装交付服务</strong>
+                  <span>自己装、找我交付、排错与支持都在一个入口。</span>
+                </a>
+                <a href={`${base}/links/`}>
+                  <strong>资源导航</strong>
+                  <span>官网、官方文档、SkillHub 和外部文章集中查看。</span>
+                </a>
+                <a href={`${base}/cases/`}>
+                  <strong>案例</strong>
+                  <span>先看真实场景，再决定学到什么程度、要不要交付。</span>
+                </a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </div>
+  </main>
+</MarketingLayout>
+
+<style>
+  .docs-shell {
+    display: grid;
+    grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+
+  .docs-sidebar,
+  .docs-rail {
+    position: sticky;
+    top: 6.8rem;
+  }
+
+  .docs-sidebar__panel,
+  .docs-rail__panel,
+  .docs-hero,
+  .docs-pagination__card {
+    border: 1px solid rgba(75, 54, 38, 0.14);
+    border-radius: 28px;
+    background:
+      linear-gradient(180deg, rgba(255, 252, 246, 0.96), rgba(249, 242, 231, 0.9));
+    box-shadow: 0 20px 48px rgba(127, 79, 47, 0.12);
+  }
+
+  .docs-sidebar__panel,
+  .docs-rail__panel,
+  .docs-hero {
+    padding: 24px;
+  }
+
+  .docs-main {
+    display: grid;
+    gap: 20px;
+  }
+
+  .docs-sidebar__intro h2 {
+    margin-top: 10px;
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+  }
+
+  .docs-sidebar__copy,
+  .docs-rail__copy,
+  .docs-hero__meta-card p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  .docs-sidebar__nav {
+    display: grid;
+    gap: 20px;
+    margin-top: 22px;
+  }
+
+  .docs-sidebar__section {
+    display: grid;
+    gap: 12px;
+  }
+
+  .docs-sidebar__section h3 {
+    font-size: 1rem;
+  }
+
+  .docs-sidebar__links {
+    display: grid;
+    gap: 8px;
+  }
+
+  .docs-sidebar__link,
+  .docs-outline__link,
+  .docs-shortcuts a {
+    display: grid;
+    gap: 6px;
+    text-decoration: none;
+  }
+
+  .docs-sidebar__link {
+    padding: 12px 14px;
+    border-radius: 18px;
+    border: 1px solid rgba(193, 94, 42, 0.08);
+    background: rgba(255, 250, 244, 0.78);
+    color: var(--muted);
+    line-height: 1.55;
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      background-color 180ms ease,
+      color 180ms ease;
+  }
+
+  .docs-sidebar__link:hover,
+  .docs-sidebar__link:focus-visible,
+  .docs-sidebar__link.active {
+    color: var(--accent-deep);
+    border-color: rgba(193, 94, 42, 0.18);
+    background: rgba(193, 94, 42, 0.12);
+    transform: translateY(-1px);
+  }
+
+  .docs-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+    gap: 18px;
+  }
+
+  .docs-hero__lead {
+    max-width: 42rem;
+  }
+
+  .docs-hero__meta {
+    display: grid;
+    gap: 12px;
+  }
+
+  .docs-hero__meta-card {
+    display: grid;
+    gap: 10px;
+    padding: 18px;
+    border-radius: 22px;
+    border: 1px solid rgba(193, 94, 42, 0.12);
+    background: rgba(255, 250, 244, 0.78);
+  }
+
+  .docs-content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 280px);
+    gap: 20px;
+    align-items: start;
+  }
+
+  .docs-article {
+    padding: 30px;
+  }
+
+  .docs-article :global(h1),
+  .docs-article :global(h2),
+  .docs-article :global(h3) {
+    scroll-margin-top: 7.5rem;
+  }
+
+  .docs-article :global(h2) {
+    margin-top: 2.6rem;
+    margin-bottom: 1rem;
+    font-size: clamp(1.55rem, 3vw, 2.2rem);
+  }
+
+  .docs-article :global(h3) {
+    margin-top: 1.8rem;
+    margin-bottom: 0.8rem;
+    font-size: 1.3rem;
+  }
+
+  .docs-article :global(p),
+  .docs-article :global(li),
+  .docs-article :global(blockquote) {
+    color: var(--muted);
+    line-height: 1.85;
+    font-size: 1rem;
+  }
+
+  .docs-article :global(ul),
+  .docs-article :global(ol) {
+    padding-left: 1.3rem;
+  }
+
+  .docs-article :global(code) {
+    padding: 0.18rem 0.4rem;
+    border-radius: 0.5rem;
+    background: rgba(193, 94, 42, 0.1);
+    color: var(--accent-deep);
+    font-size: 0.92em;
+  }
+
+  .docs-article :global(pre) {
+    overflow-x: auto;
+    padding: 18px;
+    border-radius: 22px;
+    background: #2a1a14;
+    box-shadow: inset 0 0 0 1px rgba(255, 217, 191, 0.06);
+  }
+
+  .docs-article :global(pre code) {
+    padding: 0;
+    background: transparent;
+    color: #fff4ec;
+  }
+
+  .docs-article :global(blockquote) {
+    margin: 1.2rem 0;
+    padding: 1rem 1.1rem;
+    border-left: 4px solid rgba(193, 94, 42, 0.3);
+    background: rgba(255, 248, 238, 0.86);
+    border-radius: 0 18px 18px 0;
+  }
+
+  .docs-article :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.2rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    background: rgba(255, 250, 244, 0.88);
+  }
+
+  .docs-article :global(th),
+  .docs-article :global(td) {
+    padding: 12px 14px;
+    border: 1px solid rgba(193, 94, 42, 0.1);
+    text-align: left;
+  }
+
+  .docs-outline,
+  .docs-shortcuts {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .docs-outline__link,
+  .docs-shortcuts a {
+    padding: 12px 14px;
+    border-radius: 18px;
+    border: 1px solid rgba(193, 94, 42, 0.1);
+    background: rgba(255, 250, 244, 0.8);
+    color: var(--muted);
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      background-color 180ms ease,
+      color 180ms ease;
+  }
+
+  .docs-outline__link:hover,
+  .docs-outline__link:focus-visible,
+  .docs-shortcuts a:hover,
+  .docs-shortcuts a:focus-visible {
+    transform: translateY(-1px);
+    color: var(--accent-deep);
+    border-color: rgba(193, 94, 42, 0.18);
+    background: rgba(255, 249, 241, 0.96);
+  }
+
+  .docs-outline__link.depth-3 {
+    margin-left: 12px;
+  }
+
+  .docs-shortcuts span {
+    line-height: 1.7;
+  }
+
+  .docs-pagination {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .docs-pagination__card {
+    display: grid;
+    gap: 6px;
+    padding: 18px;
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .docs-pagination__card:hover,
+  .docs-pagination__card:focus-visible {
+    transform: translateY(-2px);
+    border-color: rgba(193, 94, 42, 0.18);
+    box-shadow: 0 24px 54px rgba(127, 79, 47, 0.16);
+  }
+
+  .docs-pagination__label {
+    color: var(--muted);
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 1200px) {
+    .docs-shell,
+    .docs-content-grid,
+    .docs-hero {
+      grid-template-columns: 1fr;
+    }
+
+    .docs-sidebar,
+    .docs-rail {
+      position: static;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .docs-sidebar__panel,
+    .docs-rail__panel,
+    .docs-hero,
+    .docs-article,
+    .docs-pagination__card {
+      padding: 18px;
+      border-radius: 22px;
+    }
+
+    .docs-pagination {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
