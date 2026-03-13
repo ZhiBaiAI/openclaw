@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import { SITE_DESCRIPTION, SITE_NAME } from './src/data/site.mjs';
 
 const repo = process.env.GITHUB_REPOSITORY?.split('/')[1] ?? '';
 const owner = process.env.GITHUB_REPOSITORY_OWNER ?? '';
@@ -27,8 +28,8 @@ export default defineConfig({
   base,
   integrations: [
     starlight({
-      title: '虾客AI',
-      description: '面向已交付客户和潜在客户的 OpenClaw 文档、案例、资源与支持中心。',
+      title: SITE_NAME,
+      description: SITE_DESCRIPTION,
       pagefind,
       components: {
         Header: './src/components/starlight/Header.astro'

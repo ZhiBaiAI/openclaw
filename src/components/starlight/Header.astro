@@ -3,240 +3,36 @@ import config from 'virtual:starlight/user-config';
 
 import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import Search from 'virtual:starlight/components/Search';
-import SiteTitle from 'virtual:starlight/components/SiteTitle';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
+import SiteHeader from '../shared/SiteHeader.astro';
 
 const shouldRenderSearch =
   config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
-
-const navItems = [
-  { href: '/docs/', label: '文档教程', match: '/docs/' },
-  { href: '/links/', label: '资源导航', match: '/links/' },
-  { href: '/cases/', label: '案例', match: '/cases/' },
-  { href: '/service/', label: '安装交付服务', match: '/service/' }
-];
-
-const currentPath = Astro.url.pathname;
 ---
 
-<div class="header-shell">
-  <div class="header-top">
-    <div class="title-wrapper sl-flex">
-      <div class="docs-brand">
-        <SiteTitle />
-        <span class="docs-slogan">AI江湖，从这里开始</span>
-      </div>
-    </div>
-    <div class="sl-flex print:hidden header-search">
-      {shouldRenderSearch && <Search />}
-    </div>
-    <div class="sl-hidden md:sl-flex print:hidden right-group">
-      <div class="sl-flex social-icons">
-        <SocialIcons />
-      </div>
-      <ThemeSelect />
-      <LanguageSelect />
-    </div>
+<SiteHeader navLabel="站点导航">
+  {shouldRenderSearch && <Search slot="search" />}
+  <div slot="utilities" class="docs-header-tools print:hidden">
+    <SocialIcons />
+    <ThemeSelect />
+    <LanguageSelect />
   </div>
-
-  <nav class="docs-top-nav print:hidden" aria-label="站点导航">
-    {
-      navItems.map((item) => {
-        const isActive = currentPath === item.match || currentPath.startsWith(item.match);
-        return (
-          <a class:list={['docs-top-link', { active: isActive }]} href={item.href}>
-            {item.label}
-          </a>
-        );
-      })
-    }
-  </nav>
-</div>
+</SiteHeader>
 
 <style>
   @layer starlight.core {
-    .header-shell {
-      display: grid;
-      gap: 0.9rem;
-      width: 100%;
-    }
-
-    .header-top {
+    .docs-header-tools {
       display: flex;
-      gap: var(--sl-nav-gap);
-      justify-content: space-between;
       align-items: center;
-      min-width: 0;
-    }
-
-    .title-wrapper {
-      overflow: clip;
-      padding: 0.25rem;
-      margin: -0.25rem;
-      min-width: 0;
-    }
-
-    .docs-brand {
-      display: grid;
-      gap: 0.35rem;
-      min-width: 0;
-    }
-
-    .title-wrapper :global(.site-title) {
-      position: relative;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.62rem 1rem 0.62rem 0.9rem;
-      border-radius: 999px;
-      border: 1px solid rgba(193, 94, 42, 0.14);
-      background: rgba(255, 250, 242, 0.9);
-      color: #7b371c;
-      box-shadow: 0 14px 28px rgba(83, 58, 42, 0.08);
-      font-family: 'Fraunces', 'Noto Serif SC', serif;
-      font-size: 1.02rem;
-      font-weight: 800;
-      letter-spacing: 0.01em;
-    }
-
-    .title-wrapper :global(.site-title)::before {
-      content: '';
-      width: 0.8rem;
-      height: 0.8rem;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #c15e2a, #e49b45);
-      box-shadow: 0 0 0 0.35rem rgba(193, 94, 42, 0.1);
-      flex: none;
-    }
-
-    .title-wrapper :global(.site-title span) {
-      overflow: visible;
-    }
-
-    .docs-slogan {
-      padding-left: 0.25rem;
-      color: #6c5a4e;
-      font-size: 0.8rem;
-      line-height: 1.2;
-      white-space: nowrap;
-    }
-
-    .header-search {
-      min-width: min(32rem, 100%);
-    }
-
-    .header-search :global(.search) {
-      width: 100%;
-    }
-
-    .header-search :global(button),
-    .header-search :global(label) {
-      border-radius: 999px;
-      border-color: rgba(193, 94, 42, 0.12);
-      background: rgba(255, 251, 244, 0.86);
-      box-shadow: 0 10px 24px rgba(83, 58, 42, 0.06);
-    }
-
-    .right-group,
-    .social-icons {
       gap: 1rem;
-      align-items: center;
-    }
-
-    .social-icons::after {
-      content: '';
-      height: 2rem;
-      border-inline-end: 1px solid var(--sl-color-gray-5);
-    }
-
-    .docs-top-nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.55rem;
-      align-items: center;
-      padding: 0.2rem 0 0;
-    }
-
-    .docs-top-link {
-      padding: 0.58rem 0.92rem;
-      border-radius: 999px;
-      border: 1px solid rgba(193, 94, 42, 0.1);
-      color: #6c5a4e;
-      text-decoration: none;
-      font-size: 0.92rem;
-      background: rgba(255, 251, 244, 0.78);
-      box-shadow: 0 10px 24px rgba(83, 58, 42, 0.04);
-      transition:
-        border-color 180ms ease,
-        background-color 180ms ease,
-        color 180ms ease,
-        transform 180ms ease,
-        box-shadow 180ms ease;
-    }
-
-    .docs-top-link:hover,
-    .docs-top-link:focus-visible {
-      color: #7b371c;
-      border-color: rgba(193, 94, 42, 0.18);
-      background: rgba(255, 249, 241, 0.96);
-      transform: translateY(-1px);
-      box-shadow: 0 14px 26px rgba(83, 58, 42, 0.08);
-    }
-
-    .docs-top-link.active {
-      color: #7b371c;
-      border-color: rgba(193, 94, 42, 0.18);
-      background: rgba(193, 94, 42, 0.12);
-      box-shadow: inset 0 0 0 1px rgba(193, 94, 42, 0.02);
-    }
-
-    @media (min-width: 50rem) {
-      :global(:root[data-has-sidebar]) {
-        --__sidebar-pad: calc(2 * var(--sl-nav-pad-x));
-      }
-
-      :global(:root:not([data-has-toc])) {
-        --__toc-width: 0rem;
-      }
-
-      .header-top {
-        --__sidebar-width: max(0rem, var(--sl-content-inline-start, 0rem) - var(--sl-nav-pad-x));
-        --__main-column-fr: calc(
-          (
-              100% + var(--__sidebar-pad, 0rem) - var(--__toc-width, var(--sl-sidebar-width)) -
-                (2 * var(--__toc-width, var(--sl-nav-pad-x))) - var(--sl-content-inline-start, 0rem) -
-                var(--sl-content-width)
-            ) / 2
-        );
-        display: grid;
-        grid-template-columns:
-          minmax(calc(var(--__sidebar-width) + max(0rem, var(--__main-column-fr) - var(--sl-nav-gap))), auto)
-          1fr
-          auto;
-        align-content: center;
-      }
     }
 
     @media (max-width: 50rem) {
-      .header-top {
-        flex-wrap: wrap;
-      }
-
-      .header-search {
-        order: 3;
+      .docs-header-tools {
         width: 100%;
-      }
-
-      .docs-top-nav {
-        gap: 0.45rem;
-      }
-
-      .docs-top-link {
-        font-size: 0.88rem;
-      }
-
-      .docs-slogan {
-        white-space: normal;
+        justify-content: flex-start;
+        flex-wrap: wrap;
       }
     }
   }

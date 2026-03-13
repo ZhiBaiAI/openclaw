@@ -1,27 +1,16 @@
 ---
+import SiteHeader from '../components/shared/SiteHeader.astro';
+import { SITE_DESCRIPTION, SITE_NAV_ITEMS } from '../data/site.mjs';
+
 export interface Props {
   title: string;
   description?: string;
 }
 
-const { title, description = '给对 OpenClaw 感兴趣的技术小白准备的学习、案例、资源与交付入口。' } =
-  Astro.props;
+const { title, description = SITE_DESCRIPTION } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const withBase = (path: string) => `${base}${path}`;
-const normalize = (path: string) => (path === '/' ? '/' : `${path.replace(/\/+$/, '')}/`);
-const rawPath = (() => {
-  const pathname = Astro.url.pathname || '/';
-  return base && pathname.startsWith(base) ? pathname.slice(base.length) || '/' : pathname;
-})();
-const currentPath = normalize(rawPath);
-
-const navItems = [
-  { href: withBase('/docs/'), label: '文档教程', match: '/docs/' },
-  { href: withBase('/links/'), label: '资源导航', match: '/links/' },
-  { href: withBase('/cases/'), label: '案例', match: '/cases/' },
-  { href: withBase('/service/'), label: '安装交付服务', match: '/service/' }
-];
 ---
 
 <!doctype html>
@@ -123,86 +112,7 @@ const navItems = [
       }
 
       .header-inner {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 22px;
         padding: 16px 0;
-      }
-
-      .brand {
-        display: inline-grid;
-        gap: 3px;
-      }
-
-      .brand-mark {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        width: fit-content;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: rgba(255, 250, 242, 0.86);
-        border: 1px solid rgba(193, 94, 42, 0.12);
-        box-shadow: 0 12px 28px rgba(83, 58, 42, 0.06);
-      }
-
-      .brand-orb {
-        width: 12px;
-        height: 12px;
-        border-radius: 999px;
-        background: linear-gradient(135deg, var(--accent), #e49b45);
-        box-shadow: 0 0 0 5px rgba(193, 94, 42, 0.08);
-      }
-
-      .brand-title {
-        font-family: 'Fraunces', 'Noto Serif SC', serif;
-        font-size: 1.18rem;
-        font-weight: 800;
-        letter-spacing: 0.01em;
-        color: var(--accent-deep);
-      }
-
-      .brand-subtitle {
-        padding-left: 12px;
-        color: var(--muted);
-        font-size: 0.85rem;
-      }
-
-      .site-nav {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 10px;
-      }
-
-      .nav-link {
-        padding: 11px 14px;
-        border-radius: 999px;
-        border: 1px solid transparent;
-        color: var(--muted);
-        font-size: 0.95rem;
-        transition:
-          transform 180ms ease,
-          color 180ms ease,
-          border-color 180ms ease,
-          background-color 180ms ease;
-      }
-
-      .nav-link:hover,
-      .nav-link:focus-visible {
-        color: var(--accent-deep);
-        border-color: rgba(193, 94, 42, 0.16);
-        background: rgba(255, 251, 244, 0.74);
-        transform: translateY(-1px);
-      }
-
-      .nav-link.active {
-        color: var(--accent-deep);
-        background: var(--accent-soft);
-        border-color: rgba(193, 94, 42, 0.18);
-        box-shadow: inset 0 0 0 1px rgba(193, 94, 42, 0.03);
       }
 
       main.page {
@@ -584,14 +494,9 @@ const navItems = [
       }
 
       @media (max-width: 960px) {
-        .header-inner,
         .section-header {
           flex-direction: column;
           align-items: start;
-        }
-
-        .site-nav {
-          justify-content: flex-start;
         }
 
         .hero-grid,
@@ -642,24 +547,7 @@ const navItems = [
     <div class="shell">
       <header class="site-header">
         <div class="container header-inner">
-          <a class="brand" href={withBase('/')}>
-            <span class="brand-mark">
-              <span class="brand-orb"></span>
-              <span class="brand-title">虾客AI</span>
-            </span>
-            <span class="brand-subtitle">AI江湖，从这里开始</span>
-          </a>
-
-          <nav class="site-nav" aria-label="主导航">
-            {navItems.map((item) => {
-              const isActive = currentPath === item.match || currentPath.startsWith(item.match);
-              return (
-                <a class:list={['nav-link', { active: isActive }]} href={item.href}>
-                  {item.label}
-                </a>
-              );
-            })}
-          </nav>
+          <SiteHeader navLabel="主导航" />
         </div>
       </header>
 
@@ -677,10 +565,7 @@ const navItems = [
                   想自己安装或找我交付就去安装交付服务。
                 </p>
                 <div class="footer-links">
-                  <a href={withBase('/docs/')}>文档教程</a>
-                  <a href={withBase('/links/')}>资源导航</a>
-                  <a href={withBase('/cases/')}>案例</a>
-                  <a href={withBase('/service/')}>安装交付服务</a>
+                  {SITE_NAV_ITEMS.map((item) => <a href={withBase(item.path)}>{item.label}</a>)}
                 </div>
               </div>
 

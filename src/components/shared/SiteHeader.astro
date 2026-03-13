@@ -1,0 +1,242 @@
+---
+import { SITE_NAME, SITE_NAV_ITEMS, SITE_SLOGAN } from '../../data/site.mjs';
+
+export interface Props {
+  navLabel?: string;
+}
+
+const { navLabel = '站点导航' } = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => `${base}${path}`;
+const normalize = (path: string) => (path === '/' ? '/' : `${path.replace(/\/+$/, '')}/`);
+const rawPath = (() => {
+  const pathname = Astro.url.pathname || '/';
+  return base && pathname.startsWith(base) ? pathname.slice(base.length) || '/' : pathname;
+})();
+const currentPath = normalize(rawPath);
+
+const hasSearch = Astro.slots.has('search');
+const hasUtilities = Astro.slots.has('utilities');
+---
+
+<div class="shared-header">
+  <div class="shared-header__top">
+    <a class="shared-header__brand" href={withBase('/')}>
+      <span class="shared-header__mark">
+        <span class="shared-header__orb" aria-hidden="true"></span>
+        <span class="shared-header__title">{SITE_NAME}</span>
+      </span>
+      <span class="shared-header__subtitle">{SITE_SLOGAN}</span>
+    </a>
+
+    {
+      (hasSearch || hasUtilities) && (
+        <div class="shared-header__tools">
+          {hasSearch && (
+            <div class="shared-header__search">
+              <slot name="search" />
+            </div>
+          )}
+          {hasUtilities && (
+            <div class="shared-header__utilities">
+              <slot name="utilities" />
+            </div>
+          )}
+        </div>
+      )
+    }
+  </div>
+
+  <nav class="shared-header__nav" aria-label={navLabel}>
+    {
+      SITE_NAV_ITEMS.map((item) => {
+        const isActive = currentPath === item.path || currentPath.startsWith(item.path);
+        return (
+          <a class:list={['shared-header__link', { active: isActive }]} href={withBase(item.path)}>
+            {item.label}
+          </a>
+        );
+      })
+    }
+  </nav>
+</div>
+
+<style>
+  .shared-header {
+    display: grid;
+    gap: 0.9rem;
+    width: 100%;
+  }
+
+  .shared-header__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+    min-width: 0;
+  }
+
+  .shared-header__brand {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .shared-header__mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: fit-content;
+    padding: 0.72rem 1rem 0.72rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid rgba(193, 94, 42, 0.14);
+    background: rgba(255, 250, 242, 0.9);
+    box-shadow: 0 14px 28px rgba(83, 58, 42, 0.08);
+  }
+
+  .shared-header__orb {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #c15e2a, #e49b45);
+    box-shadow: 0 0 0 0.35rem rgba(193, 94, 42, 0.1);
+    flex: none;
+  }
+
+  .shared-header__title {
+    color: #7b371c;
+    font-family: 'Fraunces', 'Noto Serif SC', serif;
+    font-size: 1.06rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+  }
+
+  .shared-header__subtitle {
+    padding-left: 0.3rem;
+    color: #6c5a4e;
+    font-size: 0.82rem;
+    line-height: 1.2;
+  }
+
+  .shared-header__tools {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .shared-header__search {
+    flex: 1 1 20rem;
+    min-width: min(20rem, 100%);
+    max-width: 32rem;
+  }
+
+  .shared-header__search :global(.search) {
+    width: 100%;
+  }
+
+  .shared-header__search :global(button),
+  .shared-header__search :global(label) {
+    border-radius: 999px;
+    border-color: rgba(193, 94, 42, 0.12);
+    background: rgba(255, 251, 244, 0.86);
+    box-shadow: 0 10px 24px rgba(83, 58, 42, 0.06);
+  }
+
+  .shared-header__utilities {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .shared-header__utilities :global(.social-icons) {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-right: 1rem;
+    border-inline-end: 1px solid var(--sl-color-gray-5, rgba(75, 54, 38, 0.14));
+  }
+
+  .shared-header__nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .shared-header__link {
+    padding: 0.62rem 0.98rem;
+    border-radius: 999px;
+    border: 1px solid rgba(193, 94, 42, 0.1);
+    background: rgba(255, 251, 244, 0.78);
+    box-shadow: 0 10px 24px rgba(83, 58, 42, 0.04);
+    color: #6c5a4e;
+    font-size: 0.92rem;
+    text-decoration: none;
+    transition:
+      border-color 180ms ease,
+      background-color 180ms ease,
+      color 180ms ease,
+      transform 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .shared-header__link:hover,
+  .shared-header__link:focus-visible {
+    color: #7b371c;
+    border-color: rgba(193, 94, 42, 0.18);
+    background: rgba(255, 249, 241, 0.96);
+    transform: translateY(-1px);
+    box-shadow: 0 14px 26px rgba(83, 58, 42, 0.08);
+  }
+
+  .shared-header__link.active {
+    color: #7b371c;
+    border-color: rgba(193, 94, 42, 0.18);
+    background: rgba(193, 94, 42, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(193, 94, 42, 0.02);
+  }
+
+  @media (max-width: 60rem) {
+    .shared-header__top {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .shared-header__tools {
+      width: 100%;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .shared-header__search {
+      width: 100%;
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .shared-header__subtitle {
+      white-space: normal;
+    }
+
+    .shared-header__utilities {
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .shared-header__utilities :global(.social-icons) {
+      padding-right: 0;
+      border-inline-end: 0;
+    }
+
+    .shared-header__link {
+      font-size: 0.88rem;
+    }
+  }
+</style>
