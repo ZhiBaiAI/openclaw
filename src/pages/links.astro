@@ -7,412 +7,242 @@ const withBase = (path: string) => `${base}${path}`;
 const officialLinks = [
   {
     title: 'OpenClaw 官网',
-    tag: '官方首页',
+    tag: '官方入口',
     url: 'https://openclaw.ai/',
-    summary: '先看产品定位、安装方式、平台支持和官方下载安装入口。',
-    note: '先用它了解 OpenClaw 能做什么'
+    summary: '先看产品定位、安装方式、支持平台和官方下载安装入口。'
   },
   {
     title: 'OpenClaw 官方文档',
     tag: '官方文档',
     url: 'https://docs.openclaw.ai/',
-    summary: '查安装、配置、聊天渠道接入、远程访问和常见问题。',
-    note: '需要精确步骤时优先看这里'
-  },
-  {
-    title: '腾讯 SkillHub',
-    tag: '技能入口',
-    url: 'https://skillhub.tencent.com/',
-    summary: '去腾讯 SkillHub 查找和获取可用技能。',
-    note: '需要扩展能力时，从这里找现成技能'
-  },
-  {
-    title: 'MiniMax 开放平台',
-    tag: '模型平台',
-    url: 'https://platform.minimaxi.com/subscribe/coding-plan',
-    summary: 'MiniMax 官方订阅入口，可用于进入 Coding Plan、查看订阅方案和继续完成平台登录。',
-    note: '如果你准备在 OpenClaw 里接 MiniMax，这里适合作为平台导航入口。'
+    summary: '查安装、配置、聊天渠道接入和更细的官方说明。'
   },
   {
     title: 'GitHub 仓库',
     tag: '源码与讨论',
     url: 'https://github.com/openclaw/openclaw',
-    summary: '查看源码、Issue、更新动态和社区讨论。',
-    note: '适合跟踪官方进展和问题反馈'
+    summary: '查看源码、Issue、讨论和最近动态。'
   },
   {
     title: 'GitHub Releases',
-    tag: '版本发布',
+    tag: '版本更新',
     url: 'https://github.com/openclaw/openclaw/releases',
-    summary: '集中查看版本更新记录、发布时间和升级说明。',
-    note: '升级前建议先看这里'
+    summary: '升级前先看版本说明、发布时间和变更记录。'
+  }
+];
+
+const toolLinks = [
+  {
+    title: '腾讯 SkillHub',
+    tag: '技能入口',
+    url: 'https://skillhub.tencent.com/',
+    summary: '需要扩展能力时，从这里找可用技能。'
+  },
+  {
+    title: 'MiniMax 平台',
+    tag: '模型平台',
+    url: 'https://platform.minimaxi.com/subscribe/coding-plan',
+    summary: '如果你准备在 OpenClaw 里接 MiniMax，这里是平台入口。'
   },
   {
     title: 'ClawHub',
     tag: '生态入口',
     url: 'https://clawhub.ai/',
-    summary: '查看 OpenClaw 生态内容、案例和相关资源汇总。',
-    note: '想继续找周边资源时可以从这里看'
+    summary: '补充看 OpenClaw 生态内容、案例和周边资源。'
   }
 ];
 
-const articleLinks = [
+const readingLinks = [
   {
-    title: '小白也能轻松入手！OpenClaw + QQ，激活你的第一个 AI 助手',
-    tag: '腾讯云文章',
+    title: 'OpenClaw + QQ 入门文章',
     url: 'https://cloud.tencent.com/developer/article/2625147',
-    summary: '更偏入门向，适合想先把 OpenClaw 跟 QQ 接起来、快速跑通第一个聊天入口的用户。'
+    summary: '更偏新手向，适合先跑通第一个聊天入口。'
   },
   {
-    title: '让 OpenClaw 接入微信？',
-    tag: '腾讯云文章',
+    title: 'OpenClaw 接入微信',
     url: 'https://cloud.tencent.com/developer/article/2626045',
-    summary: '围绕微信接入思路展开，适合把 OpenClaw 进一步接到日常高频沟通工具里的用户。'
+    summary: '适合想把 OpenClaw 用进高频沟通入口的人。'
   },
   {
-    title: 'OpenClaw 接入飞书：从入门到高效使用',
-    tag: '腾讯云文章',
+    title: 'OpenClaw 接入飞书',
     url: 'https://cloud.tencent.com/developer/article/2626151',
-    summary: '偏办公协作场景，适合想把 OpenClaw 用在团队通知、流程协作和企业沟通里的用户。'
+    summary: '适合办公协同和团队沟通场景。'
   },
   {
-    title: 'OpenClaw × 钉钉：让 AI 助手 7×24 小时在线值守',
-    tag: '腾讯云文章',
+    title: 'OpenClaw 接入钉钉',
     url: 'https://cloud.tencent.com/developer/article/2626553',
-    summary: '偏企业和值守场景，适合关注钉钉接入、自动提醒和长期在线能力的用户。'
+    summary: '适合值守、通知和企业协同类场景。'
   }
 ];
 
-const localLinks = [
+const localRoutes = [
   {
-    title: '7 步教程',
+    title: '文档教程',
     url: withBase('/docs/'),
-    summary: '从安装到上手的中文整理版教程。'
+    summary: '把 7 步教程、命令和 FAQ 集中放在本站。'
   },
   {
-    title: '方案能力',
-    url: withBase('/features/'),
-    summary: '先看适合哪些场景、通常会交付什么。'
-  },
-  {
-    title: '案例演示',
+    title: '案例',
     url: withBase('/cases/'),
-    summary: '放现场演示、使用案例和典型流程。'
+    summary: '先看有哪些适合新手理解的真实使用场景。'
   },
   {
-    title: '上门服务',
+    title: '安装交付服务',
     url: withBase('/service/'),
-    summary: '长沙本地安装、调试和教学服务说明。'
+    summary: '自己安装、交付服务、排错支持都统一在这里。'
   }
 ];
 ---
 
 <MarketingLayout
   title="OpenClaw 资源导航"
-  description="集中整理 OpenClaw 官方站点、腾讯 SkillHub、精选文章和站内入口。"
+  description="集中整理官网、官方文档、SkillHub、版本更新和精选中文文章，作为 OpenClaw 的外部资源入口。"
 >
-  <main class="container">
-    <section class="hero split-hero">
-      <div class="hero-grid">
-        <article class="hero-copy">
-          <span class="eyebrow">资源导航</span>
-          <h1>官网、文档、SkillHub 和精选文章都在这里。</h1>
-          <p class="lead">
-            查官方入口、技能资源和补充教程时，先看这一页。
-          </p>
-          <div class="hero-actions">
-            <a class="cta cta-primary" href="https://openclaw.ai/" target="_blank" rel="noreferrer">
-              先看官网
-            </a>
-            <a class="cta cta-secondary" href="https://docs.openclaw.ai/" target="_blank" rel="noreferrer">
-              打开官方文档
-            </a>
-            <a class="cta cta-secondary" href="https://skillhub.tencent.com/" target="_blank" rel="noreferrer">
-              打开 SkillHub
-            </a>
-            <a class="cta cta-secondary" href="https://platform.minimaxi.com/subscribe/coding-plan" target="_blank" rel="noreferrer">
-              打开 MiniMax
-            </a>
-          </div>
-          <div class="hero-list">
-            <div>
-              <strong>安装入口</strong>
-              官网和官方文档分开列出，先看介绍，再查操作步骤。
-            </div>
-            <div>
-              <strong>技能入口</strong>
-              需要扩展能力时，直接到 SkillHub 找合适的技能。
-            </div>
-            <div>
-              <strong>更新入口</strong>
-              GitHub 仓库和 Releases 适合看版本变化与社区动态。
-            </div>
-          </div>
-        </article>
-
-        <aside class="panel">
-          <h2>使用建议</h2>
-          <p>第一次使用，建议先看官网和官方文档。</p>
-          <ul class="bullet-list">
-            <li><strong>先了解：</strong> 用官网快速判断它适不适合你的场景</li>
-            <li><strong>再安装：</strong> 具体步骤、配置细节以官方文档为准</li>
-            <li><strong>后扩展：</strong> 需要新能力时再去 SkillHub 找合适的技能</li>
-            <li><strong>再跟新：</strong> 升级前看 Releases，排错时看 GitHub Issue</li>
-          </ul>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">官方站点</span>
-          <h2>先看官方，再按需要找技能和补充文章</h2>
-        </div>
-        <p>安装、配置和升级，优先以官方信息为准。</p>
-      </div>
-      <div class="resource-grid">
-        {officialLinks.map((item) => (
-          <article class="resource-card">
-            <div class="resource-head">
-              <span class="site-tag">{item.tag}</span>
-              <h3>{item.title}</h3>
-            </div>
-            <p>{item.summary}</p>
-            <p class="resource-note">{item.note}</p>
-            <a class="resource-link" href={item.url} target="_blank" rel="noreferrer">
-              打开站点
-              <span>{item.url.replace(/^https?:\/\//, '')}</span>
-            </a>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">精选中文文章</span>
-          <h2>补充一些值得收藏的实战教程</h2>
-        </div>
-        <p>适合补充看具体接入场景。</p>
-      </div>
-      <div class="article-grid">
-        {articleLinks.map((item) => (
-          <article class="article-card">
-            <span class="site-tag article-tag">{item.tag}</span>
-            <h3>{item.title}</h3>
-            <p>{item.summary}</p>
-            <a class="article-link" href={item.url} target="_blank" rel="noreferrer">
-              查看文章
-              <span>cloud.tencent.com</span>
-            </a>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="spotlight">
-        <article class="section-card">
-          <span class="eyebrow">站内内容</span>
-          <h2>你还可以继续看这些内容。</h2>
-          <div class="mini-grid">
-            {localLinks.map((item) => (
-              <a class="mini-card" href={item.url}>
-                <strong>{item.title}</strong>
-                <span>{item.summary}</span>
+  <main class="page">
+    <div class="container">
+      <section class="page-hero">
+        <div class="hero-grid">
+          <article>
+            <span class="eyebrow">资源导航</span>
+            <h1>官网、官方文档、SkillHub 和精选文章，都放在这一页。</h1>
+            <p class="lead">
+              你不需要每次都重新翻聊天记录找链接。需要查官方资料、看技能入口、补外部文章时，
+              直接来这一页就够了。
+            </p>
+            <div class="action-row">
+              <a class="button button-primary" href="https://openclaw.ai/" target="_blank" rel="noreferrer">
+                打开官网
               </a>
-            ))}
-          </div>
-        </article>
-        <article class="section-card">
-          <span class="eyebrow">小提醒</span>
-          <h2>不要把第三方教程当成唯一依据。</h2>
-          <p>
-            安装、授权和技能相关内容，优先以官方文档为准。
-          </p>
-          <div class="hero-actions">
-            <a class="cta cta-primary" href={withBase('/docs/')}>看中文教程</a>
-            <a class="cta cta-secondary" href={withBase('/contact/')}>联系与更新</a>
-          </div>
-        </article>
-      </div>
-    </section>
+              <a class="button button-secondary" href="https://docs.openclaw.ai/" target="_blank" rel="noreferrer">
+                打开官方文档
+              </a>
+            </div>
+          </article>
 
-    <footer class="footer">先看官方入口，扩展能力再看 SkillHub 和补充教程。</footer>
+          <aside class="hero-aside">
+            <span class="section-kicker">建议顺序</span>
+            <ul class="simple-list">
+              <li>第一次使用：先看官网，再看官方文档。</li>
+              <li>想扩展能力：再去 SkillHub 找技能。</li>
+              <li>准备升级或排错：看 Releases 和 GitHub 仓库。</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">官方入口</span>
+            <h2>安装、配置、升级，优先以官方信息为准。</h2>
+          </div>
+          <p class="section-copy">
+            第三方文章适合辅助理解，但安装步骤、权限、更新与兼容性，还是优先参考官方入口。
+          </p>
+        </div>
+
+        <div class="card-grid card-grid-two">
+          {officialLinks.map((item) => (
+            <article class="info-card">
+              <span class="card-tag">{item.tag}</span>
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-meta">{item.summary}</p>
+              <div class="action-row">
+                <a class="button button-secondary" href={item.url} target="_blank" rel="noreferrer">
+                  打开链接
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="split-grid">
+          <article class="summary-card">
+            <span class="section-kicker">工具与生态</span>
+            <h2>需要扩展能力、补模型平台或看生态内容时，再来这里。</h2>
+            <div class="mini-grid">
+              {toolLinks.map((item) => (
+                <a class="mini-card" href={item.url} target="_blank" rel="noreferrer">
+                  <strong>{item.title}</strong>
+                  <span>{item.summary}</span>
+                </a>
+              ))}
+            </div>
+          </article>
+
+          <article class="note-card">
+            <span class="status-chip support">提醒</span>
+            <h3 class="card-title">SkillHub 放在资源页，不放在顶部主菜单。</h3>
+            <p class="card-meta">
+              这样首页结构更干净。只有在你明确需要外部资源和技能入口时，才进入资源导航。
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">精选文章</span>
+            <h2>适合补充看具体聊天入口和场景接入。</h2>
+          </div>
+          <p class="section-copy">
+            这些文章更偏场景理解，适合新手补概念，不建议代替官方步骤。
+          </p>
+        </div>
+
+        <div class="card-grid card-grid-two">
+          {readingLinks.map((item) => (
+            <article class="info-card">
+              <span class="card-tag">外部文章</span>
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-meta">{item.summary}</p>
+              <div class="action-row">
+                <a class="button button-secondary" href={item.url} target="_blank" rel="noreferrer">
+                  查看文章
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="split-grid">
+          <article class="summary-card">
+            <span class="section-kicker">站内入口</span>
+            <h2>看完外部链接后，通常会回到这三个站内页面。</h2>
+            <div class="mini-grid">
+              {localRoutes.map((item) => (
+                <a class="mini-card" href={item.url}>
+                  <strong>{item.title}</strong>
+                  <span>{item.summary}</span>
+                </a>
+              ))}
+            </div>
+          </article>
+
+          <article class="note-card">
+            <span class="status-chip">收藏建议</span>
+            <h3 class="card-title">如果你每天都在用 OpenClaw，这页最好也一起收藏。</h3>
+            <p class="card-meta">
+              它负责所有“站外资源”的统一入口，能把官网、技能、版本和补充文章收在一处。
+            </p>
+          </article>
+        </div>
+      </section>
+    </div>
   </main>
 
   <style>
-    .resource-grid {
-      display: grid;
+    .card-grid-two {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .resource-card {
-      display: grid;
-      gap: 14px;
-      padding: 24px;
-      border: 1px solid rgba(126, 72, 42, 0.14);
-      border-radius: var(--radius-xl);
-      background:
-        radial-gradient(circle at top right, rgba(239, 143, 71, 0.12), transparent 30%),
-        linear-gradient(180deg, rgba(255, 252, 247, 0.96), rgba(255, 248, 241, 0.88));
-      box-shadow: var(--shadow);
-    }
-
-    .resource-head {
-      display: grid;
-      gap: 10px;
-    }
-
-    .resource-head h3 {
-      font-size: 1.7rem;
-    }
-
-    .site-tag {
-      width: fit-content;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent-deep);
-      font-size: 0.85rem;
-      font-weight: 800;
-      letter-spacing: 0.03em;
-    }
-
-    .resource-card p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    .resource-note {
-      padding: 12px 14px;
-      border-radius: 18px;
-      background: rgba(255, 248, 241, 0.88);
-      border: 1px solid rgba(217, 94, 57, 0.12);
-    }
-
-    .resource-link {
-      display: grid;
-      gap: 4px;
-      width: fit-content;
-      padding: 14px 18px;
-      border-radius: 18px;
-      color: #fff8f4;
-      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-      box-shadow: 0 18px 32px rgba(217, 94, 57, 0.18);
-      transition: transform 180ms ease;
-      font-weight: 800;
-    }
-
-    .resource-link:hover {
-      transform: translateY(-2px);
-    }
-
-    .resource-link span {
-      font-size: 0.85rem;
-      font-weight: 600;
-      opacity: 0.86;
-    }
-
-    .mini-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 16px;
-    }
-
-    .article-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .article-card {
-      display: grid;
-      gap: 14px;
-      padding: 24px;
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(126, 72, 42, 0.14);
-      background:
-        radial-gradient(circle at top left, rgba(217, 94, 57, 0.08), transparent 28%),
-        linear-gradient(180deg, rgba(255, 251, 246, 0.96), rgba(255, 245, 236, 0.88));
-      box-shadow: var(--shadow);
-    }
-
-    .article-card h3 {
-      font-size: 1.5rem;
-    }
-
-    .article-card p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    .article-tag {
-      background: rgba(141, 52, 36, 0.1);
-    }
-
-    .article-link {
-      display: grid;
-      gap: 4px;
-      width: fit-content;
-      padding: 13px 17px;
-      border-radius: 18px;
-      background: rgba(255, 248, 241, 0.92);
-      border: 1px solid rgba(217, 94, 57, 0.14);
-      color: var(--accent-deep);
-      font-weight: 800;
-      transition:
-        transform 180ms ease,
-        border-color 180ms ease;
-    }
-
-    .article-link:hover {
-      transform: translateY(-2px);
-      border-color: rgba(217, 94, 57, 0.24);
-    }
-
-    .article-link span {
-      font-size: 0.84rem;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .mini-card {
-      display: grid;
-      gap: 8px;
-      padding: 18px;
-      border-radius: 20px;
-      background: rgba(255, 248, 241, 0.86);
-      border: 1px solid rgba(217, 94, 57, 0.12);
-      transition:
-        transform 180ms ease,
-        border-color 180ms ease;
-    }
-
-    .mini-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(217, 94, 57, 0.2);
-    }
-
-    .mini-card strong {
-      color: var(--accent-deep);
-    }
-
-    .mini-card span {
-      color: var(--muted);
-      line-height: 1.7;
     }
 
     @media (max-width: 960px) {
-      .resource-grid,
-      .article-grid,
-      .mini-grid {
+      .card-grid-two {
         grid-template-columns: 1fr;
       }
     }

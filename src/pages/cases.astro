@@ -6,253 +6,131 @@ const withBase = (path: string) => `${base}${path}`;
 
 const cases = [
   {
-    title: '用 OpenClaw 做小红书自动运营',
     tag: '内容运营',
-    summary:
-      '把热点收集、选题整理、文案起草和发布准备串成一个流程，适合个人博主和小团队做半自动内容运营。',
-    highlights: [
-      '先收集热点和关键词，再生成适合平台语气的选题方向',
-      '把文案、标题、配图提示词整理成可直接改稿的草案',
-      '适合做日更选题池、账号灵感库和固定栏目运营'
-    ],
-    result:
-      '核心价值不是“完全无人值守”，而是把最耗时的内容准备环节交给 OpenClaw 先打底，人只负责判断和定稿。'
+    title: '把选题、资料收集和草稿整理交给 OpenClaw 打底',
+    summary: '适合个人创作者和小团队，用它先做信息收集、选题整理和初稿准备。',
+    fit: '如果你经常卡在“今天写什么、资料从哪找、标题怎么起”，这类案例最容易看出价值。',
+    result: '重点不是全自动发内容，而是把最耗时间的准备环节先交给 OpenClaw 做。'
   },
   {
-    title: '10 分钟搭一个 AI 选股助手',
-    tag: '信息筛选',
-    summary:
-      '通过定时任务和规则筛选，让 OpenClaw 每天自动整理一份候选股票列表，适合把公开信息做成固定观察流。',
-    highlights: [
-      '设定固定选股条件和信息来源，按日自动收集与筛选',
-      '输出简洁的候选名单和观察理由，方便你自己二次判断',
-      '适合做每日简报、盘前观察和自定义提醒'
-    ],
-    result:
-      '它更像一个“自动整理投研线索”的助手，而不是替你做最终交易决定的系统。',
-    caution: '仅适合作为信息整理案例，不构成投资建议。'
-  },
-  {
-    title: '5 分钟把 OpenClaw 接进飞书',
     tag: '办公协同',
-    summary:
-      '把 OpenClaw 放进飞书后，消息入口、日常协作和办公提醒会更集中，适合团队内部统一使用一个助手入口。',
-    highlights: [
-      '在飞书里直接发起问题、任务或查询，不用额外切换工具',
-      '适合承接日常问答、固定提醒和轻量协作流程',
-      '对经常在手机和电脑之间切换的人尤其友好'
-    ],
-    result:
-      '这类场景的重点是把 AI 放到你本来就在用的工作入口里，而不是再多开一个新系统。'
+    title: '把 OpenClaw 放进飞书、微信、钉钉这些高频沟通入口',
+    summary: '适合日常办公、团队协同和高频问答，让助手直接出现在你本来就会打开的地方。',
+    fit: '如果你不想多开一个系统，而是想在原来的工作入口里直接用 AI，这类场景更适合你。',
+    result: '真正的价值是减少切换成本，而不是把所有工作都自动化。'
   },
   {
-    title: '把 OpenClaw 训练成专属营养师',
-    tag: '生活助理',
-    summary:
-      '把饮食偏好、热量目标和外卖选择整理成规则后，OpenClaw 可以先帮你做日常搭配建议和记录提醒。',
-    highlights: [
-      '结合你的减脂目标、饮食偏好和常点餐厅做建议',
-      '适合做“吃什么”“怎么点更稳”“今天还差多少”这类日常问题',
-      '可以把常见餐品整理成长期可复用的个人规则'
-    ],
-    result:
-      '它适合作为饮食记录和选择建议助手，尤其适合高频、重复、需要快速判断的生活场景。',
-    caution: '适合日常饮食管理，不替代专业医疗或营养建议。'
+    tag: '个人助手',
+    title: '把 OpenClaw 调成你的日常生活与工作助手',
+    summary: '适合提醒、整理、记录和轻量建议这类高频重复问题。',
+    fit: '如果你是技术小白，通常从个人助手类场景开始最容易建立使用习惯。',
+    result: '先从“每天都会问的事”开始，最容易把 OpenClaw 真正养熟。'
   },
   {
-    title: '配置 Skills 打通苹果生态',
-    tag: '设备联动',
-    summary:
-      '把 OpenClaw 和苹果设备常用能力串起来后，可以让它更像一个跨设备个人助理，而不是只会聊天的机器人。',
-    highlights: [
-      '适合把手机、云端文件和常用设备信息接入同一个助手',
-      '能把跨设备查询和固定操作收敛到一个入口里',
-      '对苹果全家桶用户价值会更明显'
-    ],
-    result:
-      '真正好用的点在于：你不需要记住每个设备各自怎么操作，而是把常见动作交给同一个助手入口。'
+    tag: '信息筛选',
+    title: '用固定规则筛公开信息，生成每日观察和候选列表',
+    summary: '适合把重复搜集、比对、整理的动作，变成固定流程。',
+    fit: '如果你每天都要看同一类信息，再手工汇总，这类场景会明显节省时间。',
+    result: '它更像自动整理线索的助手，不是替你做最终决策。'
   }
+];
+
+const tips = [
+  '先挑最接近自己日常的案例，不用一口气全看。',
+  '看案例的重点，不是功能名，而是“它帮你省掉了哪一段重复动作”。',
+  '如果案例看完觉得自己还是不会配，就直接去安装交付服务页。'
 ];
 ---
 
 <MarketingLayout
-  title="OpenClaw 真实案例"
-  description="把公开教程整理成更容易理解的文字版案例，方便客户快速理解 OpenClaw 能落地到哪些真实场景。"
+  title="OpenClaw 案例"
+  description="用技术小白也能看懂的方式，整理 OpenClaw 的真实使用场景，帮助判断它适不适合自己。"
 >
-  <main class="container">
-    <section class="hero split-hero">
-      <div class="hero-grid">
-        <article class="hero-copy">
-          <span class="eyebrow">真实案例</span>
-          <h1>不是只讲概念，直接看能怎么落地。</h1>
-          <p class="lead">重点看能带来什么结果，以及哪些场景更适合你。</p>
-          <div class="hero-actions">
-            <a class="cta cta-primary" href="#case-list">直接看案例</a>
-          </div>
-          <div class="hero-list">
-            <div>
-              <strong>偏实战</strong>
-              都是具体可落地的使用方向，不是抽象卖点。
+  <main class="page">
+    <div class="container">
+      <section class="page-hero">
+        <div class="hero-grid">
+          <article>
+            <span class="eyebrow">案例</span>
+            <h1>先别急着研究功能，先看它能不能帮你做成事。</h1>
+            <p class="lead">
+              这一页不讲复杂原理，只讲最实际的问题：
+              OpenClaw 适合落在哪些场景，哪些人最容易先用起来，最后能帮你省掉什么。
+            </p>
+            <div class="action-row">
+              <a class="button button-primary" href="#case-list">直接看案例</a>
+              <a class="button button-secondary" href={withBase('/service/')}>不会配就看安装交付服务</a>
             </div>
-            <div>
-              <strong>偏文字</strong>
-              全部整理成文字版，适合快速扫一遍抓重点。
-            </div>
-            <div>
-              <strong>偏普通用户</strong>
-              重点看使用结果，不用先理解太多技术术语。
-            </div>
-          </div>
-        </article>
-
-        <aside class="panel">
-          <h2>推荐先看</h2>
-          <p>先看最贴近你场景的那个案例。</p>
-          <ul class="bullet-list">
-            <li><strong>内容型用户：</strong> 先看小红书自动运营</li>
-            <li><strong>办公型用户：</strong> 先看飞书接入和苹果生态</li>
-            <li><strong>个人效率型：</strong> 先看营养师和每日筛选系统</li>
-            <li><strong>做演示教学：</strong> 可以直接选 1 到 2 个案例现场演示</li>
-          </ul>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section" id="case-list">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">案例清单</span>
-          <h2>五个方向，覆盖内容、办公、生活和设备联动</h2>
-        </div>
-        <p>先从最贴近你需求的一类开始看。</p>
-      </div>
-
-      <div class="case-grid">
-        {cases.map((item) => (
-          <article class="case-card">
-            <div class="case-head">
-              <span class="case-tag">{item.tag}</span>
-              <h2>{item.title}</h2>
-            </div>
-            <p class="case-summary">{item.summary}</p>
-            <div class="case-box">
-              <strong>适合这样用</strong>
-              <ul>
-                {item.highlights.map((point) => (
-                  <li>{point}</li>
-                ))}
-              </ul>
-            </div>
-            <p class="case-result">{item.result}</p>
-            {item.caution && <p class="case-caution">{item.caution}</p>}
           </article>
-        ))}
-      </div>
-    </section>
 
-    <section class="section">
-      <div class="spotlight">
-        <article class="section-card">
-          <span class="eyebrow">现场演示建议</span>
-          <h2>如果要做教学，优先演示这两类。</h2>
-          <ul>
-            <li>内容运营类：容易看出“收集信息 → 整理结果 → 输出草案”的连贯价值</li>
-            <li>办公协同类：更贴近日常工作，用户也更容易想象自己怎么用</li>
-            <li>生活助理类：适合技术小白，门槛低，代入感强</li>
-          </ul>
-        </article>
+          <aside class="hero-aside">
+            <span class="section-kicker">怎么看这页</span>
+            <ul class="simple-list">
+              {tips.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </aside>
+        </div>
+      </section>
 
-        <article class="section-card">
-          <span class="eyebrow">落地提醒</span>
-          <h2>案例能跑起来，不代表可以无脑全自动。</h2>
-          <p>
-            内容发布、投资判断、饮食建议和设备联动这几类场景，都建议保留人工确认环节。真正稳定的用法，
-            通常是让 OpenClaw 先做收集、整理、提醒和草案，人再做最后判断。
-          </p>
-          <div class="hero-actions">
-            <a class="cta cta-primary" href={withBase('/service/')}>看交付服务</a>
-            <a class="cta cta-secondary" href={withBase('/docs/')}>看 7 步教程</a>
+      <section class="section" id="case-list">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">场景清单</span>
+            <h2>先从最像你日常生活或工作的那一类开始看。</h2>
           </div>
-        </article>
-      </div>
-    </section>
+          <p class="section-copy">
+            你不需要先理解所有技术词。只要先判断“这个场景是不是我真的会每天用到”，就够了。
+          </p>
+        </div>
 
-    <footer class="footer">适合用来做现场演示，也适合客户先判断自己的使用方向。</footer>
+        <div class="card-grid case-grid">
+          {cases.map((item) => (
+            <article class="info-card">
+              <span class="card-tag">{item.tag}</span>
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-meta">{item.summary}</p>
+              <ul class="bullet-list">
+                <li>{item.fit}</li>
+                <li>{item.result}</li>
+              </ul>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="split-grid">
+          <article class="summary-card">
+            <span class="section-kicker">给新客户的建议</span>
+            <h2>如果你只是想先判断值不值得做，案例页比参数页更重要。</h2>
+            <p class="card-copy">
+              因为真正影响你是否会长期使用的，不是模型名字，也不是一长串配置项，
+              而是它能不能进入你原本的工作和生活流程。
+            </p>
+          </article>
+
+          <article class="note-card">
+            <span class="status-chip support">下一步</span>
+            <h3 class="card-title">看完案例以后，通常只需要做一个决定。</h3>
+            <p class="card-meta">
+              如果你已经知道“这就是我想要的方向”，那就去文档教程自己装，
+              或直接去安装交付服务页找我帮你落地。
+            </p>
+            <div class="action-row">
+              <a class="button button-primary" href={withBase('/docs/')}>自己开始装</a>
+              <a class="button button-secondary" href={withBase('/service/')}>找我做交付</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
   </main>
 
   <style>
     .case-grid {
-      display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .case-card {
-      display: grid;
-      gap: 16px;
-      padding: 26px;
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(126, 72, 42, 0.14);
-      background:
-        radial-gradient(circle at top right, rgba(239, 143, 71, 0.12), transparent 30%),
-        linear-gradient(180deg, rgba(255, 252, 247, 0.96), rgba(255, 246, 238, 0.9));
-      box-shadow: var(--shadow);
-    }
-
-    .case-head {
-      display: grid;
-      gap: 10px;
-    }
-
-    .case-head h2 {
-      font-size: 1.8rem;
-    }
-
-    .case-tag {
-      width: fit-content;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent-deep);
-      font-size: 0.84rem;
-      font-weight: 800;
-      letter-spacing: 0.03em;
-    }
-
-    .case-summary,
-    .case-result,
-    .case-caution {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    .case-box {
-      padding: 16px 18px;
-      border-radius: 20px;
-      background: rgba(255, 248, 241, 0.9);
-      border: 1px solid rgba(217, 94, 57, 0.12);
-    }
-
-    .case-box strong {
-      display: block;
-      margin-bottom: 10px;
-      color: var(--accent-deep);
-    }
-
-    .case-box ul {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    .case-caution {
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: rgba(95, 137, 103, 0.1);
-      color: #486750;
-      border: 1px solid rgba(95, 137, 103, 0.16);
     }
 
     @media (max-width: 960px) {

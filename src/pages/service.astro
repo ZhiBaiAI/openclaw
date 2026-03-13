@@ -4,82 +4,278 @@ import MarketingLayout from '../layouts/MarketingLayout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const withBase = (path: string) => `${base}${path}`;
 
-const supportDevices = ['Windows 电脑', 'macOS 电脑', 'Linux / 云服务器', '旧主机 / 小型常驻设备'];
-const serviceItems = [
-  ['交付前沟通', '先确认设备、使用场景、聊天入口和你最想先跑通的能力。'],
-  ['部署与调试', '完成环境配置、模型接入、聊天渠道、基础调试和功能验证。'],
-  ['案例演示', '根据你的实际用途做 1 到 2 个小案例现场演示，避免装完不会用。'],
-  ['文档与支持', '交付后继续通过文档、资源导航、命令速查和支持入口使用。']
+const routes = [
+  {
+    id: 'self-install',
+    tag: '自己上手',
+    title: '我想自己安装，但希望路线清楚一点',
+    summary: '适合愿意自己折腾，但不想从一堆零散教程里拼流程的人。',
+    bullets: ['先走文档教程的 7 步流程', '遇到问题先查命令速查和 FAQ', '需要外部资料时再去资源导航']
+  },
+  {
+    id: 'delivery',
+    tag: '交付服务',
+    title: '我想尽快用起来，直接找你做交付',
+    summary: '适合没时间自己踩坑，或者已经知道自己不会配环境、不会接聊天入口的人。',
+    bullets: ['先说明设备和想用的场景', '优先跑通 1 到 2 个真实需求', '交付后继续保留文档和支持入口']
+  },
+  {
+    id: 'daily-use',
+    tag: '日常使用',
+    title: '我已经在用了，想排错或继续扩展',
+    summary: '适合已交付用户和已经跑起来的用户，把这里当成支持和回看入口。',
+    bullets: ['先自查教程、命令和 FAQ', '再带着现象和日志来沟通', '需要案例或外部资源时直接跳到对应入口']
+  }
+];
+
+const deliverySteps = [
+  ['确认设备与入口', '先确认你准备用什么设备、聊天入口和优先场景，不先做无效安装。'],
+  ['跑通最小可用版本', '优先把一个聊天入口、一个模型和一两个真实场景跑顺。'],
+  ['现场教你怎么用', '不是只装完就走，而是会带着你用一遍，让你知道日常怎么继续养。'],
+  ['后续回到这个站', '交付完成后，文档、案例、资源和支持入口都继续在这里。']
+];
+
+const selfInstall = [
+  '先进入文档教程，把 7 步流程从头看一遍。',
+  '遇到命令、配置或接入问题，先查常用命令速查和 FAQ。',
+  '需要找官网、官方文档、SkillHub 或版本更新，再去资源导航。'
+];
+
+const serviceScope = [
+  '环境安装与基础配置',
+  '模型接入与聊天入口接入',
+  '基础规则整理与使用方式说明',
+  '1 到 2 个真实场景演示',
+  '交付后继续通过本站回看和排错'
+];
+
+const supportChecklist = [
+  '你的设备类型和系统',
+  '你现在最想先跑通的 1 到 2 个场景',
+  '已经接入或准备接入的聊天工具',
+  '如果报错，尽量附上截图、现象和日志'
 ];
 ---
 
 <MarketingLayout
-  title="OpenClaw 交付服务"
-  description="把交付范围、支持设备、服务流程和交付后支持方式集中说明，方便客户判断是否适合。"
+  title="OpenClaw 安装交付服务"
+  description="把自己安装、找我交付、已在使用后的排错和支持，全都整合到一个入口页。"
 >
-  <main class="container">
-    <section class="hero split-hero">
-      <div class="hero-grid">
-        <article class="hero-copy">
-          <span class="eyebrow">交付服务</span>
-          <h1>上门或远程都可以，但目标始终是交付一个真正能用的助手。</h1>
-          <p class="lead">
-            先沟通需求，再部署调试，最后用案例带你上手。
-          </p>
-          <div class="hero-actions">
-            <a class="cta cta-primary" href={withBase('/contact/')}>看交付支持</a>
-            <a class="cta cta-secondary" href={withBase('/cases/')}>看真实案例</a>
-          </div>
-        </article>
-
-        <aside class="panel">
-          <h2>支持设备</h2>
-          <ul class="bullet-list">
-            {supportDevices.map((item) => (
-              <li>{item}</li>
-            ))}
-          </ul>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">交付内容</span>
-          <h2>交付不是一次性安装，而是一套清晰流程</h2>
-        </div>
-        <p>先跑通真实场景，再慢慢扩功能。</p>
-      </div>
-      <div class="card-grid">
-        {serviceItems.map(([title, text]) => (
-          <article class="section-card">
-            <h3>{title}</h3>
-            <p>{text}</p>
+  <main class="page">
+    <div class="container">
+      <section class="page-hero">
+        <div class="hero-grid">
+          <article>
+            <span class="eyebrow">安装交付服务</span>
+            <h1>不再把交付相关内容拆散，这一页就是总入口。</h1>
+            <p class="lead">
+              不管你是想自己安装、想直接找我交付、还是已经在使用中遇到问题，
+              都先从这页判断该走哪条路。这里负责把“怎么开始”和“遇到问题怎么办”讲清楚。
+            </p>
+            <div class="action-row">
+              <a class="button button-primary" href="#self-install">自己安装路线</a>
+              <a class="button button-secondary" href="#delivery">交付服务说明</a>
+              <a class="button button-secondary" href="#contact">支持与联系</a>
+            </div>
           </article>
-        ))}
-      </div>
-    </section>
 
-    <section class="section">
-      <div class="spotlight">
-        <article class="section-card">
-          <span class="eyebrow">适合的客户</span>
-          <ul>
-            <li>想把 OpenClaw 用进真实工作和生活流程，而不是只停留在尝鲜阶段</li>
-            <li>不想自己从零排坑，想直接拿到能用的部署方案</li>
-            <li>希望交付后还有文档、案例和支持入口可持续使用</li>
-          </ul>
-        </article>
-        <article class="section-card">
-          <span class="eyebrow">交付原则</span>
-          <ul>
-            <li>优先跑通 1 到 2 个最贴近你需求的实际场景</li>
-            <li>高风险能力默认保守，不做无边界放权</li>
-            <li>交付后可随时查文档、命令和支持入口</li>
-          </ul>
-        </article>
-      </div>
-    </section>
+          <aside class="hero-aside">
+            <span class="section-kicker">适合谁</span>
+            <ul class="simple-list">
+              <li>新客户先判断自己装还是找我做交付。</li>
+              <li>技术小白想要一条更顺的安装路线。</li>
+              <li>已经在使用的用户需要固定的支持入口。</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">三条路线</span>
+            <h2>先判断自己在哪一类，再继续往下走。</h2>
+          </div>
+          <p class="section-copy">
+            你不用一上来就看很长的说明。先找到自己对应的路线，后面的内容才会真正有用。
+          </p>
+        </div>
+
+        <div class="route-grid route-grid-flat">
+          {routes.map((item) => (
+            <a class="route-card route-card-flat" href={`#${item.id}`}>
+              <span class="card-tag">{item.tag}</span>
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-meta">{item.summary}</p>
+              <ul class="bullet-list">
+                {item.bullets.map((bullet) => (
+                  <li>{bullet}</li>
+                ))}
+              </ul>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="section section-anchor" id="self-install">
+        <div class="split-grid">
+          <article class="summary-card">
+            <span class="section-kicker">自己安装路线</span>
+            <h2>适合愿意自己动手，但不想迷路的人。</h2>
+            <ul class="bullet-list">
+              {selfInstall.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+            <div class="action-row">
+              <a class="button button-primary" href={withBase('/docs/')}>进入文档教程</a>
+              <a class="button button-secondary" href={withBase('/links/')}>补外部资源</a>
+            </div>
+          </article>
+
+          <article class="note-card">
+            <span class="status-chip">建议顺序</span>
+            <h3 class="card-title">不要同时开十几个入口。</h3>
+            <p class="card-meta">
+              初次上手最容易犯的错，是一边翻官方文档、一边看第三方文章、一边问人，
+              最后步骤反而乱掉。这里建议的顺序是：本站教程优先，外部资料按需补充。
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section-anchor" id="delivery">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">交付服务</span>
+            <h2>如果你看过还觉得自己不会，直接走交付会更省时间。</h2>
+          </div>
+          <p class="section-copy">
+            重点不是帮你“装一个程序”，而是让你真的能开始用，并且后续还能自己继续维护和扩展。
+          </p>
+        </div>
+
+        <div class="card-grid">
+          {deliverySteps.map(([title, text]) => (
+            <article class="info-card">
+              <h3 class="card-title">{title}</h3>
+              <p class="card-meta">{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="split-grid">
+          <article class="summary-card">
+            <span class="section-kicker">通常会覆盖什么</span>
+            <h2>交付不是一次性装完，而是把最小可用流程带起来。</h2>
+            <ul class="bullet-list">
+              {serviceScope.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article class="note-card">
+            <span class="status-chip support">边界提醒</span>
+            <h3 class="card-title">先把一两个场景养熟，比一口气堆很多功能更重要。</h3>
+            <p class="card-meta">
+              真正能长期用下去的 OpenClaw，不是功能越多越好，而是入口稳定、规则清楚、
+              你自己知道每天怎么用、出了问题知道怎么查。
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section-anchor" id="daily-use">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">已在使用</span>
+            <h2>已经用起来了，就把这个站当成日常支持入口。</h2>
+          </div>
+          <p class="section-copy">
+            建议先自查，再沟通。这样排错更快，也更容易把真正的问题说清楚。
+          </p>
+        </div>
+
+        <div class="mini-grid">
+          <a class="mini-card" href={withBase('/docs/')}>
+            <strong>先回文档教程</strong>
+            <span>重新梳理 7 步教程，很多问题都出在顺序没走对。</span>
+          </a>
+          <a class="mini-card" href={withBase('/docs/reference/common-commands/')}>
+            <strong>看常用命令速查</strong>
+            <span>命令、状态检查、重启与日志查询，先从这里查。</span>
+          </a>
+          <a class="mini-card" href={withBase('/cases/')}>
+            <strong>补看案例</strong>
+            <span>很多扩展思路，都是从具体案例里长出来的。</span>
+          </a>
+          <a class="mini-card" href={withBase('/links/')}>
+            <strong>补外部资源</strong>
+            <span>官网、SkillHub、Releases 和外部文章都集中在一页。</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="section section-anchor" id="contact">
+        <div class="split-grid support-grid">
+          <article class="summary-card">
+            <span class="section-kicker">联系前准备</span>
+            <h2>把这些信息准备好，沟通会顺很多。</h2>
+            <ul class="bullet-list">
+              {supportChecklist.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article class="note-card qr-card">
+            <span class="section-kicker">支持与联系</span>
+            <h3 class="card-title">需要预约交付或继续排错，直接扫码联系。</h3>
+            <img src={withBase('/wechat-qr.png')} alt="微信联系二维码" />
+            <p class="card-meta">
+              添加时备注你的设备类型、当前阶段，以及最想先解决的事情，会更容易快速对上问题。
+            </p>
+          </article>
+        </div>
+      </section>
+    </div>
   </main>
+
+  <style>
+    .section-anchor {
+      scroll-margin-top: 92px;
+    }
+
+    .route-grid-flat {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .route-card-flat,
+    .route-card-flat:hover {
+      transform: none;
+    }
+
+    .qr-card img {
+      width: min(100%, 220px);
+      margin-top: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(193, 94, 42, 0.12);
+      background: rgba(255, 251, 244, 0.92);
+      padding: 12px;
+      box-shadow: 0 16px 32px rgba(83, 58, 42, 0.08);
+    }
+
+    .support-grid {
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .route-grid-flat {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </MarketingLayout>

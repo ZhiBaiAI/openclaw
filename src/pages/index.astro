@@ -4,244 +4,161 @@ import MarketingLayout from '../layouts/MarketingLayout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const withBase = (path: string) => `${base}${path}`;
 
-const quickLinks = [
+const coreRoutes = [
   {
-    title: '未交付客户',
-    text: '先看能力、案例和交付方式。',
-    href: withBase('/features/'),
-    action: '先看方案能力'
+    tag: '先上手',
+    title: '文档教程',
+    href: withBase('/docs/'),
+    summary: '从安装、接入、规则、命令到日常使用，一步一步把 OpenClaw 养起来。',
+    audience: '适合第一次接触、已经装好但不会用、想重新梳理流程的人。',
+    bullets: ['先看 7 步教程', '常用命令速查', 'FAQ 排错入口'],
+    action: '进入文档教程'
   },
   {
-    title: '已交付客户',
-    text: '直接看文档、命令和支持入口。',
-    href: withBase('/docs/'),
-    action: '进入使用文档'
+    tag: '看外部入口',
+    title: '资源导航',
+    href: withBase('/links/'),
+    summary: '集中放官网、官方文档、SkillHub、版本发布和精选文章，不用到处翻链接。',
+    audience: '适合需要补官网信息、找技能、查版本和收藏外部资料的人。',
+    bullets: ['官网与官方文档', 'SkillHub 与 Releases', '精选中文文章'],
+    action: '打开资源导航'
+  },
+  {
+    tag: '看能做什么',
+    title: '案例',
+    href: withBase('/cases/'),
+    summary: '用技术小白也能看懂的方式，把 OpenClaw 能落地到哪些真实场景讲清楚。',
+    audience: '适合先判断值不值得学、值不值得装、值不值得交付的人。',
+    bullets: ['内容运营案例', '办公协同案例', '个人生活助手案例'],
+    action: '查看案例'
+  },
+  {
+    tag: '自己装或找我做',
+    title: '安装交付服务',
+    href: withBase('/service/'),
+    summary: '把自己安装、找我交付、已在使用后的排错和支持，全都收进一个入口页。',
+    audience: '适合准备上手、已经上手、或需要交付支持的人。',
+    bullets: ['自己安装路线', '交付服务说明', '排错与联系入口'],
+    action: '进入安装交付服务'
   }
 ];
 
-const capabilityCards = [
-  ['部署交付', '电脑、旧设备、云服务器都能部署。'],
-  ['工具接入', '聊天入口、邮箱、日历、搜索、浏览器可逐步接入。'],
-  ['规则调校', '把提醒节奏、说话方式和边界调清楚。'],
-  ['案例教学', '现场演示 1 到 2 个真实用法。'],
-  ['后续支持', '文档、命令、FAQ 和支持入口集中保留。'],
-  ['资源导航', '官网、SkillHub 和精选文章都能快速找到。']
+const useFlows = [
+  ['第一次来', '先去文档教程，再把资源导航收藏起来。'],
+  ['想判断值不值得', '先看案例，再看安装交付服务页决定自己装还是找我交付。'],
+  ['已经在使用', '把这里当成固定首页，四个入口足够覆盖日常大多数需求。']
 ];
 
-const deliverySteps = [
-  ['交付前沟通', '先确认设备、聊天入口和优先场景。'],
-  ['环境部署', '完成环境、模型和聊天入口配置。'],
-  ['现场演示', '用小案例带你上手。'],
-  ['文档支持', '交付后通过文档、命令和支持入口继续使用。']
+const reasons = [
+  {
+    title: '这不是一堆零散页面',
+    text: '首页只做导航，不再把交付、案例、说明混在一块。你一进来就知道该往哪走。'
+  },
+  {
+    title: '它是给技术小白准备的',
+    text: '默认你不懂太多技术术语，所以优先讲“怎么开始、怎么用、遇到问题怎么办”。'
+  },
+  {
+    title: '也能服务已经在用的人',
+    text: '已经交付的用户也可以把这里当日常入口，查文档、看命令、找资源、补场景都方便。'
+  }
 ];
 ---
 
 <MarketingLayout
-  title="OpenClaw 交付与使用中心"
-  description="给未交付客户看方案和案例，给已交付客户看文档、案例、资源和支持。"
+  title="OpenClaw 养成站"
+  description="给对 OpenClaw 感兴趣的技术小白准备的导航首页：文档教程、资源导航、案例、安装交付服务四个核心入口。"
 >
-  <main class="container">
-    <section class="hero landing-hero">
-      <div class="hero-grid">
-        <article class="hero-copy">
-          <span class="eyebrow">交付与使用中心</span>
-          <h1>客户入口</h1>
-          <p class="lead">未交付客户看方案，已交付客户直接看文档和支持。</p>
-          <div class="hero-actions">
-            <a class="cta cta-primary" href={withBase('/docs/')}>进入使用文档</a>
-            <a class="cta cta-secondary" href={withBase('/service/')}>查看交付服务</a>
-            <a class="cta cta-secondary" href={withBase('/cases/')}>看真实案例</a>
-          </div>
-        </article>
-
-        <aside class="panel">
-          <h2>推荐查看路径</h2>
-          <div class="path-grid">
-            {quickLinks.map((item) => (
-              <a class="path-card" href={item.href}>
-                <strong>{item.title}</strong>
-                <span>{item.text}</span>
-                <em>{item.action}</em>
-              </a>
-            ))}
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">核心入口</span>
-          <h2>无论是否已交付，都能快速找到下一步。</h2>
-        </div>
-        <p>未交付先看方案，已交付直接进文档和支持。</p>
-      </div>
-      <div class="capability-grid">
-        {capabilityCards.map(([title, text]) => (
-          <article class="capability-card">
-            <h3>{title}</h3>
-            <p>{text}</p>
+  <main class="page">
+    <div class="container">
+      <section class="page-hero">
+        <div class="hero-grid">
+          <article>
+            <span class="eyebrow">导航首页</span>
+            <h1>把 OpenClaw 养起来，从这四个入口走就够了。</h1>
+            <p class="lead">
+              这里不是只给新客户看的介绍页，也不是只给已交付用户看的说明页。
+              它应该同时服务三类人：刚感兴趣的人、准备开始的人、已经在日常使用的人。
+            </p>
+            <div class="action-row">
+              <a class="button button-primary" href={withBase('/docs/')}>先去文档教程</a>
+              <a class="button button-secondary" href={withBase('/service/')}>看安装交付服务</a>
+            </div>
           </article>
-        ))}
-      </div>
-    </section>
 
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">典型交付</span>
-          <h2>从需求沟通到实际使用，通常会经过这四步</h2>
+          <aside class="hero-aside">
+            <span class="section-kicker">怎么用这个站</span>
+            <ul class="simple-list">
+              {useFlows.map(([title, text]) => (
+                <li>
+                  <strong>{title}</strong>
+                  <br />
+                  {text}
+                </li>
+              ))}
+            </ul>
+          </aside>
         </div>
-        <p>重点是交付后当天就能开始使用。</p>
-      </div>
-      <div class="process-grid">
-        {deliverySteps.map(([title, text], index) => (
-          <article class="process-card">
-            <span class="process-index">0{index + 1}</span>
-            <h3>{title}</h3>
-            <p>{text}</p>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">四个核心入口</span>
+            <h2>以后不再分“营销页”和“交付页”，统一从这里分流。</h2>
+          </div>
+          <p class="section-copy">
+            四块内容分别承担学习、查资料、看场景、决定安装与交付。结构简单，长期也更好维护。
+          </p>
+        </div>
+
+        <div class="route-grid">
+          {coreRoutes.map((item) => (
+            <a class="route-card" href={item.href}>
+              <span class="card-tag">{item.tag}</span>
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-meta">{item.summary}</p>
+              <p class="card-meta"><strong>适合谁：</strong>{item.audience}</p>
+              <ul class="bullet-list">
+                {item.bullets.map((bullet) => (
+                  <li>{bullet}</li>
+                ))}
+              </ul>
+              <p class="card-meta"><strong>下一步：</strong>{item.action}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="split-grid">
+          <article class="summary-card">
+            <span class="section-kicker">为什么这样改</span>
+            <h2>首页只做导航，交付相关全部收进一个入口页。</h2>
+            <div class="mini-grid">
+              {reasons.map((item) => (
+                <article class="mini-card">
+                  <strong>{item.title}</strong>
+                  <span>{item.text}</span>
+                </article>
+              ))}
+            </div>
           </article>
-        ))}
-      </div>
-    </section>
 
-    <section class="section">
-      <div class="spotlight">
-        <article class="section-card">
-          <span class="eyebrow">如果你还没交付</span>
-          <h2>先判断适不适合你的场景，再决定怎么部署。</h2>
-          <ul>
-            <li>先看<a href={withBase('/features/')}>方案能力</a>，对照你自己的使用场景</li>
-            <li>再看<a href={withBase('/cases/')}>真实案例</a>，感受它能怎么落地</li>
-            <li>最后看<a href={withBase('/service/')}>交付服务</a>，确认支持设备和交付方式</li>
-          </ul>
-        </article>
-
-        <article class="section-card">
-          <span class="eyebrow">如果你已经交付</span>
-          <h2>文档、命令和支持入口都在这里。</h2>
-          <ul>
-            <li>从<a href={withBase('/docs/')}>7 步教程</a>开始补齐安装和使用流程</li>
-            <li>遇到问题先看<a href={withBase('/docs/reference/common-commands/')}>命令速查</a>和 FAQ</li>
-            <li>需要资源、技能和文章入口时再进<a href={withBase('/links/')}>资源导航</a></li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <footer class="footer">
-      先判断适不适合，再进入安装、使用和长期支持。
-    </footer>
+          <article class="note-card">
+            <span class="status-chip support">建议收藏</span>
+            <h3 class="card-title">如果你已经开始用 OpenClaw，这个站应该是你的固定起点。</h3>
+            <p class="card-meta">
+              以后需要查命令、回看教程、找外部链接、补看案例、决定要不要找我帮你做交付，
+              都不需要再重新找聊天记录或翻仓库页面。
+            </p>
+            <div class="action-row">
+              <a class="button button-primary" href={withBase('/links/')}>打开资源导航</a>
+              <a class="button button-secondary" href={withBase('/cases/')}>补看案例</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
   </main>
-
-  <style>
-    .path-grid,
-    .capability-grid,
-    .process-grid {
-      display: grid;
-      gap: 16px;
-    }
-
-    .path-grid {
-      margin-top: 10px;
-    }
-
-    .path-card,
-    .capability-card,
-    .process-card {
-      display: grid;
-      gap: 10px;
-      padding: 18px;
-      border-radius: 22px;
-      border: 1px solid rgba(217, 94, 57, 0.12);
-      background: rgba(255, 248, 241, 0.88);
-    }
-
-    .path-card strong,
-    .capability-card h3,
-    .process-card h3 {
-      color: var(--accent-deep);
-    }
-
-    .path-card span,
-    .path-card em,
-    .capability-card p,
-    .process-card p {
-      color: var(--muted);
-      line-height: 1.75;
-      margin: 0;
-    }
-
-    .path-card em {
-      font-style: normal;
-      font-weight: 800;
-      color: var(--accent);
-    }
-
-    .path-card {
-      gap: 6px;
-      padding: 16px;
-      border-radius: 18px;
-      background: rgba(255, 252, 247, 0.92);
-      box-shadow: none;
-    }
-
-    .capability-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .capability-card {
-      padding: 22px;
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      background:
-        radial-gradient(circle at top right, rgba(239, 143, 71, 0.1), transparent 32%),
-        linear-gradient(180deg, rgba(255, 252, 247, 0.96), rgba(255, 247, 239, 0.9));
-    }
-
-    .process-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .process-card {
-      padding: 22px;
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      background:
-        linear-gradient(180deg, rgba(255, 252, 247, 0.96), rgba(255, 248, 241, 0.88));
-    }
-
-    .process-index {
-      width: fit-content;
-      padding: 8px 11px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent-deep);
-      font-weight: 800;
-      letter-spacing: 0.04em;
-    }
-
-    .section-card ul {
-      margin-top: 16px;
-    }
-
-    .section-card li {
-      margin-bottom: 10px;
-    }
-
-    .section-card li a {
-      margin: 0 0.18rem;
-      color: var(--accent-deep);
-      font-weight: 800;
-    }
-
-    @media (max-width: 960px) {
-      .landing-hero .hero-grid,
-      .capability-grid,
-      .process-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
 </MarketingLayout>
