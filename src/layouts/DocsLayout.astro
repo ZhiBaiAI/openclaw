@@ -24,6 +24,10 @@ const {
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const outlineItems = headings.filter((item) => item.depth === 2 || item.depth === 3);
+const sidebarSections = DOCS_SIDEBAR.map((section) => ({
+  ...section,
+  isCurrent: section.items.some((item) => item.id === currentId)
+}));
 
 const overviewFacts = [
   { label: '当前分区', value: currentSection },
@@ -47,9 +51,15 @@ const overviewFacts = [
 
           <nav aria-label="文档目录" class="docs-sidebar__nav">
             {
-              DOCS_SIDEBAR.map((section) => (
-                <section class="docs-sidebar__section">
-                  <h3>{section.label}</h3>
+              sidebarSections.map((section) => (
+                <details class="docs-sidebar__section" open={section.isCurrent}>
+                  <summary class="docs-sidebar__summary">
+                    <span class="docs-sidebar__summary-copy">
+                      <span class="docs-sidebar__summary-label">{section.label}</span>
+                      <span class="docs-sidebar__summary-meta">{section.items.length} 篇</span>
+                    </span>
+                    <span class="docs-sidebar__summary-icon" aria-hidden="true"></span>
+                  </summary>
                   <div class="docs-sidebar__links">
                     {section.items.map((item) => (
                       <a class:list={['docs-sidebar__link', { active: item.id === currentId }]} href={docHref(item.id, base)}>
@@ -57,7 +67,7 @@ const overviewFacts = [
                       </a>
                     ))}
                   </div>
-                </section>
+                </details>
               ))
             }
           </nav>
@@ -89,61 +99,59 @@ const overviewFacts = [
           </div>
         </header>
 
-        <div class="docs-content-grid">
-          <article class="docs-article content-panel">
-            <slot />
+        <aside class="docs-rail">
+          <div class="docs-rail__panel">
+            <span class="section-kicker">页内索引</span>
+            {outlineItems.length > 0 ? (
+              <nav class="docs-outline" aria-label="页内目录">
+                {outlineItems.map((item) => (
+                  <a class:list={['docs-outline__link', `depth-${item.depth}`]} href={`#${item.slug}`}>
+                    {item.text}
+                  </a>
+                ))}
+              </nav>
+            ) : (
+              <p class="docs-rail__copy">这页内容较短，按正文顺着读即可。</p>
+            )}
+          </div>
 
-            <div class="docs-pagination">
-              {prevItem && (
-                <a class="docs-pagination__card" href={docHref(prevItem.id, base)}>
-                  <span class="docs-pagination__label">上一篇</span>
-                  <strong>{prevItem.label}</strong>
-                </a>
-              )}
-              {nextItem && (
-                <a class="docs-pagination__card" href={docHref(nextItem.id, base)}>
-                  <span class="docs-pagination__label">下一篇</span>
-                  <strong>{nextItem.label}</strong>
-                </a>
-              )}
+          <div class="docs-rail__panel">
+            <span class="section-kicker">快捷入口</span>
+            <div class="docs-shortcuts">
+              <a href={`${base}/service/`}>
+                <strong>安装交付服务</strong>
+                <span>自己安装、预约交付、排错支持都可以从这里继续。</span>
+              </a>
+              <a href={`${base}/links/`}>
+                <strong>资源导航</strong>
+                <span>官网、官方文档、SkillHub 和外部文章集中查看。</span>
+              </a>
+              <a href={`${base}/cases/`}>
+                <strong>案例</strong>
+                <span>先看真实场景，再决定学到什么程度、要不要交付。</span>
+              </a>
             </div>
-          </article>
+          </div>
+        </aside>
 
-          <aside class="docs-rail">
-            <div class="docs-rail__panel">
-              <span class="section-kicker">页内索引</span>
-              {outlineItems.length > 0 ? (
-                <nav class="docs-outline" aria-label="页内目录">
-                  {outlineItems.map((item) => (
-                    <a class:list={['docs-outline__link', `depth-${item.depth}`]} href={`#${item.slug}`}>
-                      {item.text}
-                    </a>
-                  ))}
-                </nav>
-              ) : (
-                <p class="docs-rail__copy">这页内容较短，按正文顺着读即可。</p>
-              )}
-            </div>
+        <article class="docs-article content-panel">
+          <slot />
 
-            <div class="docs-rail__panel">
-              <span class="section-kicker">快捷入口</span>
-              <div class="docs-shortcuts">
-                <a href={`${base}/service/`}>
-                  <strong>安装交付服务</strong>
-                  <span>自己安装、预约交付、排错支持都可以从这里继续。</span>
-                </a>
-                <a href={`${base}/links/`}>
-                  <strong>资源导航</strong>
-                  <span>官网、官方文档、SkillHub 和外部文章集中查看。</span>
-                </a>
-                <a href={`${base}/cases/`}>
-                  <strong>案例</strong>
-                  <span>先看真实场景，再决定学到什么程度、要不要交付。</span>
-                </a>
-              </div>
-            </div>
-          </aside>
-        </div>
+          <div class="docs-pagination">
+            {prevItem && (
+              <a class="docs-pagination__card" href={docHref(prevItem.id, base)}>
+                <span class="docs-pagination__label">上一篇</span>
+                <strong>{prevItem.label}</strong>
+              </a>
+            )}
+            {nextItem && (
+              <a class="docs-pagination__card" href={docHref(nextItem.id, base)}>
+                <span class="docs-pagination__label">下一篇</span>
+                <strong>{nextItem.label}</strong>
+              </a>
+            )}
+          </div>
+        </article>
       </section>
     </div>
   </main>
@@ -181,7 +189,9 @@ const overviewFacts = [
 
   .docs-main {
     display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(234px, 272px);
     gap: 16px;
+    align-items: start;
   }
 
   .docs-sidebar__intro {
@@ -211,8 +221,6 @@ const overviewFacts = [
   }
 
   .docs-sidebar__section {
-    display: grid;
-    gap: 8px;
     padding-top: 10px;
     border-top: 1px solid rgba(91, 68, 52, 0.08);
   }
@@ -222,14 +230,56 @@ const overviewFacts = [
     border-top: 0;
   }
 
-  .docs-sidebar__section h3 {
+  .docs-sidebar__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 44px;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .docs-sidebar__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .docs-sidebar__summary-copy {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .docs-sidebar__summary-label {
     font-size: 0.98rem;
+    font-weight: 700;
     color: var(--text);
+  }
+
+  .docs-sidebar__summary-meta {
+    color: var(--muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+  }
+
+  .docs-sidebar__summary-icon {
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid rgba(123, 67, 37, 0.72);
+    border-bottom: 2px solid rgba(123, 67, 37, 0.72);
+    transform: rotate(45deg);
+    transition: transform 180ms ease;
+    flex: none;
+  }
+
+  .docs-sidebar__section[open] .docs-sidebar__summary-icon {
+    transform: rotate(225deg);
   }
 
   .docs-sidebar__links {
     display: grid;
     gap: 6px;
+    margin-top: 10px;
   }
 
   .docs-sidebar__link,
@@ -265,6 +315,7 @@ const overviewFacts = [
   }
 
   .docs-hero {
+    grid-column: 1;
     position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
@@ -330,14 +381,16 @@ const overviewFacts = [
     background: rgba(255, 252, 248, 0.86);
   }
 
-  .docs-content-grid {
+  .docs-rail {
+    grid-column: 2;
+    grid-row: 1 / span 2;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(234px, 272px);
     gap: 16px;
-    align-items: start;
+    align-content: start;
   }
 
   .docs-article {
+    grid-column: 1;
     min-width: 0;
     padding: 16px;
   }
@@ -514,7 +567,7 @@ const overviewFacts = [
 
   @media (max-width: 1200px) {
     .docs-shell,
-    .docs-content-grid,
+    .docs-main,
     .docs-hero {
       grid-template-columns: 1fr;
     }
@@ -522,6 +575,13 @@ const overviewFacts = [
     .docs-sidebar,
     .docs-rail {
       position: static;
+    }
+
+    .docs-hero,
+    .docs-rail,
+    .docs-article {
+      grid-column: auto;
+      grid-row: auto;
     }
   }
 
@@ -547,6 +607,7 @@ const overviewFacts = [
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .docs-sidebar__summary-icon,
     .docs-sidebar__link,
     .docs-outline__link,
     .docs-shortcuts a,
