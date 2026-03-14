@@ -201,6 +201,7 @@ const overviewFacts = [
     margin: 0;
     color: var(--muted);
     line-height: 1.72;
+    overflow-wrap: anywhere;
   }
 
   .docs-sidebar__nav {
@@ -240,6 +241,7 @@ const overviewFacts = [
   }
 
   .docs-sidebar__link {
+    min-height: 44px;
     padding: 9px 11px;
     border-radius: var(--radius-md);
     border: 1px solid rgba(91, 68, 52, 0.08);
@@ -336,8 +338,8 @@ const overviewFacts = [
   }
 
   .docs-article {
+    min-width: 0;
     padding: 16px;
-    overflow: hidden;
   }
 
   .docs-article > :global(:first-child) {
@@ -368,6 +370,7 @@ const overviewFacts = [
     color: var(--muted);
     line-height: 1.75;
     font-size: 0.97rem;
+    overflow-wrap: anywhere;
   }
 
   .docs-article :global(p) {
@@ -393,7 +396,9 @@ const overviewFacts = [
   }
 
   .docs-article :global(pre) {
+    max-width: 100%;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     margin: 1rem 0;
     padding: 14px;
     border-radius: var(--radius-lg);
@@ -416,10 +421,13 @@ const overviewFacts = [
   }
 
   .docs-article :global(table) {
+    display: block;
     width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     border-collapse: collapse;
     margin: 1rem 0;
-    overflow: hidden;
     border-radius: var(--radius-md);
     background: rgba(255, 252, 248, 0.9);
   }
@@ -429,6 +437,7 @@ const overviewFacts = [
     padding: 10px 12px;
     border: 1px solid rgba(186, 99, 54, 0.1);
     text-align: left;
+    overflow-wrap: anywhere;
   }
 
   .docs-outline,
@@ -440,6 +449,7 @@ const overviewFacts = [
 
   .docs-outline__link,
   .docs-shortcuts a {
+    min-height: 44px;
     padding: 9px 11px;
     border-radius: var(--radius-md);
     border: 1px solid rgba(91, 68, 52, 0.08);
@@ -480,6 +490,7 @@ const overviewFacts = [
   .docs-pagination__card {
     display: grid;
     gap: 5px;
+    min-height: 44px;
     padding: 13px;
     transition:
       transform 180ms ease,
