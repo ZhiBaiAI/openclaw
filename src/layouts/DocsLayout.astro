@@ -28,12 +28,6 @@ const sidebarSections = DOCS_SIDEBAR.map((section) => ({
   ...section,
   isCurrent: section.items.some((item) => item.id === currentId)
 }));
-
-const overviewFacts = [
-  { label: '当前分区', value: currentSection },
-  { label: '页内小节', value: outlineItems.length > 0 ? `${outlineItems.length} 个` : '短文内容' },
-  { label: '阅读建议', value: '先跑通一个入口，再补规则、工具和扩展。' }
-];
 ---
 
 <MarketingLayout title={`${title} | 虾客AI`} description={description}>
@@ -75,29 +69,30 @@ const overviewFacts = [
       </aside>
 
       <section class="docs-main">
-        <header class="docs-hero">
-          <div class="docs-hero__content">
+        <article class="docs-article content-panel">
+          <div class="docs-pagehead">
             <span class="eyebrow">{currentSection}</span>
             <h1>{title}</h1>
-            {description && <p class="lead docs-hero__lead">{description}</p>}
+            {description && <p class="docs-pagehead__lead">{description}</p>}
           </div>
 
-          <div class="docs-hero__meta">
-            <div class="docs-hero__facts">
-              {overviewFacts.map((item) => (
-                <article class="docs-hero__fact">
-                  <strong>{item.label}</strong>
-                  <span>{item.value}</span>
-                </article>
-              ))}
-            </div>
+          <slot />
 
-            <div class="docs-hero__meta-card">
-              <span class="card-tag">排错建议</span>
-              <p>先看当前章节和命令速查；看完还是不确定，再去安装交付服务页联系我处理。</p>
-            </div>
+          <div class="docs-pagination">
+            {prevItem && (
+              <a class="docs-pagination__card" href={docHref(prevItem.id, base)}>
+                <span class="docs-pagination__label">上一篇</span>
+                <strong>{prevItem.label}</strong>
+              </a>
+            )}
+            {nextItem && (
+              <a class="docs-pagination__card" href={docHref(nextItem.id, base)}>
+                <span class="docs-pagination__label">下一篇</span>
+                <strong>{nextItem.label}</strong>
+              </a>
+            )}
           </div>
-        </header>
+        </article>
 
         <aside class="docs-rail">
           <div class="docs-rail__panel">
@@ -133,25 +128,6 @@ const overviewFacts = [
             </div>
           </div>
         </aside>
-
-        <article class="docs-article content-panel">
-          <slot />
-
-          <div class="docs-pagination">
-            {prevItem && (
-              <a class="docs-pagination__card" href={docHref(prevItem.id, base)}>
-                <span class="docs-pagination__label">上一篇</span>
-                <strong>{prevItem.label}</strong>
-              </a>
-            )}
-            {nextItem && (
-              <a class="docs-pagination__card" href={docHref(nextItem.id, base)}>
-                <span class="docs-pagination__label">下一篇</span>
-                <strong>{nextItem.label}</strong>
-              </a>
-            )}
-          </div>
-        </article>
       </section>
     </div>
   </main>
@@ -173,7 +149,6 @@ const overviewFacts = [
 
   .docs-sidebar__panel,
   .docs-rail__panel,
-  .docs-hero,
   .docs-pagination__card {
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
@@ -182,8 +157,7 @@ const overviewFacts = [
   }
 
   .docs-sidebar__panel,
-  .docs-rail__panel,
-  .docs-hero {
+  .docs-rail__panel {
     padding: 16px;
   }
 
@@ -206,8 +180,7 @@ const overviewFacts = [
 
   .docs-sidebar__copy,
   .docs-rail__copy,
-  .docs-hero__meta-card p,
-  .docs-hero__fact span {
+  .docs-pagehead__lead {
     margin: 0;
     color: var(--muted);
     line-height: 1.72;
@@ -314,85 +287,28 @@ const overviewFacts = [
     transform: translateY(-1px);
   }
 
-  .docs-hero {
-    grid-column: 1;
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
-    gap: 16px;
-    overflow: hidden;
-  }
-
-  .docs-hero::before {
-    content: '';
-    position: absolute;
-    inset: 0 0 auto;
-    height: 3px;
-    background: linear-gradient(90deg, rgba(186, 99, 54, 0.72), rgba(186, 99, 54, 0.18), rgba(186, 99, 54, 0));
-  }
-
-  .docs-hero__content {
-    display: grid;
-    align-content: start;
-    gap: 12px;
-  }
-
-  .docs-hero__content h1,
-  .docs-hero__lead {
-    margin: 0;
-  }
-
-  .docs-hero__lead {
-    max-width: 46rem;
-  }
-
-  .docs-hero__meta {
-    display: grid;
-    gap: 10px;
-  }
-
-  .docs-hero__facts {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-  }
-
-  .docs-hero__fact {
-    display: grid;
-    gap: 4px;
-    padding: 10px;
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(91, 68, 52, 0.08);
-    background: rgba(255, 252, 248, 0.86);
-  }
-
-  .docs-hero__fact strong {
-    color: var(--accent-deep);
-    font-size: 0.82rem;
-    line-height: 1.35;
-  }
-
-  .docs-hero__meta-card {
-    display: grid;
-    gap: 7px;
-    padding: 12px;
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(91, 68, 52, 0.08);
-    background: rgba(255, 252, 248, 0.86);
-  }
-
   .docs-rail {
-    grid-column: 2;
-    grid-row: 1 / span 2;
     display: grid;
     gap: 16px;
     align-content: start;
   }
 
   .docs-article {
-    grid-column: 1;
     min-width: 0;
     padding: 16px;
+  }
+
+  .docs-pagehead {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(91, 68, 52, 0.1);
+  }
+
+  .docs-pagehead h1,
+  .docs-pagehead__lead {
+    margin: 0;
   }
 
   .docs-article > :global(:first-child) {
@@ -567,8 +483,7 @@ const overviewFacts = [
 
   @media (max-width: 1200px) {
     .docs-shell,
-    .docs-main,
-    .docs-hero {
+    .docs-main {
       grid-template-columns: 1fr;
     }
 
@@ -576,25 +491,11 @@ const overviewFacts = [
     .docs-rail {
       position: static;
     }
-
-    .docs-hero,
-    .docs-rail,
-    .docs-article {
-      grid-column: auto;
-      grid-row: auto;
-    }
-  }
-
-  @media (max-width: 720px) {
-    .docs-hero__facts {
-      grid-template-columns: 1fr;
-    }
   }
 
   @media (max-width: 640px) {
     .docs-sidebar__panel,
     .docs-rail__panel,
-    .docs-hero,
     .docs-article,
     .docs-pagination__card {
       padding: 15px;

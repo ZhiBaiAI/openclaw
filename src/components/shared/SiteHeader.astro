@@ -33,20 +33,20 @@ const hasUtilities = Astro.slots.has('utilities');
             </span>
           </span>
         </a>
-
-        <nav class="shared-header__nav" aria-label={navLabel}>
-          {
-            SITE_NAV_ITEMS.map((item) => {
-              const isActive = currentPath === item.path || currentPath.startsWith(item.path);
-              return (
-                <a class:list={['shared-header__link', { active: isActive }]} href={withBase(item.path)}>
-                  <span>{item.label}</span>
-                </a>
-              );
-            })
-          }
-        </nav>
       </div>
+
+      <nav class="shared-header__nav" aria-label={navLabel}>
+        {
+          SITE_NAV_ITEMS.map((item) => {
+            const isActive = currentPath === item.path || currentPath.startsWith(item.path);
+            return (
+              <a class:list={['shared-header__link', { active: isActive }]} href={withBase(item.path)}>
+                <span>{item.label}</span>
+              </a>
+            );
+          })
+        }
+      </nav>
 
       {
         (hasSearch || hasUtilities) && (
@@ -109,8 +109,7 @@ const hasUtilities = Astro.slots.has('utilities');
   .shared-header__identity {
     display: flex;
     align-items: center;
-    gap: 0.7rem;
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     min-width: 0;
   }
 
@@ -215,8 +214,10 @@ const hasUtilities = Astro.slots.has('utilities');
     flex: 1 1 auto;
     flex-wrap: nowrap;
     align-items: center;
+    justify-content: flex-end;
     gap: 0.35rem;
     min-width: 0;
+    margin-left: auto;
     overflow-x: auto;
     padding: 0.1rem 0;
     scroll-snap-type: x proximity;
@@ -285,8 +286,7 @@ const hasUtilities = Astro.slots.has('utilities');
     }
 
     .shared-header__identity {
-      width: 100%;
-      flex-wrap: wrap;
+      width: auto;
     }
 
     .shared-header__tools {
@@ -302,6 +302,8 @@ const hasUtilities = Astro.slots.has('utilities');
 
     .shared-header__nav {
       width: 100%;
+      margin-left: 0;
+      justify-content: flex-start;
     }
   }
 
