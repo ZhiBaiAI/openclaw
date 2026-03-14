@@ -10,13 +10,13 @@ const cases = [
     title: '把选题、资料收集和草稿整理交给 OpenClaw 打底',
     summary: '适合个人创作者和小团队，用它先做信息收集、选题整理和初稿准备。',
     fit: '如果你经常卡在“今天写什么、资料从哪找、标题怎么起”，这类案例最容易看出价值。',
-    result: '重点不是全自动发内容，而是把最耗时间的准备环节先交给 OpenClaw 做。'
+    result: '重点不是全自动发内容，而是把最耗时间的准备环节先交给 OpenClaw。'
   },
   {
     tag: '办公协同',
     title: '把 OpenClaw 放进飞书、微信、钉钉这些高频沟通入口',
     summary: '适合日常办公、团队协同和高频问答，让助手直接出现在你本来就会打开的地方。',
-    fit: '如果你不想多开一个系统，而是想在原来的工作入口里直接用 AI，这类场景更适合你。',
+    fit: '如果你不想多开一个系统，而是想在原有工作入口里直接用 AI，这类场景更适合你。',
     result: '真正的价值是减少切换成本，而不是把所有工作都自动化。'
   },
   {
@@ -31,14 +31,20 @@ const cases = [
     title: '用固定规则筛公开信息，生成每日观察和候选列表',
     summary: '适合把重复搜集、比对、整理的动作，变成固定流程。',
     fit: '如果你每天都要看同一类信息，再手工汇总，这类场景会明显节省时间。',
-    result: '它更像自动整理线索的助手，不是替你做最终决策。'
+    result: '它更像自动整理线索的助手，不是替你做最后决策。'
   }
 ];
 
 const tips = [
   '先挑最接近自己日常的案例，不用一口气全看。',
-  '看案例的重点，不是功能名，而是“它帮你省掉了哪一段重复动作”。',
-  '如果案例看完觉得自己还是不会配，就直接去安装交付服务页。'
+  '看案例的重点，不是功能名，而是“它帮你省掉了哪段重复动作”。',
+  '如果案例看完还是觉得自己不会配，就直接去安装交付服务页。'
+];
+
+const introFacts = [
+  ['4 类常见场景', '内容、协同、个人助手、信息筛选四种起步方向。'],
+  ['重点看节省了什么', '不要盯着功能名，先看它替你减少了哪段重复工作。'],
+  ['看完就能决定下一步', '继续自己安装，还是直接进入交付支持。']
 ];
 ---
 
@@ -46,24 +52,31 @@ const tips = [
   title="虾客AI 案例"
   description="用技术小白也能看懂的方式，整理 OpenClaw 的真实使用场景，帮助判断它适不适合自己。"
 >
-  <main class="page">
+  <main class="page" id="main-content">
     <div class="container">
-      <section class="page-hero">
-        <div class="hero-grid">
-          <article>
+      <section class="page-intro">
+        <div class="page-intro__grid">
+          <article class="page-intro__content">
             <span class="eyebrow">案例</span>
             <h1>先别急着研究功能，先看它能不能帮你做成事。</h1>
             <p class="lead">
-              这一页不讲复杂原理，只讲最实际的问题：
-              OpenClaw 适合落在哪些场景，哪些人最容易先用起来，最后能帮你省掉什么。
+              这一页不讲复杂原理，只回答最实际的问题：OpenClaw 适合落在哪些场景，哪些人最容易先用起来，最后能帮你省掉什么。
             </p>
             <div class="action-row">
               <a class="button button-primary" href="#case-list">直接看案例</a>
               <a class="button button-secondary" href={withBase('/service/')}>不会配就看安装交付服务</a>
             </div>
+            <div class="intro-facts">
+              {introFacts.map(([title, text]) => (
+                <article class="intro-fact">
+                  <strong>{title}</strong>
+                  <span>{text}</span>
+                </article>
+              ))}
+            </div>
           </article>
 
-          <aside class="hero-aside">
+          <aside class="page-intro__aside">
             <span class="section-kicker">怎么看这页</span>
             <ul class="simple-list">
               {tips.map((item) => (
@@ -81,20 +94,25 @@ const tips = [
             <h2>先从最像你日常生活或工作的那一类开始看。</h2>
           </div>
           <p class="section-copy">
-            你不需要先理解所有技术词。只要先判断“这个场景是不是我真的会每天用到”，就够了。
+            不需要先理解所有技术词。只要先判断“这个场景是不是我真的会每天用到”，就够了。
           </p>
         </div>
 
-        <div class="card-grid case-grid">
+        <div class="directory-list">
           {cases.map((item) => (
-            <article class="info-card">
-              <span class="card-tag">{item.tag}</span>
-              <h3 class="card-title">{item.title}</h3>
-              <p class="card-meta">{item.summary}</p>
-              <ul class="bullet-list">
-                <li>{item.fit}</li>
-                <li>{item.result}</li>
-              </ul>
+            <article class="directory-row">
+              <div class="directory-row__main">
+                <span class="card-tag">{item.tag}</span>
+                <h3 class="directory-row__title">{item.title}</h3>
+                <p class="directory-row__summary">{item.summary}</p>
+              </div>
+              <div class="directory-row__meta">
+                <p class="directory-row__meta-copy"><strong>适合时机：</strong>{item.fit}</p>
+                <p class="directory-row__meta-copy"><strong>能省下什么：</strong>{item.result}</p>
+              </div>
+              <div class="directory-row__action">
+                <span class="button button-secondary">参考</span>
+              </div>
             </article>
           ))}
         </div>
@@ -106,8 +124,7 @@ const tips = [
             <span class="section-kicker">给新客户的建议</span>
             <h2>如果你只是想先判断值不值得做，案例页比参数页更重要。</h2>
             <p class="card-copy">
-              因为真正影响你是否会长期使用的，不是模型名字，也不是一长串配置项，
-              而是它能不能进入你原本的工作和生活流程。
+              真正影响你会不会长期使用的，不是模型名字，也不是一长串配置项，而是它能不能进入你原本的工作和生活流程。
             </p>
           </article>
 
@@ -115,8 +132,7 @@ const tips = [
             <span class="status-chip support">下一步</span>
             <h3 class="card-title">看完案例以后，通常只需要做一个决定。</h3>
             <p class="card-meta">
-              如果你已经知道“这就是我想要的方向”，那就去文档教程自己装，
-              或直接去安装交付服务页找我帮你落地。
+              如果你已经知道“这就是我想要的方向”，那就去文档教程自己装，或者直接去安装交付服务页找我帮你落地。
             </p>
             <div class="action-row">
               <a class="button button-primary" href={withBase('/docs/')}>自己开始装</a>
@@ -128,15 +144,4 @@ const tips = [
     </div>
   </main>
 
-  <style>
-    .case-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    @media (max-width: 960px) {
-      .case-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
 </MarketingLayout>

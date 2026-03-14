@@ -24,10 +24,16 @@ const {
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const outlineItems = headings.filter((item) => item.depth === 2 || item.depth === 3);
+
+const overviewFacts = [
+  { label: '当前分区', value: currentSection },
+  { label: '页内小节', value: outlineItems.length > 0 ? `${outlineItems.length} 个` : '短文内容' },
+  { label: '阅读建议', value: '先跑通一个入口，再补规则、工具和扩展。' }
+];
 ---
 
 <MarketingLayout title={`${title} | 虾客AI`} description={description}>
-  <main class="page docs-page">
+  <main class="page docs-page" id="main-content">
     <div class="container docs-shell">
       <aside class="docs-sidebar">
         <div class="docs-sidebar__panel">
@@ -35,7 +41,7 @@ const outlineItems = headings.filter((item) => item.depth === 2 || item.depth ==
             <span class="section-kicker">文档导航</span>
             <h2>从上手到排错，按顺序查就够了。</h2>
             <p class="docs-sidebar__copy">
-              按教程、参考资料和常见问题来查，不用反复翻聊天记录或零散笔记。
+              先走教程，再看参考资料和常见问题。尽量不要在聊天记录、截图和零散笔记之间反复切换。
             </p>
           </div>
 
@@ -60,24 +66,25 @@ const outlineItems = headings.filter((item) => item.depth === 2 || item.depth ==
 
       <section class="docs-main">
         <header class="docs-hero">
-          <div>
+          <div class="docs-hero__content">
             <span class="eyebrow">{currentSection}</span>
             <h1>{title}</h1>
             {description && <p class="lead docs-hero__lead">{description}</p>}
           </div>
 
           <div class="docs-hero__meta">
-            <div class="docs-hero__meta-card">
-              <span class="card-tag">阅读建议</span>
-              <p>
-                先跑通一个能用的入口，再继续补规则、工具接入、技能和自动化，不要一上来追求全部功能。
-              </p>
+            <div class="docs-hero__facts">
+              {overviewFacts.map((item) => (
+                <article class="docs-hero__fact">
+                  <strong>{item.label}</strong>
+                  <span>{item.value}</span>
+                </article>
+              ))}
             </div>
+
             <div class="docs-hero__meta-card">
-              <span class="card-tag">需要支持</span>
-              <p>
-                先看当前章节和命令速查；看完还是不确定，再去安装交付服务页联系我处理。
-              </p>
+              <span class="card-tag">排错建议</span>
+              <p>先看当前章节和命令速查；看完还是不确定，再去安装交付服务页联系我处理。</p>
             </div>
           </div>
         </header>
@@ -145,70 +152,83 @@ const outlineItems = headings.filter((item) => item.depth === 2 || item.depth ==
 <style>
   .docs-shell {
     display: grid;
-    grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
-    gap: 24px;
+    grid-template-columns: minmax(264px, 296px) minmax(0, 1fr);
+    gap: 18px;
     align-items: start;
   }
 
   .docs-sidebar,
   .docs-rail {
     position: sticky;
-    top: 6.8rem;
+    top: 7.8rem;
   }
 
   .docs-sidebar__panel,
   .docs-rail__panel,
   .docs-hero,
   .docs-pagination__card {
-    border: 1px solid rgba(75, 54, 38, 0.14);
-    border-radius: 28px;
-    background:
-      linear-gradient(180deg, rgba(255, 252, 246, 0.96), rgba(249, 242, 231, 0.9));
-    box-shadow: 0 20px 48px rgba(127, 79, 47, 0.12);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(250, 245, 239, 0.94));
+    box-shadow: 0 12px 28px rgba(73, 52, 38, 0.06);
   }
 
   .docs-sidebar__panel,
   .docs-rail__panel,
   .docs-hero {
-    padding: 24px;
+    padding: 16px;
   }
 
   .docs-main {
     display: grid;
-    gap: 20px;
+    gap: 16px;
+  }
+
+  .docs-sidebar__intro {
+    display: grid;
+    gap: 8px;
   }
 
   .docs-sidebar__intro h2 {
-    margin-top: 10px;
-    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    margin-top: 0;
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
   }
 
   .docs-sidebar__copy,
   .docs-rail__copy,
-  .docs-hero__meta-card p {
+  .docs-hero__meta-card p,
+  .docs-hero__fact span {
     margin: 0;
     color: var(--muted);
-    line-height: 1.75;
+    line-height: 1.72;
   }
 
   .docs-sidebar__nav {
     display: grid;
-    gap: 20px;
-    margin-top: 22px;
+    gap: 12px;
+    margin-top: 14px;
   }
 
   .docs-sidebar__section {
     display: grid;
-    gap: 12px;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(91, 68, 52, 0.08);
+  }
+
+  .docs-sidebar__section:first-child {
+    padding-top: 0;
+    border-top: 0;
   }
 
   .docs-sidebar__section h3 {
-    font-size: 1rem;
+    font-size: 0.98rem;
+    color: var(--text);
   }
 
   .docs-sidebar__links {
     display: grid;
-    gap: 8px;
+    gap: 6px;
   }
 
   .docs-sidebar__link,
@@ -220,12 +240,12 @@ const outlineItems = headings.filter((item) => item.depth === 2 || item.depth ==
   }
 
   .docs-sidebar__link {
-    padding: 12px 14px;
-    border-radius: 18px;
-    border: 1px solid rgba(193, 94, 42, 0.08);
-    background: rgba(255, 250, 244, 0.78);
+    padding: 9px 11px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(91, 68, 52, 0.08);
+    background: rgba(255, 252, 248, 0.86);
     color: var(--muted);
-    line-height: 1.55;
+    line-height: 1.44;
     transition:
       transform 180ms ease,
       border-color 180ms ease,
@@ -237,44 +257,91 @@ const outlineItems = headings.filter((item) => item.depth === 2 || item.depth ==
   .docs-sidebar__link:focus-visible,
   .docs-sidebar__link.active {
     color: var(--accent-deep);
-    border-color: rgba(193, 94, 42, 0.18);
-    background: rgba(193, 94, 42, 0.12);
+    border-color: rgba(186, 99, 54, 0.18);
+    background: linear-gradient(180deg, rgba(253, 241, 232, 0.98), rgba(247, 232, 219, 0.92));
     transform: translateY(-1px);
   }
 
   .docs-hero {
+    position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
-    gap: 18px;
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+    gap: 16px;
+    overflow: hidden;
+  }
+
+  .docs-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(186, 99, 54, 0.72), rgba(186, 99, 54, 0.18), rgba(186, 99, 54, 0));
+  }
+
+  .docs-hero__content {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+  }
+
+  .docs-hero__content h1,
+  .docs-hero__lead {
+    margin: 0;
   }
 
   .docs-hero__lead {
-    max-width: 42rem;
+    max-width: 46rem;
   }
 
   .docs-hero__meta {
     display: grid;
-    gap: 12px;
+    gap: 10px;
+  }
+
+  .docs-hero__facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .docs-hero__fact {
+    display: grid;
+    gap: 4px;
+    padding: 10px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(91, 68, 52, 0.08);
+    background: rgba(255, 252, 248, 0.86);
+  }
+
+  .docs-hero__fact strong {
+    color: var(--accent-deep);
+    font-size: 0.82rem;
+    line-height: 1.35;
   }
 
   .docs-hero__meta-card {
     display: grid;
-    gap: 10px;
-    padding: 18px;
-    border-radius: 22px;
-    border: 1px solid rgba(193, 94, 42, 0.12);
-    background: rgba(255, 250, 244, 0.78);
+    gap: 7px;
+    padding: 12px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(91, 68, 52, 0.08);
+    background: rgba(255, 252, 248, 0.86);
   }
 
   .docs-content-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(240px, 280px);
-    gap: 20px;
+    grid-template-columns: minmax(0, 1fr) minmax(234px, 272px);
+    gap: 16px;
     align-items: start;
   }
 
   .docs-article {
-    padding: 30px;
+    padding: 16px;
+    overflow: hidden;
+  }
+
+  .docs-article > :global(:first-child) {
+    margin-top: 0;
   }
 
   .docs-article :global(h1),
@@ -284,44 +351,54 @@ const outlineItems = headings.filter((item) => item.depth === 2 || item.depth ==
   }
 
   .docs-article :global(h2) {
-    margin-top: 2.6rem;
-    margin-bottom: 1rem;
-    font-size: clamp(1.55rem, 3vw, 2.2rem);
+    margin-top: 1.7rem;
+    margin-bottom: 0.7rem;
+    font-size: clamp(1.4rem, 2.4vw, 1.85rem);
   }
 
   .docs-article :global(h3) {
-    margin-top: 1.8rem;
-    margin-bottom: 0.8rem;
-    font-size: 1.3rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.12rem;
   }
 
   .docs-article :global(p),
   .docs-article :global(li),
   .docs-article :global(blockquote) {
     color: var(--muted);
-    line-height: 1.85;
-    font-size: 1rem;
+    line-height: 1.75;
+    font-size: 0.97rem;
+  }
+
+  .docs-article :global(p) {
+    margin: 0 0 0.9rem;
   }
 
   .docs-article :global(ul),
   .docs-article :global(ol) {
+    margin: 0.75rem 0 1rem;
     padding-left: 1.3rem;
+  }
+
+  .docs-article :global(li + li) {
+    margin-top: 0.3rem;
   }
 
   .docs-article :global(code) {
     padding: 0.18rem 0.4rem;
-    border-radius: 0.5rem;
-    background: rgba(193, 94, 42, 0.1);
+    border-radius: 0.45rem;
+    background: rgba(186, 99, 54, 0.1);
     color: var(--accent-deep);
     font-size: 0.92em;
   }
 
   .docs-article :global(pre) {
     overflow-x: auto;
-    padding: 18px;
-    border-radius: 22px;
-    background: #2a1a14;
-    box-shadow: inset 0 0 0 1px rgba(255, 217, 191, 0.06);
+    margin: 1rem 0;
+    padding: 14px;
+    border-radius: var(--radius-lg);
+    background: #2b201a;
+    box-shadow: inset 0 0 0 1px rgba(255, 217, 191, 0.05);
   }
 
   .docs-article :global(pre code) {
@@ -331,42 +408,42 @@ const outlineItems = headings.filter((item) => item.depth === 2 || item.depth ==
   }
 
   .docs-article :global(blockquote) {
-    margin: 1.2rem 0;
-    padding: 1rem 1.1rem;
-    border-left: 4px solid rgba(193, 94, 42, 0.3);
-    background: rgba(255, 248, 238, 0.86);
-    border-radius: 0 18px 18px 0;
+    margin: 1rem 0;
+    padding: 0.85rem 1rem;
+    border-left: 4px solid rgba(186, 99, 54, 0.26);
+    background: rgba(255, 248, 238, 0.92);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
   }
 
   .docs-article :global(table) {
     width: 100%;
     border-collapse: collapse;
-    margin: 1.2rem 0;
+    margin: 1rem 0;
     overflow: hidden;
-    border-radius: 18px;
-    background: rgba(255, 250, 244, 0.88);
+    border-radius: var(--radius-md);
+    background: rgba(255, 252, 248, 0.9);
   }
 
   .docs-article :global(th),
   .docs-article :global(td) {
-    padding: 12px 14px;
-    border: 1px solid rgba(193, 94, 42, 0.1);
+    padding: 10px 12px;
+    border: 1px solid rgba(186, 99, 54, 0.1);
     text-align: left;
   }
 
   .docs-outline,
   .docs-shortcuts {
     display: grid;
-    gap: 10px;
-    margin-top: 16px;
+    gap: 7px;
+    margin-top: 10px;
   }
 
   .docs-outline__link,
   .docs-shortcuts a {
-    padding: 12px 14px;
-    border-radius: 18px;
-    border: 1px solid rgba(193, 94, 42, 0.1);
-    background: rgba(255, 250, 244, 0.8);
+    padding: 9px 11px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(91, 68, 52, 0.08);
+    background: rgba(255, 252, 248, 0.88);
     color: var(--muted);
     transition:
       transform 180ms ease,
@@ -381,7 +458,7 @@ const outlineItems = headings.filter((item) => item.depth === 2 || item.depth ==
   .docs-shortcuts a:focus-visible {
     transform: translateY(-1px);
     color: var(--accent-deep);
-    border-color: rgba(193, 94, 42, 0.18);
+    border-color: rgba(186, 99, 54, 0.18);
     background: rgba(255, 249, 241, 0.96);
   }
 
@@ -390,20 +467,20 @@ const outlineItems = headings.filter((item) => item.depth === 2 || item.depth ==
   }
 
   .docs-shortcuts span {
-    line-height: 1.7;
+    line-height: 1.68;
   }
 
   .docs-pagination {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-    margin-top: 28px;
+    gap: 10px;
+    margin-top: 18px;
   }
 
   .docs-pagination__card {
     display: grid;
-    gap: 6px;
-    padding: 18px;
+    gap: 5px;
+    padding: 13px;
     transition:
       transform 180ms ease,
       border-color 180ms ease,
@@ -412,9 +489,9 @@ const outlineItems = headings.filter((item) => item.depth === 2 || item.depth ==
 
   .docs-pagination__card:hover,
   .docs-pagination__card:focus-visible {
-    transform: translateY(-2px);
-    border-color: rgba(193, 94, 42, 0.18);
-    box-shadow: 0 24px 54px rgba(127, 79, 47, 0.16);
+    transform: translateY(-1px);
+    border-color: rgba(186, 99, 54, 0.18);
+    box-shadow: 0 12px 24px rgba(73, 52, 38, 0.08);
   }
 
   .docs-pagination__label {
@@ -437,18 +514,33 @@ const outlineItems = headings.filter((item) => item.depth === 2 || item.depth ==
     }
   }
 
+  @media (max-width: 720px) {
+    .docs-hero__facts {
+      grid-template-columns: 1fr;
+    }
+  }
+
   @media (max-width: 640px) {
     .docs-sidebar__panel,
     .docs-rail__panel,
     .docs-hero,
     .docs-article,
     .docs-pagination__card {
-      padding: 18px;
-      border-radius: 22px;
+      padding: 15px;
+      border-radius: var(--radius-lg);
     }
 
     .docs-pagination {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .docs-sidebar__link,
+    .docs-outline__link,
+    .docs-shortcuts a,
+    .docs-pagination__card {
+      transition: none;
     }
   }
 </style>

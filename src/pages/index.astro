@@ -9,44 +9,50 @@ const coreRoutes = [
     tag: '先上手',
     title: '文档教程',
     href: withBase('/docs/'),
-    summary: '从安装、接入、规则、命令到日常使用，一步一步把 OpenClaw 养起来。',
-    audience: '适合第一次接触、已经装好但不会用、想重新梳理流程的人。',
-    bullets: ['先看 7 步教程', '常用命令速查', 'FAQ 排错入口'],
+    summary: '从安装、接入、规则、命令到日常使用，按顺序把 OpenClaw 跑起来。',
+    audience: '适合第一次接触、已经装好但不会用、或者想重新梳理流程的人。',
+    bullets: ['先看 7 步总览', '常用命令速查', 'FAQ 排错入口'],
     action: '进入文档教程'
   },
   {
     tag: '看外部入口',
     title: '资源导航',
     href: withBase('/links/'),
-    summary: '集中放官网、官方文档、SkillHub、版本发布和精选文章，不用到处翻链接。',
-    audience: '适合需要补官网信息、找技能、查版本和收藏外部资料的人。',
+    summary: '把官网、官方文档、SkillHub、版本发布和精选外部文章集中放在一页。',
+    audience: '适合需要查官方资料、找技能、看版本更新和收藏外链的人。',
     bullets: ['官网与官方文档', 'SkillHub 与 Releases', '精选中文文章'],
     action: '打开资源导航'
   },
   {
-    tag: '看能做什么',
+    tag: '先判断价值',
     title: '案例',
     href: withBase('/cases/'),
-    summary: '用技术小白也能看懂的方式，把 OpenClaw 能落地到哪些真实场景讲清楚。',
+    summary: '用非技术视角讲清楚 OpenClaw 能落到哪些真实场景里。',
     audience: '适合先判断值不值得学、值不值得装、值不值得交付的人。',
-    bullets: ['内容运营案例', '办公协同案例', '个人生活助手案例'],
+    bullets: ['内容运营案例', '办公协同案例', '个人助手案例'],
     action: '查看案例'
   },
   {
     tag: '自己装或找我做',
     title: '安装交付服务',
     href: withBase('/service/'),
-    summary: '想自己安装、预约交付，或在使用中需要支持时，都可以先看这里。',
-    audience: '适合准备上手、已经上手、或需要交付支持的人。',
+    summary: '自己安装、预约交付、排错支持，都先从这里进入。',
+    audience: '适合准备上手、已经上手、或者需要交付支持的人。',
     bullets: ['自己安装路线', '交付服务说明', '排错与联系入口'],
     action: '进入安装交付服务'
   }
 ];
 
 const useFlows = [
-  ['刚开始了解', '先看案例，确认 OpenClaw 能不能帮你解决真实问题。'],
-  ['准备动手安装', '先去文档教程，按步骤把第一个可用入口跑通。'],
-  ['想省时间少踩坑', '直接看安装交付服务，判断是自己继续装还是找我来做。']
+  ['刚开始了解', '先看案例，确认 OpenClaw 能不能解决你手上的真实问题。'],
+  ['准备自己安装', '先去文档教程，按顺序把第一个可用入口跑通。'],
+  ['想节省时间少踩坑', '直接看安装交付服务，判断是自己继续装还是让我来做。']
+];
+
+const introFacts = [
+  ['4 个核心入口', '文档、资源、案例、服务四条主线分别解决不同问题。'],
+  ['适合第一次接触', '先判断值不值得用，再决定自己装还是直接交付。'],
+  ['目标是少走弯路', '不用在聊天记录、外链和零散笔记之间来回翻找。']
 ];
 
 const nextSteps = [
@@ -69,24 +75,32 @@ const nextSteps = [
   title="虾客AI"
   description="围绕 OpenClaw 的文档教程、资源导航、案例和安装交付服务四个核心入口。"
 >
-  <main class="page">
+  <main class="page" id="main-content">
     <div class="container">
-      <section class="page-hero">
-        <div class="hero-grid">
-          <article>
+      <section class="page-intro">
+        <div class="page-intro__grid">
+          <article class="page-intro__content">
             <span class="eyebrow">虾客AI</span>
             <h1>想了解、安装或用好 OpenClaw，从这里开始。</h1>
             <p class="lead">
-              先看案例判断适不适合自己，再按教程安装，或者直接了解交付服务。
-              不管你是刚接触，还是已经在使用中，都能很快找到下一步。
+              这不是展示页，而是一个入口页。先看案例判断值不值得用，再按教程安装，或者直接进入交付服务。
+              不管你是第一次接触，还是已经在用，都能很快找到下一步。
             </p>
             <div class="action-row">
               <a class="button button-primary" href={withBase('/docs/')}>先去文档教程</a>
               <a class="button button-secondary" href={withBase('/service/')}>看安装交付服务</a>
             </div>
+            <div class="intro-facts">
+              {introFacts.map(([title, text]) => (
+                <article class="intro-fact">
+                  <strong>{title}</strong>
+                  <span>{text}</span>
+                </article>
+              ))}
+            </div>
           </article>
 
-          <aside class="hero-aside">
+          <aside class="page-intro__aside">
             <span class="section-kicker">你现在可以这样开始</span>
             <ul class="simple-list">
               {useFlows.map(([title, text]) => (
@@ -105,26 +119,33 @@ const nextSteps = [
         <div class="section-header">
           <div>
             <span class="section-kicker">四个核心入口</span>
-            <h2>按你当前最需要的事情，选择对应入口。</h2>
+            <h2>按你当前最需要解决的事情，直接选入口。</h2>
           </div>
           <p class="section-copy">
             文档教程负责上手和排错，资源导航负责外部资料，案例帮你判断场景，安装交付服务负责落地支持。
           </p>
         </div>
 
-        <div class="route-grid">
+        <div class="directory-list">
           {coreRoutes.map((item) => (
-            <a class="route-card" href={item.href}>
-              <span class="card-tag">{item.tag}</span>
-              <h3 class="card-title">{item.title}</h3>
-              <p class="card-meta">{item.summary}</p>
-              <p class="card-meta"><strong>适合谁：</strong>{item.audience}</p>
-              <ul class="bullet-list">
-                {item.bullets.map((bullet) => (
-                  <li>{bullet}</li>
-                ))}
-              </ul>
-              <p class="card-meta"><strong>下一步：</strong>{item.action}</p>
+            <a class="directory-row" href={item.href}>
+              <div class="directory-row__main">
+                <span class="card-tag">{item.tag}</span>
+                <h3 class="directory-row__title">{item.title}</h3>
+                <p class="directory-row__summary">{item.summary}</p>
+                <ul class="directory-inline-list">
+                  {item.bullets.map((bullet) => (
+                    <li>{bullet}</li>
+                  ))}
+                </ul>
+              </div>
+              <div class="directory-row__meta">
+                <p class="directory-row__meta-copy"><strong>适合谁：</strong>{item.audience}</p>
+                <p class="directory-row__meta-copy"><strong>下一步：</strong>{item.action}</p>
+              </div>
+              <div class="directory-row__action">
+                <span class="button button-secondary">进入</span>
+              </div>
             </a>
           ))}
         </div>

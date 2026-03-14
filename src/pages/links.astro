@@ -9,7 +9,7 @@ const officialLinks = [
     title: 'OpenClaw 官网',
     tag: '官方入口',
     url: 'https://openclaw.ai/',
-    summary: '先看产品定位、安装方式、支持平台和官方下载安装入口。'
+    summary: '先看产品定位、安装方式、支持平台和官方安装入口。'
   },
   {
     title: 'OpenClaw 官方文档',
@@ -42,7 +42,7 @@ const toolLinks = [
     title: 'MiniMax 平台',
     tag: '模型平台',
     url: 'https://platform.minimaxi.com/subscribe/coding-plan',
-    summary: '如果你准备在 OpenClaw 里接 MiniMax，这里是平台入口。'
+    summary: '如果准备在 OpenClaw 里接入 MiniMax，这里是平台入口。'
   },
   {
     title: 'ClawHub',
@@ -71,7 +71,7 @@ const readingLinks = [
   {
     title: 'OpenClaw 接入钉钉',
     url: 'https://cloud.tencent.com/developer/article/2626553',
-    summary: '适合值守、通知和企业协同类场景。'
+    summary: '适合通知、值守和企业协同类场景。'
   }
 ];
 
@@ -79,12 +79,12 @@ const localRoutes = [
   {
     title: '文档教程',
     url: withBase('/docs/'),
-    summary: '把 7 步教程、命令和 FAQ 集中放在本站。'
+    summary: '7 步总览、命令和 FAQ 都集中在站内。'
   },
   {
     title: '案例',
     url: withBase('/cases/'),
-    summary: '先看有哪些适合新手理解的真实使用场景。'
+    summary: '先看哪些场景值得做，再决定投入多少时间。'
   },
   {
     title: '安装交付服务',
@@ -92,34 +92,45 @@ const localRoutes = [
     summary: '自己安装、交付服务、排错支持都统一在这里。'
   }
 ];
+
+const introFacts = [
+  ['官方入口集中放', '官网、官方文档、GitHub 和 Releases 在一页内收齐。'],
+  ['外部资料按用途分组', '先看官方信息，再看生态工具，最后看补充文章。'],
+  ['站内页也给回路', '查完外链后能直接返回文档、案例和服务页。']
+];
 ---
 
 <MarketingLayout
   title="虾客AI 资源导航"
   description="集中整理官网、官方文档、SkillHub、版本更新和精选中文文章，作为 OpenClaw 的外部资源入口。"
 >
-  <main class="page">
+  <main class="page" id="main-content">
     <div class="container">
-      <section class="page-hero">
-        <div class="hero-grid">
-          <article>
+      <section class="page-intro">
+        <div class="page-intro__grid">
+          <article class="page-intro__content">
             <span class="eyebrow">资源导航</span>
             <h1>官网、官方文档、SkillHub 和精选文章，都放在这一页。</h1>
             <p class="lead">
-              你不需要每次都重新翻聊天记录找链接。需要查官方资料、看技能入口、补外部文章时，
-              直接来这一页就够了。
+              不需要每次都重新翻聊天记录找链接。需要查官方资料、看技能入口、补外部文章时，直接来这一页就够了。
             </p>
             <div class="action-row">
-              <a class="button button-primary" href="https://openclaw.ai/" target="_blank" rel="noreferrer">
-                打开官网
-              </a>
+              <a class="button button-primary" href="https://openclaw.ai/" target="_blank" rel="noreferrer">打开官网</a>
               <a class="button button-secondary" href="https://docs.openclaw.ai/" target="_blank" rel="noreferrer">
                 打开官方文档
               </a>
             </div>
+            <div class="intro-facts">
+              {introFacts.map(([title, text]) => (
+                <article class="intro-fact">
+                  <strong>{title}</strong>
+                  <span>{text}</span>
+                </article>
+              ))}
+            </div>
           </article>
 
-          <aside class="hero-aside">
+          <aside class="page-intro__aside">
             <span class="section-kicker">建议顺序</span>
             <ul class="simple-list">
               <li>第一次使用：先看官网，再看官方文档。</li>
@@ -137,20 +148,23 @@ const localRoutes = [
             <h2>安装、配置、升级，优先以官方信息为准。</h2>
           </div>
           <p class="section-copy">
-            第三方文章适合辅助理解，但安装步骤、权限、更新与兼容性，还是优先参考官方入口。
+            第三方文章适合理解场景，但安装步骤、权限、更新与兼容性，还是优先参考官方入口。
           </p>
         </div>
 
-        <div class="card-grid card-grid-two">
+        <div class="directory-list">
           {officialLinks.map((item) => (
-            <article class="info-card">
-              <span class="card-tag">{item.tag}</span>
-              <h3 class="card-title">{item.title}</h3>
-              <p class="card-meta">{item.summary}</p>
-              <div class="action-row">
-                <a class="button button-secondary" href={item.url} target="_blank" rel="noreferrer">
-                  打开链接
-                </a>
+            <article class="directory-row">
+              <div class="directory-row__main">
+                <span class="card-tag">{item.tag}</span>
+                <h3 class="directory-row__title">{item.title}</h3>
+                <p class="directory-row__summary">{item.summary}</p>
+              </div>
+              <div class="directory-row__meta">
+                <p class="directory-row__meta-copy">安装、配置、版本与官方说明，优先从这里核对。</p>
+              </div>
+              <div class="directory-row__action">
+                <a class="button button-secondary" href={item.url} target="_blank" rel="noreferrer">打开</a>
               </div>
             </article>
           ))}
@@ -189,20 +203,23 @@ const localRoutes = [
             <h2>适合补充看具体聊天入口和场景接入。</h2>
           </div>
           <p class="section-copy">
-            这些文章更偏场景理解，适合新手补概念，不建议代替官方步骤。
+            这些文章更偏场景理解，适合新手补概念，不建议替代官方步骤。
           </p>
         </div>
 
-        <div class="card-grid card-grid-two">
+        <div class="directory-list">
           {readingLinks.map((item) => (
-            <article class="info-card">
-              <span class="card-tag">外部文章</span>
-              <h3 class="card-title">{item.title}</h3>
-              <p class="card-meta">{item.summary}</p>
-              <div class="action-row">
-                <a class="button button-secondary" href={item.url} target="_blank" rel="noreferrer">
-                  查看文章
-                </a>
+            <article class="directory-row">
+              <div class="directory-row__main">
+                <span class="card-tag">外部文章</span>
+                <h3 class="directory-row__title">{item.title}</h3>
+                <p class="directory-row__summary">{item.summary}</p>
+              </div>
+              <div class="directory-row__meta">
+                <p class="directory-row__meta-copy">适合补充场景理解，不建议替代官方步骤。</p>
+              </div>
+              <div class="directory-row__action">
+                <a class="button button-secondary" href={item.url} target="_blank" rel="noreferrer">查看</a>
               </div>
             </article>
           ))}
@@ -228,7 +245,7 @@ const localRoutes = [
             <span class="status-chip">使用建议</span>
             <h3 class="card-title">需要查官网、版本更新或外部文章时，直接来这一页就够了。</h3>
             <p class="card-meta">
-              它把官网、技能、版本更新和补充文章放在一起，适合需要外部资料时集中查找。
+              这里把官网、技能、版本更新和补充文章放在一起，适合需要外部资料时集中查找。
             </p>
           </article>
         </div>
@@ -236,15 +253,4 @@ const localRoutes = [
     </div>
   </main>
 
-  <style>
-    .card-grid-two {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    @media (max-width: 960px) {
-      .card-grid-two {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
 </MarketingLayout>

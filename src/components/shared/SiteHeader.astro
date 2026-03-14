@@ -21,103 +21,149 @@ const hasUtilities = Astro.slots.has('utilities');
 ---
 
 <div class="shared-header">
-  <div class="shared-header__top">
-    <a class="shared-header__brand" href={withBase('/')}>
-      <span class="shared-header__mark">
-        <span class="shared-header__orb" aria-hidden="true"></span>
-        <span class="shared-header__title">{SITE_NAME}</span>
-      </span>
-      <span class="shared-header__subtitle">{SITE_SLOGAN}</span>
-    </a>
+  <div class="shared-header__surface">
+    <div class="shared-header__main">
+      <div class="shared-header__identity">
+        <a class="shared-header__brand" href={withBase('/')}>
+          <span class="shared-header__mark">
+            <span class="shared-header__orb" aria-hidden="true"></span>
+            <span class="shared-header__brand-copy">
+              <span class="shared-header__title">{SITE_NAME}</span>
+              <span class="shared-header__subtitle">{SITE_SLOGAN}</span>
+            </span>
+          </span>
+        </a>
 
-    {
-      (hasSearch || hasUtilities) && (
-        <div class="shared-header__tools">
-          {hasSearch && (
-            <div class="shared-header__search">
-              <slot name="search" />
-            </div>
-          )}
-          {hasUtilities && (
-            <div class="shared-header__utilities">
-              <slot name="utilities" />
-            </div>
-          )}
-        </div>
-      )
-    }
+        <nav class="shared-header__nav" aria-label={navLabel}>
+          {
+            SITE_NAV_ITEMS.map((item) => {
+              const isActive = currentPath === item.path || currentPath.startsWith(item.path);
+              return (
+                <a class:list={['shared-header__link', { active: isActive }]} href={withBase(item.path)}>
+                  <span>{item.label}</span>
+                </a>
+              );
+            })
+          }
+        </nav>
+      </div>
+
+      {
+        (hasSearch || hasUtilities) && (
+          <div class="shared-header__tools">
+            {hasSearch && (
+              <div class="shared-header__search">
+                <slot name="search" />
+              </div>
+            )}
+            {hasUtilities && (
+              <div class="shared-header__utilities">
+                <slot name="utilities" />
+              </div>
+            )}
+          </div>
+        )
+      }
+    </div>
   </div>
-
-  <nav class="shared-header__nav" aria-label={navLabel}>
-    {
-      SITE_NAV_ITEMS.map((item) => {
-        const isActive = currentPath === item.path || currentPath.startsWith(item.path);
-        return (
-          <a class:list={['shared-header__link', { active: isActive }]} href={withBase(item.path)}>
-            {item.label}
-          </a>
-        );
-      })
-    }
-  </nav>
 </div>
 
 <style>
   .shared-header {
-    display: grid;
-    gap: 0.9rem;
     width: 100%;
   }
 
-  .shared-header__top {
+  .shared-header__surface {
+    position: relative;
+    display: grid;
+    gap: 0.65rem;
+    padding: 0.68rem 0.78rem;
+    border: 1px solid rgba(91, 68, 52, 0.1);
+    border-radius: 1.1rem;
+    background:
+      linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(250, 245, 239, 0.95)),
+      radial-gradient(circle at top right, rgba(186, 99, 54, 0.04), transparent 26%);
+    box-shadow:
+      0 10px 24px rgba(73, 52, 38, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    overflow: hidden;
+  }
+
+  .shared-header__surface::after {
+    content: '';
+    position: absolute;
+    inset: auto 0.9rem 0.7rem;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(123, 67, 37, 0), rgba(123, 67, 37, 0.14), rgba(123, 67, 37, 0));
+    pointer-events: none;
+  }
+
+  .shared-header__main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem 1.5rem;
+    gap: 0.65rem 0.9rem;
+    min-width: 0;
+  }
+
+  .shared-header__identity {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    flex: 1 1 auto;
     min-width: 0;
   }
 
   .shared-header__brand {
-    display: grid;
-    gap: 0.35rem;
+    display: block;
     min-width: 0;
     color: inherit;
     text-decoration: none;
+    flex: none;
   }
 
   .shared-header__mark {
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.62rem;
     width: fit-content;
-    padding: 0.72rem 1rem 0.72rem 0.9rem;
-    border-radius: 999px;
-    border: 1px solid rgba(193, 94, 42, 0.14);
-    background: rgba(255, 250, 242, 0.9);
-    box-shadow: 0 14px 28px rgba(83, 58, 42, 0.08);
+    max-width: 100%;
+    padding: 0.56rem 0.8rem 0.56rem 0.68rem;
+    border-radius: 0.95rem;
+    border: 1px solid rgba(91, 68, 52, 0.1);
+    background: rgba(255, 252, 248, 0.94);
+    box-shadow: 0 8px 16px rgba(73, 52, 38, 0.04);
   }
 
   .shared-header__orb {
-    width: 0.8rem;
-    height: 0.8rem;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #c15e2a, #e49b45);
-    box-shadow: 0 0 0 0.35rem rgba(193, 94, 42, 0.1);
+    width: 0.72rem;
+    height: 0.72rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ba6336, #d98b54);
+    box-shadow:
+      0 0 0 0.26rem rgba(186, 99, 54, 0.08),
+      0 4px 10px rgba(186, 99, 54, 0.1);
     flex: none;
   }
 
+  .shared-header__brand-copy {
+    display: grid;
+    gap: 0.04rem;
+    min-width: 0;
+  }
+
   .shared-header__title {
-    color: #7b371c;
+    color: #7b4325;
     font-family: 'Fraunces', 'Noto Serif SC', serif;
-    font-size: 1.06rem;
+    font-size: 0.94rem;
     font-weight: 800;
     letter-spacing: 0.01em;
+    line-height: 1.1;
   }
 
   .shared-header__subtitle {
-    padding-left: 0.3rem;
     color: #6c5a4e;
-    font-size: 0.82rem;
+    font-size: 0.72rem;
     line-height: 1.2;
   }
 
@@ -125,8 +171,8 @@ const hasUtilities = Astro.slots.has('utilities');
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 1rem;
-    flex: 1 1 auto;
+    gap: 0.8rem;
+    flex: 0 1 auto;
     min-width: 0;
   }
 
@@ -143,40 +189,53 @@ const hasUtilities = Astro.slots.has('utilities');
   .shared-header__search :global(button),
   .shared-header__search :global(label) {
     border-radius: 999px;
-    border-color: rgba(193, 94, 42, 0.12);
-    background: rgba(255, 251, 244, 0.86);
-    box-shadow: 0 10px 24px rgba(83, 58, 42, 0.06);
+    border-color: rgba(91, 68, 52, 0.1);
+    background: rgba(255, 252, 248, 0.92);
+    box-shadow: none;
   }
 
   .shared-header__utilities {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .shared-header__utilities :global(.social-icons) {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding-right: 1rem;
-    border-inline-end: 1px solid var(--sl-color-gray-5, rgba(75, 54, 38, 0.14));
+    gap: 0.75rem;
+    padding-right: 0.8rem;
+    border-inline-end: 1px solid rgba(91, 68, 52, 0.1);
   }
 
   .shared-header__nav {
     display: flex;
-    flex-wrap: wrap;
+    flex: 1 1 auto;
+    flex-wrap: nowrap;
     align-items: center;
-    gap: 0.55rem;
+    gap: 0.35rem;
+    min-width: 0;
+    overflow-x: auto;
+    padding: 0.1rem 0;
+    scrollbar-width: none;
+  }
+
+  .shared-header__nav::-webkit-scrollbar {
+    display: none;
   }
 
   .shared-header__link {
-    padding: 0.62rem 0.98rem;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    padding: 0.46rem 0.72rem;
     border-radius: 999px;
-    border: 1px solid rgba(193, 94, 42, 0.1);
-    background: rgba(255, 251, 244, 0.78);
-    box-shadow: 0 10px 24px rgba(83, 58, 42, 0.04);
+    border: 1px solid rgba(91, 68, 52, 0.1);
+    background: rgba(255, 252, 248, 0.86);
     color: #6c5a4e;
-    font-size: 0.92rem;
+    font-size: 0.82rem;
     text-decoration: none;
     transition:
       border-color 180ms ease,
@@ -188,24 +247,40 @@ const hasUtilities = Astro.slots.has('utilities');
 
   .shared-header__link:hover,
   .shared-header__link:focus-visible {
-    color: #7b371c;
-    border-color: rgba(193, 94, 42, 0.18);
+    color: #7b4325;
+    border-color: rgba(186, 99, 54, 0.18);
     background: rgba(255, 249, 241, 0.96);
     transform: translateY(-1px);
-    box-shadow: 0 14px 26px rgba(83, 58, 42, 0.08);
+    box-shadow: 0 6px 12px rgba(73, 52, 38, 0.04);
   }
 
   .shared-header__link.active {
-    color: #7b371c;
-    border-color: rgba(193, 94, 42, 0.18);
-    background: rgba(193, 94, 42, 0.12);
-    box-shadow: inset 0 0 0 1px rgba(193, 94, 42, 0.02);
+    color: #7b4325;
+    border-color: rgba(186, 99, 54, 0.2);
+    background: linear-gradient(180deg, rgba(253, 241, 232, 0.98), rgba(247, 232, 219, 0.92));
+    box-shadow:
+      inset 0 0 0 1px rgba(186, 99, 54, 0.02),
+      0 6px 12px rgba(73, 52, 38, 0.04);
   }
 
-  @media (max-width: 60rem) {
-    .shared-header__top {
+  .shared-header__link.active::after {
+    content: '';
+    position: absolute;
+    inset: auto 0.7rem 0.26rem;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(123, 67, 37, 0.18), rgba(123, 67, 37, 0.82), rgba(123, 67, 37, 0.18));
+  }
+
+  @media (max-width: 58rem) {
+    .shared-header__main {
       flex-direction: column;
       align-items: flex-start;
+    }
+
+    .shared-header__identity {
+      width: 100%;
+      flex-wrap: wrap;
     }
 
     .shared-header__tools {
@@ -218,9 +293,18 @@ const hasUtilities = Astro.slots.has('utilities');
       width: 100%;
       max-width: none;
     }
+
+    .shared-header__nav {
+      width: 100%;
+    }
   }
 
   @media (max-width: 40rem) {
+    .shared-header__surface {
+      padding: 0.66rem;
+      border-radius: 0.95rem;
+    }
+
     .shared-header__subtitle {
       white-space: normal;
     }
@@ -236,7 +320,7 @@ const hasUtilities = Astro.slots.has('utilities');
     }
 
     .shared-header__link {
-      font-size: 0.88rem;
+      font-size: 0.8rem;
     }
   }
 </style>
