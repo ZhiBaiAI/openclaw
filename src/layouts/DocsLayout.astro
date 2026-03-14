@@ -114,8 +114,8 @@ const sidebarSections = DOCS_SIDEBAR.map((section) => ({
             <span class="section-kicker">快捷入口</span>
             <div class="docs-shortcuts">
               <a href={`${base}/service/`}>
-                <strong>安装交付服务</strong>
-                <span>自己安装、预约交付、排错支持都可以从这里继续。</span>
+                <strong>安装部署支持</strong>
+                <span>安装部署、配置支持和排错处理都可以从这里继续。</span>
               </a>
               <a href={`${base}/links/`}>
                 <strong>资源导航</strong>
@@ -123,7 +123,7 @@ const sidebarSections = DOCS_SIDEBAR.map((section) => ({
               </a>
               <a href={`${base}/cases/`}>
                 <strong>案例</strong>
-                <span>先看真实场景，再决定学到什么程度、要不要交付。</span>
+                <span>先看真实场景，再决定学到什么程度、要不要继续投入。</span>
               </a>
             </div>
           </div>
@@ -288,12 +288,14 @@ const sidebarSections = DOCS_SIDEBAR.map((section) => ({
   }
 
   .docs-rail {
+    align-self: start;
     display: grid;
     gap: 16px;
     align-content: start;
   }
 
   .docs-article {
+    align-self: start;
     min-width: 0;
     padding: 16px;
   }
@@ -301,6 +303,7 @@ const sidebarSections = DOCS_SIDEBAR.map((section) => ({
   .docs-pagehead {
     display: grid;
     gap: 10px;
+    margin-top: 0;
     margin-bottom: 18px;
     padding-bottom: 16px;
     border-bottom: 1px solid rgba(91, 68, 52, 0.1);

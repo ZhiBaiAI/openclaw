@@ -1,8 +1,8 @@
 export const DOCS_SIDEBAR = [
   {
-    label: '交付后开始',
+    label: '开始使用',
     items: [
-      { id: 'home', label: '交付后从这里开始' },
+      { id: 'home', label: '从这里开始' },
       { id: 'guide', label: '7 步总览' }
     ]
   },
