@@ -1,6 +1,6 @@
 ---
 import SiteHeader from '../components/shared/SiteHeader.astro';
-import { SITE_DESCRIPTION, SITE_NAV_ITEMS } from '../data/site.mjs';
+import { SITE_DESCRIPTION } from '../data/site.mjs';
 
 export interface Props {
   title: string;
@@ -8,9 +8,6 @@ export interface Props {
 }
 
 const { title, description = SITE_DESCRIPTION } = Astro.props;
-
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const withBase = (path: string) => `${base}${path}`;
 ---
 
 <!doctype html>
@@ -596,67 +593,6 @@ const withBase = (path: string) => `${base}${path}`;
         line-height: 1.3;
       }
 
-      .footer-shell {
-        padding: 6px 0 36px;
-      }
-
-      .footer-card {
-        padding: 16px;
-        border: 1px solid var(--line);
-        border-radius: 24px;
-        background:
-          linear-gradient(180deg, rgba(252, 248, 241, 0.94), rgba(247, 240, 231, 0.9)),
-          radial-gradient(circle at top right, rgba(186, 99, 54, 0.05), transparent 32%);
-        box-shadow: 0 12px 30px rgba(83, 58, 42, 0.07);
-      }
-
-      .footer-grid {
-        display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
-        gap: 12px;
-        align-items: start;
-      }
-
-      .footer-grid > div {
-        display: grid;
-        align-content: start;
-      }
-
-      .footer-grid > div + div {
-        padding-inline-start: 18px;
-        border-inline-start: 1px solid rgba(91, 68, 52, 0.1);
-      }
-
-      .footer-card h2 {
-        max-width: 16ch;
-      }
-
-      .footer-links {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 14px;
-      }
-
-      .footer-links a {
-        display: inline-flex;
-        align-items: center;
-        min-height: 44px;
-        padding: 8px 10px;
-        border-radius: 999px;
-        background: rgba(255, 251, 244, 0.88);
-        border: 1px solid rgba(193, 94, 42, 0.12);
-        color: var(--accent-deep);
-        font-size: 0.88rem;
-      }
-
-      .footer-note {
-        margin: 0;
-        color: var(--muted);
-        font-size: 0.94rem;
-        line-height: 1.8;
-      }
-
       @keyframes riseIn {
         from {
           opacity: 0;
@@ -693,20 +629,12 @@ const withBase = (path: string) => `${base}${path}`;
         .card-grid,
         .split-grid,
         .mini-grid,
-        .directory-row,
-        .footer-grid {
+        .directory-row {
           grid-template-columns: 1fr;
         }
 
         .directory-row__action {
           justify-items: start;
-        }
-
-        .footer-grid > div + div {
-          padding-inline-start: 0;
-          border-inline-start: 0;
-          padding-top: 10px;
-          border-top: 1px solid rgba(91, 68, 52, 0.1);
         }
       }
 
@@ -729,8 +657,7 @@ const withBase = (path: string) => `${base}${path}`;
         .note-card,
         .summary-card,
         .page-intro__aside,
-        .island,
-        .footer-card {
+        .island {
           padding: 16px;
           border-radius: 22px;
         }
@@ -782,34 +709,6 @@ const withBase = (path: string) => `${base}${path}`;
       </header>
 
       <slot />
-
-      <footer class="footer-shell">
-        <div class="container">
-          <div class="footer-card">
-            <div class="footer-grid">
-              <div>
-                <span class="section-kicker">固定入口</span>
-                <h2>把虾客AI当成你的日常入口，不用每次重新找路。</h2>
-                <p class="footer-note">
-                  第一次来先看文档教程，想看外部官网和工具去资源导航，想知道能做什么去案例，
-                  想自己安装或找我交付就去安装交付服务。
-                </p>
-                <div class="footer-links">
-                  {SITE_NAV_ITEMS.map((item) => <a href={withBase(item.path)}>{item.label}</a>)}
-                </div>
-              </div>
-
-              <div>
-                <span class="section-kicker">使用建议</span>
-                <p class="footer-note">
-                  不要一上来追求“全自动”。先把一个聊天入口、一两个真实场景跑顺，再慢慢把 OpenClaw
-                  养熟，它才会变成你真正会每天用的助手。
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   </body>
 </html>
