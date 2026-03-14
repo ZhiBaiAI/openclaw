@@ -4,69 +4,59 @@ import MarketingLayout from '../layouts/MarketingLayout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const withBase = (path: string) => `${base}${path}`;
 
+const primaryActions = [
+  { label: '我先看案例', href: withBase('/cases/'), style: 'button-primary' },
+  { label: '我开始安装', href: withBase('/docs/'), style: 'button-secondary' },
+  { label: '我想直接落地', href: withBase('/service/'), style: 'button-secondary' }
+];
+
 const coreRoutes = [
   {
-    tag: '先上手',
+    tag: '先开始动手',
     title: '文档教程',
     href: withBase('/docs/'),
     summary: '从安装、接入、规则、命令到日常使用，按顺序把 OpenClaw 跑起来。',
-    audience: '适合第一次接触、已经装好但不会用、或者想重新梳理流程的人。',
-    bullets: ['先看 7 步总览', '常用命令速查', 'FAQ 排错入口'],
+    bullets: ['7 步总览', '命令速查', 'FAQ 排错'],
     action: '进入文档教程'
   },
   {
-    tag: '看外部入口',
-    title: '资源导航',
-    href: withBase('/links/'),
-    summary: '把官网、官方文档、SkillHub、版本发布和精选外部文章集中放在一页。',
-    audience: '适合需要查官方资料、找技能、看版本更新和收藏外链的人。',
-    bullets: ['官网与官方文档', 'SkillHub 与 Releases', '精选中文文章'],
-    action: '打开资源导航'
-  },
-  {
-    tag: '先判断价值',
+    tag: '先判断场景',
     title: '案例',
     href: withBase('/cases/'),
-    summary: '用非技术视角讲清楚 OpenClaw 能落到哪些真实场景里。',
-    audience: '适合先判断值不值得学、值不值得装、值不值得交付的人。',
-    bullets: ['内容运营案例', '办公协同案例', '个人助手案例'],
+    summary: '先看真实场景，再判断 OpenClaw 是否值得你继续投入时间和精力。',
+    bullets: ['内容运营', '办公协同', '个人助手'],
     action: '查看案例'
   },
   {
-    tag: '自己装或找我做',
+    tag: '先查资料',
+    title: '资源导航',
+    href: withBase('/links/'),
+    summary: '把官网、官方文档、SkillHub、版本发布和精选文章集中在一页。',
+    bullets: ['官网与文档', 'SkillHub', 'Releases'],
+    action: '打开资源导航'
+  },
+  {
+    tag: '先解决落地',
     title: '安装交付服务',
     href: withBase('/service/'),
-    summary: '自己安装、预约交付、排错支持，都先从这里进入。',
-    audience: '适合准备上手、已经上手、或者需要交付支持的人。',
-    bullets: ['自己安装路线', '交付服务说明', '排错与联系入口'],
-    action: '进入安装交付服务'
+    summary: '自己安装、预约支持、排错协助，都从这里进入。',
+    bullets: ['自己安装', '服务说明', '联系入口'],
+    action: '查看服务'
   }
 ];
 
-const useFlows = [
-  ['刚开始了解', '先看案例，确认 OpenClaw 能不能解决你手上的真实问题。'],
-  ['准备自己安装', '先去文档教程，按顺序把第一个可用入口跑通。'],
-  ['想节省时间少踩坑', '直接看安装交付服务，判断是自己继续装还是让我来做。']
-];
-
-const introFacts = [
-  ['4 个核心入口', '文档、资源、案例、服务四条主线分别解决不同问题。'],
-  ['适合第一次接触', '先判断值不值得用，再决定自己装还是直接交付。'],
-  ['目标是少走弯路', '不用在聊天记录、外链和零散笔记之间来回翻找。']
-];
-
-const nextSteps = [
+const supportLinks = [
   {
-    title: '先看案例',
-    text: '适合还在判断值不值得学、值不值得装的人，先看真实场景最直接。'
+    title: '已经安装好了',
+    text: '继续查资料、看官方更新或找常用外链，优先去资源导航。',
+    href: withBase('/links/'),
+    action: '去资源导航'
   },
   {
-    title: '先走教程',
-    text: '适合准备自己动手的人，从安装、接入、规则到排错都有对应文档。'
-  },
-  {
-    title: '直接预约交付',
-    text: '适合已经确定要用，但不想自己配环境或希望更快落地的人。'
+    title: '已经开始用了',
+    text: '想补场景、补思路或回头看看还能怎么扩展，就去看案例。',
+    href: withBase('/cases/'),
+    action: '去看案例'
   }
 ];
 ---
@@ -76,109 +66,201 @@ const nextSteps = [
   description="围绕 OpenClaw 的文档教程、资源导航、案例和安装交付服务四个核心入口。"
 >
   <main class="page" id="main-content">
-    <div class="container">
-      <section class="page-intro">
-        <div class="page-intro__grid">
-          <article class="page-intro__content">
-            <span class="eyebrow">虾客AI</span>
-            <h1>想了解、安装或用好 OpenClaw，从这里开始。</h1>
-            <p class="lead">
-              这不是展示页，而是一个入口页。先看案例判断值不值得用，再按教程安装，或者直接进入交付服务。
-              不管你是第一次接触，还是已经在用，都能很快找到下一步。
-            </p>
-            <div class="action-row">
-              <a class="button button-primary" href={withBase('/docs/')}>先去文档教程</a>
-              <a class="button button-secondary" href={withBase('/service/')}>看安装交付服务</a>
-            </div>
-            <div class="intro-facts">
-              {introFacts.map(([title, text]) => (
-                <article class="intro-fact">
-                  <strong>{title}</strong>
-                  <span>{text}</span>
-                </article>
-              ))}
-            </div>
-          </article>
-
-          <aside class="page-intro__aside">
-            <span class="section-kicker">你现在可以这样开始</span>
-            <ul class="simple-list">
-              {useFlows.map(([title, text]) => (
-                <li>
-                  <strong>{title}</strong>
-                  <br />
-                  {text}
-                </li>
-              ))}
-            </ul>
-          </aside>
+    <div class="container home-page">
+      <section class="page-intro home-hero">
+        <div class="home-hero__content">
+          <span class="eyebrow">虾客AI</span>
+          <h1>想了解、安装或用好 OpenClaw，就从这里选入口。</h1>
+          <p class="lead">
+            先判断你现在是想了解场景、准备安装，还是希望更快落地，然后直接进入对应页面。
+          </p>
+          <div class="action-row home-hero__actions">
+            {primaryActions.map((item) => (
+              <a class:list={['button', item.style]} href={item.href}>{item.label}</a>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section class="section">
-        <div class="section-header">
-          <div>
-            <span class="section-kicker">四个核心入口</span>
-            <h2>按你当前最需要解决的事情，直接选入口。</h2>
-          </div>
-          <p class="section-copy">
-            文档教程负责上手和排错，资源导航负责外部资料，案例帮你判断场景，安装交付服务负责落地支持。
-          </p>
+      <section class="section home-sections">
+        <div class="home-sections__heading">
+          <h2>四个核心入口</h2>
         </div>
 
-        <div class="directory-list">
+        <div class="home-entry-grid">
           {coreRoutes.map((item) => (
-            <a class="directory-row" href={item.href}>
-              <div class="directory-row__main">
-                <span class="card-tag">{item.tag}</span>
-                <h3 class="directory-row__title">{item.title}</h3>
-                <p class="directory-row__summary">{item.summary}</p>
-                <ul class="directory-inline-list">
-                  {item.bullets.map((bullet) => (
-                    <li>{bullet}</li>
-                  ))}
-                </ul>
-              </div>
-              <div class="directory-row__meta">
-                <p class="directory-row__meta-copy"><strong>适合谁：</strong>{item.audience}</p>
-                <p class="directory-row__meta-copy"><strong>下一步：</strong>{item.action}</p>
-              </div>
-              <div class="directory-row__action">
-                <span class="button button-secondary">进入</span>
-              </div>
+            <a class="home-entry-card" href={item.href}>
+              <span class="card-tag">{item.tag}</span>
+              <h3>{item.title}</h3>
+              <p class="home-entry-card__summary">{item.summary}</p>
+              <ul class="directory-inline-list">
+                {item.bullets.map((bullet) => (
+                  <li>{bullet}</li>
+                ))}
+              </ul>
+              <span class="home-entry-card__action">{item.action}</span>
             </a>
           ))}
         </div>
       </section>
 
-      <section class="section">
-        <div class="split-grid">
-          <article class="summary-card">
-            <span class="section-kicker">建议顺序</span>
-            <h2>多数人只需要先做这三个判断。</h2>
-            <div class="mini-grid">
-              {nextSteps.map((item) => (
-                <article class="mini-card">
-                  <strong>{item.title}</strong>
-                  <span>{item.text}</span>
-                </article>
-              ))}
-            </div>
-          </article>
+      <section class="section home-support">
+        <article class="summary-card home-support__panel">
+          <div class="home-support__heading">
+            <span class="section-kicker">已经安装或正在使用</span>
+            <h2>后续常用入口</h2>
+          </div>
 
-          <article class="note-card">
-            <span class="status-chip support">日常使用</span>
-            <h3 class="card-title">已经开始用 OpenClaw 时，这里也能继续帮你排错和补资料。</h3>
-            <p class="card-meta">
-              需要查命令、回看教程、补外部资料或继续扩展场景时，直接从这里进入对应页面就够了。
-            </p>
-            <div class="action-row">
-              <a class="button button-primary" href={withBase('/links/')}>打开资源导航</a>
-              <a class="button button-secondary" href={withBase('/cases/')}>补看案例</a>
-            </div>
-          </article>
-        </div>
+          <div class="home-support__grid">
+            {supportLinks.map((item) => (
+              <a class="mini-card home-support__card" href={item.href}>
+                <strong>{item.title}</strong>
+                <span>{item.text}</span>
+                <em>{item.action}</em>
+              </a>
+            ))}
+          </div>
+        </article>
       </section>
     </div>
   </main>
+
+  <style>
+    .home-page {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .home-hero {
+      padding: 24px;
+    }
+
+    .home-hero__content {
+      display: grid;
+      gap: 16px;
+      max-width: 52rem;
+    }
+
+    .home-hero__actions {
+      gap: 10px;
+    }
+
+    .home-sections {
+      display: grid;
+      gap: 14px;
+      padding-top: 14px;
+    }
+
+    .home-sections__heading {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .home-entry-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .home-entry-card {
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      min-height: 100%;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(91, 68, 52, 0.12);
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(248, 242, 234, 0.96)),
+        radial-gradient(circle at top right, rgba(186, 99, 54, 0.08), transparent 30%);
+      box-shadow:
+        0 12px 28px rgba(73, 52, 38, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .home-entry-card:hover,
+    .home-entry-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(186, 99, 54, 0.2);
+      box-shadow: 0 14px 28px rgba(73, 52, 38, 0.08);
+    }
+
+    .home-entry-card h3,
+    .home-entry-card__summary {
+      margin: 0;
+    }
+
+    .home-entry-card h3 {
+      font-size: 1.22rem;
+      line-height: 1.16;
+    }
+
+    .home-entry-card__summary,
+    .home-support__card span {
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.68;
+    }
+
+    .home-entry-card__action,
+    .home-support__card em {
+      margin-top: auto;
+      color: var(--accent-deep);
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    .home-support {
+      padding-top: 8px;
+    }
+
+    .home-support__panel {
+      display: grid;
+      gap: 14px;
+    }
+
+    .home-support__heading {
+      display: grid;
+      gap: 8px;
+    }
+
+    .home-support__grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .home-support__card {
+      text-decoration: none;
+    }
+
+    .home-support__card strong {
+      color: var(--text);
+    }
+
+    @media (max-width: 960px) {
+      .home-entry-grid,
+      .home-support__grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .home-hero,
+      .home-entry-card {
+        padding: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .home-entry-card {
+        transition: none;
+      }
+    }
+  </style>
 </MarketingLayout>
