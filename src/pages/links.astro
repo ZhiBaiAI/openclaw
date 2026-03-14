@@ -166,9 +166,8 @@ const groups = [
             <div class="nav-group__bar">
               <div>
                 <span class="section-kicker">{group.title}</span>
-                <h2>{group.note}</h2>
+                <p class="nav-group__note">{group.note}</p>
               </div>
-              <a class="nav-group__back" href="#main-content">回到顶部</a>
             </div>
 
             <div class="nav-grid">
@@ -229,8 +228,7 @@ const groups = [
       gap: 8px;
     }
 
-    .nav-hub__jump a,
-    .nav-group__back {
+    .nav-hub__jump a {
       display: inline-flex;
       align-items: center;
       min-height: 40px;
@@ -255,14 +253,22 @@ const groups = [
     .nav-group__bar {
       display: flex;
       align-items: end;
-      justify-content: space-between;
       gap: 12px;
       margin-bottom: 12px;
       padding: 0 4px;
     }
 
-    .nav-group__bar h2 {
+    .nav-group__bar > div {
+      display: grid;
+      gap: 4px;
+    }
+
+    .nav-group__note {
+      margin: 0;
       max-width: 40rem;
+      color: var(--muted);
+      font-size: 0.96rem;
+      line-height: 1.6;
     }
 
     .nav-grid {
