@@ -9,13 +9,13 @@ const officialLinks = [
     title: 'OpenClaw 官网',
     tag: '官方入口',
     url: 'https://openclaw.ai/',
-    summary: '先看产品定位、安装方式、支持平台和官方安装入口。'
+    summary: '看产品定位、安装方式、支持平台和官方安装入口。'
   },
   {
     title: 'OpenClaw 官方文档',
     tag: '官方文档',
     url: 'https://docs.openclaw.ai/',
-    summary: '查安装、配置、聊天渠道接入和更细的官方说明。'
+    summary: '查安装、配置、聊天渠道接入和更详细的官方说明。'
   },
   {
     title: 'GitHub 仓库',
@@ -55,21 +55,25 @@ const toolLinks = [
 const readingLinks = [
   {
     title: 'OpenClaw + QQ 入门文章',
+    tag: '外部文章',
     url: 'https://cloud.tencent.com/developer/article/2625147',
     summary: '更偏新手向，适合先跑通第一个聊天入口。'
   },
   {
     title: 'OpenClaw 接入微信',
+    tag: '外部文章',
     url: 'https://cloud.tencent.com/developer/article/2626045',
     summary: '适合想把 OpenClaw 用进高频沟通入口的人。'
   },
   {
     title: 'OpenClaw 接入飞书',
+    tag: '外部文章',
     url: 'https://cloud.tencent.com/developer/article/2626151',
     summary: '适合办公协同和团队沟通场景。'
   },
   {
     title: 'OpenClaw 接入钉钉',
+    tag: '外部文章',
     url: 'https://cloud.tencent.com/developer/article/2626553',
     summary: '适合通知、值守和企业协同类场景。'
   }
@@ -78,25 +82,53 @@ const readingLinks = [
 const localRoutes = [
   {
     title: '文档教程',
+    tag: '站内入口',
     url: withBase('/docs/'),
     summary: '7 步总览、命令和 FAQ 都集中在站内。'
   },
   {
     title: '案例',
+    tag: '站内入口',
     url: withBase('/cases/'),
     summary: '先看哪些场景值得做，再决定投入多少时间。'
   },
   {
     title: '安装交付服务',
+    tag: '站内入口',
     url: withBase('/service/'),
     summary: '自己安装、交付服务、排错支持都统一在这里。'
   }
 ];
 
-const introFacts = [
-  ['官方入口集中放', '官网、官方文档、GitHub 和 Releases 在一页内收齐。'],
-  ['外部资料按用途分组', '先看官方信息，再看生态工具，最后看补充文章。'],
-  ['站内页也给回路', '查完外链后能直接返回文档、案例和服务页。']
+const groups = [
+  {
+    id: 'official',
+    label: '官方',
+    title: '官方入口',
+    note: '安装、配置、升级，优先以官方信息为准。',
+    links: officialLinks
+  },
+  {
+    id: 'tools',
+    label: '生态',
+    title: '工具与生态',
+    note: '需要扩展能力、补模型平台或看生态内容时，再来这里。',
+    links: toolLinks
+  },
+  {
+    id: 'reading',
+    label: '文章',
+    title: '精选文章',
+    note: '更偏场景理解，适合补概念，不建议替代官方步骤。',
+    links: readingLinks
+  },
+  {
+    id: 'inside',
+    label: '站内',
+    title: '站内入口',
+    note: '看完外部链接后，通常会回到这几个站内页面继续操作。',
+    links: localRoutes
+  }
 ];
 ---
 
@@ -105,152 +137,223 @@ const introFacts = [
   description="集中整理官网、官方文档、SkillHub、版本更新和精选中文文章，作为 OpenClaw 的外部资源入口。"
 >
   <main class="page" id="main-content">
-    <div class="container">
-      <section class="page-intro">
-        <div class="page-intro__grid">
-          <article class="page-intro__content">
-            <span class="eyebrow">资源导航</span>
-            <h1>官网、官方文档、SkillHub 和精选文章，都放在这一页。</h1>
-            <p class="lead">
-              不需要每次都重新翻聊天记录找链接。需要查官方资料、看技能入口、补外部文章时，直接来这一页就够了。
-            </p>
-            <div class="action-row">
-              <a class="button button-primary" href="https://openclaw.ai/" target="_blank" rel="noreferrer">打开官网</a>
-              <a class="button button-secondary" href="https://docs.openclaw.ai/" target="_blank" rel="noreferrer">
-                打开官方文档
-              </a>
-            </div>
-            <div class="intro-facts">
-              {introFacts.map(([title, text]) => (
-                <article class="intro-fact">
-                  <strong>{title}</strong>
-                  <span>{text}</span>
-                </article>
-              ))}
-            </div>
-          </article>
-
-          <aside class="page-intro__aside">
-            <span class="section-kicker">建议顺序</span>
-            <ul class="simple-list">
-              <li>第一次使用：先看官网，再看官方文档。</li>
-              <li>想扩展能力：再去 SkillHub 找技能。</li>
-              <li>准备升级或排错：看 Releases 和 GitHub 仓库。</li>
-            </ul>
-          </aside>
+    <div class="container nav-page">
+      <section class="nav-hub">
+        <div class="nav-hub__heading">
+          <span class="eyebrow">资源导航</span>
+          <h1>OpenClaw 常用入口</h1>
+          <p class="lead">像传统导航页一样集中放链接，按类别直接进入，不再单独放一块开场介绍。</p>
         </div>
-      </section>
 
-      <section class="section">
-        <div class="section-header">
-          <div>
-            <span class="section-kicker">官方入口</span>
-            <h2>安装、配置、升级，优先以官方信息为准。</h2>
+        <div class="nav-hub__tools">
+          <div class="nav-hub__jump">
+            {groups.map((group) => (
+              <a href={`#${group.id}`}>{group.label}</a>
+            ))}
           </div>
-          <p class="section-copy">
-            第三方文章适合理解场景，但安装步骤、权限、更新与兼容性，还是优先参考官方入口。
-          </p>
-        </div>
-
-        <div class="directory-list">
-          {officialLinks.map((item) => (
-            <article class="directory-row">
-              <div class="directory-row__main">
-                <span class="card-tag">{item.tag}</span>
-                <h3 class="directory-row__title">{item.title}</h3>
-                <p class="directory-row__summary">{item.summary}</p>
-              </div>
-              <div class="directory-row__meta">
-                <p class="directory-row__meta-copy">安装、配置、版本与官方说明，优先从这里核对。</p>
-              </div>
-              <div class="directory-row__action">
-                <a class="button button-secondary" href={item.url} target="_blank" rel="noreferrer">打开</a>
-              </div>
-            </article>
-          ))}
+          <div class="nav-hub__quick">
+            <a class="button button-primary" href="https://openclaw.ai/" target="_blank" rel="noreferrer">打开官网</a>
+            <a class="button button-secondary" href="https://docs.openclaw.ai/" target="_blank" rel="noreferrer">
+              官方文档
+            </a>
+          </div>
         </div>
       </section>
 
-      <section class="section">
-        <div class="split-grid">
-          <article class="summary-card">
-            <span class="section-kicker">工具与生态</span>
-            <h2>需要扩展能力、补模型平台或看生态内容时，再来这里。</h2>
-            <div class="mini-grid">
-              {toolLinks.map((item) => (
-                <a class="mini-card" href={item.url} target="_blank" rel="noreferrer">
-                  <strong>{item.title}</strong>
-                  <span>{item.summary}</span>
+      {
+        groups.map((group) => (
+          <section class="nav-group section" id={group.id}>
+            <div class="nav-group__bar">
+              <div>
+                <span class="section-kicker">{group.title}</span>
+                <h2>{group.note}</h2>
+              </div>
+              <a class="nav-group__back" href="#main-content">回到顶部</a>
+            </div>
+
+            <div class="nav-grid">
+              {group.links.map((item) => (
+                <a class="nav-card" href={item.url} target={item.url.startsWith('http') ? '_blank' : undefined} rel={item.url.startsWith('http') ? 'noreferrer' : undefined}>
+                  <span class="card-tag">{item.tag}</span>
+                  <h3 class="nav-card__title">{item.title}</h3>
+                  <p class="nav-card__summary">{item.summary}</p>
+                  <span class="nav-card__action">{item.url.startsWith('http') ? '打开链接' : '进入页面'}</span>
                 </a>
               ))}
             </div>
-          </article>
-
-          <article class="note-card">
-            <span class="status-chip support">提醒</span>
-            <h3 class="card-title">找技能时，再进入 SkillHub 会更高效。</h3>
-            <p class="card-meta">
-              建议先把基础安装和常用场景跑顺，再按实际需要去补技能和外部资源。
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-header">
-          <div>
-            <span class="section-kicker">精选文章</span>
-            <h2>适合补充看具体聊天入口和场景接入。</h2>
-          </div>
-          <p class="section-copy">
-            这些文章更偏场景理解，适合新手补概念，不建议替代官方步骤。
-          </p>
-        </div>
-
-        <div class="directory-list">
-          {readingLinks.map((item) => (
-            <article class="directory-row">
-              <div class="directory-row__main">
-                <span class="card-tag">外部文章</span>
-                <h3 class="directory-row__title">{item.title}</h3>
-                <p class="directory-row__summary">{item.summary}</p>
-              </div>
-              <div class="directory-row__meta">
-                <p class="directory-row__meta-copy">适合补充场景理解，不建议替代官方步骤。</p>
-              </div>
-              <div class="directory-row__action">
-                <a class="button button-secondary" href={item.url} target="_blank" rel="noreferrer">查看</a>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="split-grid">
-          <article class="summary-card">
-            <span class="section-kicker">站内入口</span>
-            <h2>看完外部链接后，通常会回到这三个站内页面。</h2>
-            <div class="mini-grid">
-              {localRoutes.map((item) => (
-                <a class="mini-card" href={item.url}>
-                  <strong>{item.title}</strong>
-                  <span>{item.summary}</span>
-                </a>
-              ))}
-            </div>
-          </article>
-
-          <article class="note-card">
-            <span class="status-chip">使用建议</span>
-            <h3 class="card-title">需要查官网、版本更新或外部文章时，直接来这一页就够了。</h3>
-            <p class="card-meta">
-              这里把官网、技能、版本更新和补充文章放在一起，适合需要外部资料时集中查找。
-            </p>
-          </article>
-        </div>
-      </section>
+          </section>
+        ))
+      }
     </div>
   </main>
 
+  <style>
+    .nav-page {
+      display: grid;
+      gap: 18px;
+    }
+
+    .nav-hub {
+      display: grid;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      border-radius: var(--radius-xl);
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(250, 245, 239, 0.94)),
+        radial-gradient(circle at top right, rgba(186, 99, 54, 0.06), transparent 28%);
+      box-shadow: 0 12px 28px rgba(73, 52, 38, 0.06);
+    }
+
+    .nav-hub__heading {
+      display: grid;
+      gap: 10px;
+    }
+
+    .nav-hub__heading h1,
+    .nav-hub__heading p {
+      margin: 0;
+    }
+
+    .nav-hub__tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-hub__jump {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav-hub__jump a,
+    .nav-group__back {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      background: rgba(255, 252, 248, 0.88);
+      color: var(--accent-deep);
+      font-size: 0.88rem;
+    }
+
+    .nav-hub__quick {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav-group {
+      padding-top: 0;
+    }
+
+    .nav-group__bar {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
+    .nav-group__bar h2 {
+      max-width: 40rem;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .nav-card {
+      display: grid;
+      align-content: start;
+      gap: 8px;
+      min-height: 188px;
+      padding: 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(250, 245, 239, 0.94));
+      box-shadow: 0 10px 24px rgba(73, 52, 38, 0.05);
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .nav-card:hover,
+    .nav-card:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(186, 99, 54, 0.2);
+      box-shadow: 0 14px 28px rgba(73, 52, 38, 0.08);
+    }
+
+    .nav-card__title,
+    .nav-card__summary,
+    .nav-card__action {
+      margin: 0;
+    }
+
+    .nav-card__title {
+      font-size: 1.08rem;
+      line-height: 1.2;
+    }
+
+    .nav-card__summary {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.62;
+    }
+
+    .nav-card__action {
+      margin-top: auto;
+      color: var(--accent-deep);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1100px) {
+      .nav-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 840px) {
+      .nav-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .nav-group__bar {
+        flex-direction: column;
+        align-items: start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-hub {
+        padding: 14px;
+      }
+
+      .nav-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-card {
+        min-height: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-card {
+        transition: none;
+      }
+    }
+  </style>
 </MarketingLayout>
