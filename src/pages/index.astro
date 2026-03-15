@@ -44,21 +44,6 @@ const coreRoutes = [
     action: '查看服务'
   }
 ];
-
-const supportLinks = [
-  {
-    title: '已经安装好了',
-    text: '继续查资料、看官方更新或找常用外链，优先去资源导航。',
-    href: withBase('/links/'),
-    action: '去资源导航'
-  },
-  {
-    title: '已经开始用了',
-    text: '想补场景、补思路或回头看看还能怎么扩展，就去看案例。',
-    href: withBase('/cases/'),
-    action: '去看案例'
-  }
-];
 ---
 
 <MarketingLayout
@@ -102,25 +87,6 @@ const supportLinks = [
             </a>
           ))}
         </div>
-      </section>
-
-      <section class="section home-support">
-        <article class="summary-card home-support__panel">
-          <div class="home-support__heading">
-            <span class="section-kicker">已经安装或正在使用</span>
-            <h2>后续常用入口</h2>
-          </div>
-
-          <div class="home-support__grid">
-            {supportLinks.map((item) => (
-              <a class="mini-card home-support__card" href={item.href}>
-                <strong>{item.title}</strong>
-                <span>{item.text}</span>
-                <em>{item.action}</em>
-              </a>
-            ))}
-          </div>
-        </article>
       </section>
     </div>
   </main>
@@ -200,52 +166,20 @@ const supportLinks = [
       line-height: 1.16;
     }
 
-    .home-entry-card__summary,
-    .home-support__card span {
+    .home-entry-card__summary {
       color: var(--muted);
       font-size: 0.94rem;
       line-height: 1.68;
     }
 
-    .home-entry-card__action,
-    .home-support__card em {
+    .home-entry-card__action {
       margin-top: auto;
       color: var(--accent-deep);
-      font-style: normal;
       font-weight: 700;
     }
 
-    .home-support {
-      padding-top: 8px;
-    }
-
-    .home-support__panel {
-      display: grid;
-      gap: 14px;
-    }
-
-    .home-support__heading {
-      display: grid;
-      gap: 8px;
-    }
-
-    .home-support__grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .home-support__card {
-      text-decoration: none;
-    }
-
-    .home-support__card strong {
-      color: var(--text);
-    }
-
     @media (max-width: 960px) {
-      .home-entry-grid,
-      .home-support__grid {
+      .home-entry-grid {
         grid-template-columns: 1fr;
       }
     }

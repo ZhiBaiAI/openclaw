@@ -1,147 +1,1216 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const withBase = (path: string) => `${base}${path}`;
-
-const cases = [
+const personalGroups = [
   {
-    tag: '内容运营',
-    title: '把选题、资料收集和草稿整理交给 OpenClaw 打底',
-    summary: '适合个人创作者和小团队，用它先做信息收集、选题整理和初稿准备。',
-    fit: '如果你经常卡在“今天写什么、资料从哪找、标题怎么起”，这类案例最容易看出价值。',
-    result: '重点不是全自动发内容，而是把最耗时间的准备环节先交给 OpenClaw。'
+    id: 'daily-cases',
+    tag: '通用个人场景',
+    title: '日常整理与信息收口',
+    summary: '最适合第一次上手。先把每天都在重复发生的信息汇总、消息分拣、资料检索和收尾动作跑通。',
+    items: [
+      {
+        tag: '晨间整理',
+        title: '每日个人简报',
+        summary: '把天气、日历、邮件、待办统一整理成一条晨间摘要。',
+        fit: '早上要快速进入状态、信息入口很多的人。',
+        starts: ['先接日历、邮件、待办 3 个源', '固定每天早上 8 点发送', '只保留必须处理的内容'],
+        gain: '早上不用来回切换多个工具找信息。'
+      },
+      {
+        tag: '消息分拣',
+        title: '邮件与消息分类助手',
+        summary: '把广告、订阅、账单、出行、重要通知拆开处理。',
+        fit: '经常漏通知、邮件和群消息都很多的人。',
+        starts: ['先标重要消息', '再生成今日待处理清单', '不要一开始就自动删除'],
+        gain: '减少噪音，降低漏掉关键事项的概率。'
+      },
+      {
+        tag: '知识检索',
+        title: '个人知识库问答',
+        summary: '接入自己的笔记、文档和项目资料，回答“以前写过什么”“上次做到哪了”。',
+        fit: '文档很多、经常找不到旧资料的人。',
+        starts: ['先只接一个资料库', '先做检索和问答', '后面再补版本和上下文记忆'],
+        gain: '减少“明明写过但找不到”的时间浪费。'
+      },
+      {
+        tag: '日终收口',
+        title: '日终复盘与次日计划助手',
+        summary: '每天固定时间收口今天完成了什么、还差什么、明天先做什么。',
+        fit: '白天信息很多、晚上难以收尾的人。',
+        starts: ['固定一个时间点', '先接待办和邮件或聊天', '只输出明天最该先做的 3 件事'],
+        gain: '当天更容易收尾，第二天也能更快进入状态。'
+      }
+    ]
   },
   {
-    tag: '办公协同',
-    title: '把 OpenClaw 放进飞书、微信、钉钉这些高频沟通入口',
-    summary: '适合日常办公、团队协同和高频问答，让助手直接出现在你本来就会打开的地方。',
-    fit: '如果你不想多开一个系统，而是想在原有工作入口里直接用 AI，这类场景更适合你。',
-    result: '真正的价值是减少切换成本，而不是把所有工作都自动化。'
+    id: 'workflow-cases',
+    tag: '通用个人场景',
+    title: '工作推进与事务归档',
+    summary: '适合已经有稳定工作流的人。重点不是更聪明，而是更少漏、更少断，让事情真正往前走。',
+    items: [
+      {
+        tag: '任务推进',
+        title: '待办跟进与提醒助手',
+        summary: '提醒今天必须推进的任务，标出长期没动和需要催办的事项。',
+        fit: '有很多跨天任务、经常断掉推进节奏的人。',
+        starts: ['只选一个固定场景先做', '先盯跟进而不是所有待办', '记录每次推进到哪一步'],
+        gain: '减少“记了待办但没完成”的情况。'
+      },
+      {
+        tag: '会议跟进',
+        title: '会议纪要与行动项整理',
+        summary: '从录音、聊天或笔记里提炼出决策、行动项和时间点。',
+        fit: '会议多、会后容易忘记谁做什么的人。',
+        starts: ['先做会议摘要', '再提取责任人和截止时间', '最后生成会后跟进清单'],
+        gain: '会后不再靠个人记忆拼接执行事项。'
+      },
+      {
+        tag: '降低启动阻力',
+        title: '日程安排与微动作拆解',
+        summary: '把一句自然语言任务拆成很多可执行的小动作和提醒。',
+        fit: '容易拖延、任务难启动、想把计划执行起来的人。',
+        starts: ['只从一类任务开始拆解', '先补日期和提醒', '拆到能立刻动手的粒度'],
+        gain: '减少启动阻力，让任务更容易真正开始。'
+      },
+      {
+        tag: '票据归档',
+        title: '报销发票与票据整理',
+        summary: '提取电子发票和邮件附件里的关键信息，自动归档到表格或目录。',
+        fit: '自由职业者、出差多、经常报销的人。',
+        starts: ['先处理电子发票邮件', '再做字段提取和归档', '最后再接提醒或汇总'],
+        gain: '减少票据散落和月底集中补账的混乱。'
+      },
+      {
+        tag: '出行整理',
+        title: '行程与出行整理助手',
+        summary: '把机票、酒店、车票、预约信息汇总成按时间排序的行程单。',
+        fit: '经常出差、确认信息散落在邮件和聊天里的人。',
+        starts: ['先只接一趟已确定好的行程', '只接邮件、日历和确认信息', '先做整理提醒，不做自动改签'],
+        gain: '临出发前不用在多个地方翻关键信息。'
+      },
+      {
+        tag: '订阅管理',
+        title: '账单、票据与订阅管理',
+        summary: '把票据、发票、账单和即将续费的订阅集中整理，按周或按月输出清单。',
+        fit: '有报销需求、订阅服务很多、个人工作室用户。',
+        starts: ['先只选一个小切口', '先做归类和提醒', '不要一开始就接支付动作'],
+        gain: '减少漏报销、漏续费和月底集中补账的混乱。'
+      }
+    ]
   },
   {
-    tag: '个人助手',
-    title: '把 OpenClaw 调成你的日常生活与工作助手',
-    summary: '适合提醒、整理、记录和轻量建议这类高频重复问题。',
-    fit: '如果你是技术小白，通常从个人助手类场景开始最容易建立使用习惯。',
-    result: '先从“每天都会问的事”开始，最容易把 OpenClaw 真正养熟。'
+    id: 'content-cases',
+    tag: '内容与输出',
+    title: '内容生产、分发与反馈沉淀',
+    summary: '适合做内容、做产品和长期输出的人，重点是减少前期准备、平台改写和二次分发的重复劳动。',
+    items: [
+      {
+        tag: '内容准备',
+        title: '内容素材收集与整理',
+        summary: '先收集群聊、收藏、语音、文档里的素材，再提炼主题、观点和金句。',
+        fit: '自媒体创作者、短视频、公众号、小红书内容生产者。',
+        starts: ['先只做素材汇总、主题归类、金句提炼', '别一开始就做自动生成', '先把素材库养起来'],
+        gain: '以后开始写之前，不再从零找素材。'
+      },
+      {
+        tag: '内容矩阵',
+        title: '播客、语音、视频转内容矩阵',
+        summary: '把一段长内容拆成摘要、短内容和不同平台可复用版本。',
+        fit: '做播客、口播视频、有大量语音素材的人。',
+        starts: ['先跑一条固定流程', '一段音频先转长文摘要和 3 条短内容', '不要一开始生成 10 种版本'],
+        gain: '一个内容可以真正复用，而不是发一次就结束。'
+      },
+      {
+        tag: '产品增长',
+        title: '个人产品 SEO 内容辅助',
+        summary: '围绕关键词、问题库和大纲，稳定生成网站或产品页面的内容起稿。',
+        fit: '独立开发者、有自己网站或产品主页的人。',
+        starts: ['每周先给 3 个关键词方向', '再给 3 篇大纲和 1 篇长文初稿', '不要直接自动发文'],
+        gain: '不必从空白页开始写内容。'
+      },
+      {
+        tag: '平台改写',
+        title: '一份素材改成小红书版本',
+        summary: '把已有文章、视频脚本或长文素材改成更适合小红书的表达结构。',
+        fit: '已经有素材，但不同平台改写很耗时的人。',
+        starts: ['先固定一种来源素材', '只做结构改写和标题方向', '发布前仍保留人工判断'],
+        gain: '同一份素材能更快适配不同平台。'
+      },
+      {
+        tag: '选题研究',
+        title: '搜索词、选题与笔记方向整理',
+        summary: '把搜索词、用户问题和已有素材整理成可持续更新的内容选题池。',
+        fit: '做小红书、公众号、短视频选题规划的人。',
+        starts: ['先固定一个内容方向', '沉淀用户问题和搜索词', '每周产出一版选题池'],
+        gain: '不再每次发内容都从空白开始想题。'
+      },
+      {
+        tag: '评论沉淀',
+        title: '评论区与私信问题沉淀',
+        summary: '把重复评论和私信问题收拢成 FAQ、线索标签和后续跟进清单。',
+        fit: '有持续私信咨询和评论互动的创作者、服务型账号。',
+        starts: ['先抽样整理高频问题', '区分普通问答和高意向线索', '复杂咨询再转人工'],
+        gain: '减少重复回复，也更容易看清用户真正关心什么。'
+      },
+      {
+        tag: '发布复盘',
+        title: '笔记复盘与二次分发排期',
+        summary: '把发过的内容、反馈和可二次利用的素材整理成复盘和排期。',
+        fit: '连续发内容但复盘跟不上的人。',
+        starts: ['先记录发布结果和反馈', '提取可二次利用片段', '再生成下周排期建议'],
+        gain: '内容不再发完就断，能形成复用和迭代。'
+      }
+    ]
   },
   {
-    tag: '信息筛选',
-    title: '用固定规则筛公开信息，生成每日观察和候选列表',
-    summary: '适合把重复搜集、比对、整理的动作，变成固定流程。',
-    fit: '如果你每天都要看同一类信息，再手工汇总，这类场景会明显节省时间。',
-    result: '它更像自动整理线索的助手，不是替你做最后决策。'
+    id: 'life-cases',
+    tag: '个人成长与生活',
+    title: '学习、生活与个人决策',
+    summary: '这些场景不是商业化最强，但对真实个人的长期价值很高，也更容易形成持续使用习惯。',
+    items: [
+      {
+        tag: '决策研究',
+        title: '购物研究与购买决策',
+        summary: '帮你收敛候选商品，整理预算、优点、劝退点和比较表。',
+        fit: '购买前要做大量对比研究的人。',
+        starts: ['先定义预算和硬约束', '收集候选和评价', '最后输出一页决策清单'],
+        gain: '少看很多重复信息，更快做出决定。'
+      },
+      {
+        tag: '决策归档',
+        title: '收藏、截图与购买决策整理',
+        summary: '把零散收藏、截图和待购买清单整理成真正能做决定的列表。',
+        fit: '日常收藏很多，真正需要时又翻不到的人。',
+        starts: ['先只处理一个主题', '统一整理来源和原因', '最后输出候选和取舍建议'],
+        gain: '把“收藏过很多”变成“真的能拿来做决定”。'
+      },
+      {
+        tag: '学习复盘',
+        title: '学习辅导与复盘助手',
+        summary: '记录学习计划、生成复习提醒、整理当天要点和阶段性复盘。',
+        fit: '考证、学英语、学技术、容易中断学习的人。',
+        starts: ['先只做每日学习提醒、学习摘要、每周复盘', '不要一开始把它当全能老师'],
+        gain: '更容易把学习稳定坚持下来。'
+      },
+      {
+        tag: '健康习惯',
+        title: '健康记录与生活习惯辅助',
+        summary: '记录睡眠、饮食、运动并做周期性反馈，帮助发现一直没坚持住的习惯。',
+        fit: '想稳定记录作息、饮食、运动的人。',
+        starts: ['先只选一个维度记录', '先做提醒和反馈', '不做医疗判断'],
+        gain: '能更清楚看到自己的真实执行状态。'
+      },
+      {
+        tag: '求职准备',
+        title: '求职准备与面试跟进',
+        summary: '围绕岗位 JD、STAR 素材、面试问答和投递状态做持续跟进。',
+        fit: '正在找工作、转岗或同时跟多轮面试的人。',
+        starts: ['先围绕 1 个目标岗位', '准备 1 版基础简历和 1 组问答', '不要一上来做自动海投'],
+        gain: '减少重复改材料的时间，让每次准备更聚焦。'
+      },
+      {
+        tag: '家庭提醒',
+        title: '重要日期与家庭事项提醒',
+        summary: '记录生日、纪念日、缴费、体检和接送等关键事项，并按提前量提醒。',
+        fit: '工作忙、需要兼顾家庭安排、容易忘事的人。',
+        starts: ['先录入 5 到 10 个重要日期', '固定一个提醒出口', '先把提醒跑稳，不做复杂家庭系统'],
+        gain: '减少生活层面的低级遗漏。'
+      },
+      {
+        tag: '本地生活',
+        title: '本地生活和 POI 决策整理',
+        summary: '围绕餐厅、医院、商场、亲子地点和周边服务做条件筛选和路线整理。',
+        fit: '家庭出行、本地决策、需要结合地点信息做选择的人。',
+        starts: ['先围绕一种决策场景', '定义预算、距离和硬约束', '只输出候选清单和理由'],
+        gain: '减少临时搜索和反复比对的消耗。'
+      }
+    ]
+  },
+  {
+    id: 'service-cases',
+    tag: '服务与变现',
+    title: '服务交付与转化场景',
+    summary: '更适合已经有明确服务或副业方向的人，建议放在前面几组跑顺后再做。',
+    items: [
+      {
+        tag: '咨询接待',
+        title: '咨询接待与线索整理',
+        summary: '把高频问题、用户背景采集和高意向线索识别先交给 OpenClaw。',
+        fit: '做咨询、私教、小课、顾问或服务转化的人。',
+        starts: ['先整理 20 个高频问题', '只做初步接待和线索分层', '复杂问题仍转人工'],
+        gain: '减少重复答疑，同时不漏掉值得亲自跟进的人。'
+      },
+      {
+        tag: '交付辅助',
+        title: '轻量交付助手',
+        summary: '把资料整理、报告初稿、状态跟踪和交付提醒做成固定流程。',
+        fit: '接私活、接项目、做个人工作室服务的人。',
+        starts: ['先挑一个做过很多次的服务', '从报告初稿和节点提醒入手', '复杂判断和复核仍自己完成'],
+        gain: '把时间放在判断和复核，而不是重复搬运。'
+      },
+      {
+        tag: '轻咨询转化',
+        title: '轻咨询与服务转化前接待助手',
+        summary: '在正式转化前，先完成背景收集、需求澄清和初步分层。',
+        fit: '做咨询、陪跑、顾问、培训转化的人。',
+        starts: ['先整理一套标准问题', '先做意向识别和背景采集', '不要在接待阶段给最终承诺'],
+        gain: '把前置接待标准化，人工只处理真正值得投入的线索。'
+      }
+    ]
   }
 ];
 
-const tips = [
-  '先挑最接近自己日常的案例，不用一口气全看。',
-  '看案例的重点，不是功能名，而是“它帮你省掉了哪段重复动作”。',
-  '如果案例看完还是觉得自己不会配，就直接去安装交付服务页。'
+const professionalCases = [
+  {
+    id: 'analytics',
+    tag: '专业工作流',
+    level: '适合知识型岗位',
+    title: '数据分析助手',
+    summary: '先接数据字典、表结构和指标口径，再把自然语言问题翻成 SQL 或取数脚本。',
+    starts: ['接表结构、字段说明、指标口径', '先做 SQL 草拟和需求理解', '查询执行和结果分发可由人工或工作流完成'],
+    fit: '数据分析、商业分析、运营分析岗位。',
+    boundary: '不建议一开始直接接生产库权限。',
+    proof: '来自“小龙虾怎么在数据分析场景落地”等实搜结果。'
+  },
+  {
+    id: 'commerce-ops',
+    tag: '专业工作流',
+    level: '闭环最容易形成',
+    title: '选品、竞品监控与跨境运营',
+    summary: '夜间盯竞品、整理选品报告、辅助生成 Listing 和目录审计，是目前最容易跑成稳定闭环的方向。',
+    starts: ['先盯价格、评论、排名和上新变化', '再做选品报告模板', '最后接 Listing 初稿或目录审计'],
+    fit: '个人卖家、小团队跨境运营、兼职选品研究者。',
+    boundary: '价格承诺和售后策略仍然要由人工确认。',
+    proof: '来自“龙虾帮我盯竞品到凌晨2点”等实搜结果。'
+  },
+  {
+    id: 'teaching',
+    tag: '专业工作流',
+    level: '规则清楚、持续省事',
+    title: '教学事务自动化',
+    summary: '请假记录、补交作业、附件归档、表格登记这类动作规则清楚，一旦跑通就能持续省事。',
+    starts: ['先记录请假和缺交情况', '再自动保存附件并归档', '最后再接提醒、统计或批改流程'],
+    fit: '老师、助教、培训从业者、社群课程运营。',
+    boundary: '评分、录用、处分等结论仍应由人工决定。',
+    proof: '来自“终于找到了一个属于我的应用场景”等实搜结果。'
+  },
+  {
+    id: 'research',
+    tag: '专业工作流',
+    level: '知识密集型用户',
+    title: '科研知识工作流',
+    summary: '把文献拆成卡片、做概念图谱、整理写作素材和初稿，是研究场景里更现实的落地方向。',
+    starts: ['先做文献拆解和知识卡片', '再围绕方向生成概念图谱', '最后衔接写作模板和初稿'],
+    fit: '研究生、博士、教师、科研岗位。',
+    boundary: '不把它当成最终学术判断或事实核验者。',
+    proof: '来自“聊一下小龙虾在科研场景下的应用”等实搜结果。'
+  },
+  {
+    id: 'multi-agent',
+    tag: '进阶用法',
+    level: '放在后面做',
+    title: '多 Agent 协同战队',
+    summary: '适合长链路、分角色、强编排的任务，但不是大多数个人用户的第一优先级。',
+    starts: ['先把单个核心角色跑稳', '再拆前台接待、处理、审查等角色', '最后再考虑多容器和复杂编排'],
+    fit: '技术用户、自动化团队、复杂业务编排场景。',
+    boundary: '不要把多 Agent 当成第一步，先跑通一个稳定小场景。',
+    proof: '来自“指挥8个OpenClaw Agent协同工作搬砖实战”等实搜结果。'
+  }
 ];
 
-const introFacts = [
-  ['4 类常见场景', '内容、协同、个人助手、信息筛选四种起步方向。'],
-  ['重点看节省了什么', '不要盯着功能名，先看它替你减少了哪段重复工作。'],
-  ['看完就能决定下一步', '继续自己安装，还是直接进入交付支持。']
+const industrySolutions = [
+  {
+    id: 'media',
+    tag: '内容营销',
+    title: '自媒体与内容营销',
+    cut: '从素材整理、初稿生产、分发建议开始。',
+    risk: '低风险',
+    pains: ['素材分散，选题和写稿总从零开始', '一篇内容要反复改写多个平台版本', '评论、私信和反馈没有持续沉淀'],
+    scenes: ['选题池整理与热点跟踪', '长内容拆短内容与多平台改写', '评论私信沉淀成 FAQ 和线索'],
+    starts: ['先接素材库和文档库', '先做提纲、改写、分发建议', '发布动作保留人工审核'],
+    systems: ['文档系统', '素材库', '飞书/企业微信', '发布流程工具'],
+    metrics: ['每周能多稳定产出多少内容', '一篇内容从准备到发布能省下多少时间', '人工反复改写有没有明显变少'],
+    boundary: '不建议跳过人工审核自动发布。'
+  },
+  {
+    id: 'commerce',
+    tag: '跨境电商',
+    title: '跨境电商',
+    cut: '从售前咨询、订单查询、售后分流开始。',
+    risk: '中风险',
+    pains: ['客服入口多，重复问题占用大量人力', '订单、库存、物流状态分散，查询慢', '售后问题层级不清，容易把团队拖乱'],
+    scenes: ['多平台客服统一接待', '订单进度与物流异常查询', '售后问题分层和人工转单'],
+    starts: ['先做售前问答和订单查询', '再接库存与物流状态', '赔付和争议订单仍人工处理'],
+    systems: ['店铺后台', '库存系统', '客服系统', '物流接口'],
+    metrics: ['客户提问后多久能收到第一次回复', '多少问题可以先由系统接住再转人工', '客服接待后成交有没有更顺'],
+    boundary: '赔付、争议订单和价格承诺需要人工确认。'
+  },
+  {
+    id: 'hr',
+    tag: '招聘 HR',
+    title: '招聘与人力资源',
+    cut: '从简历初筛、面试协同、入职答疑开始。',
+    risk: '中风险',
+    pains: ['简历量大但初筛标准执行不稳定', '候选人跟进、排期、提醒容易断档', 'HR 大量时间消耗在重复答疑和协调上'],
+    scenes: ['JD 与简历初步匹配', '面试排期与候选人跟进', '入职前高频问题答疑'],
+    starts: ['先做面试协同和提醒', '再做标准化初筛建议', '录用决定和筛选规则人工把关'],
+    systems: ['ATS', '日历系统', 'HR 知识库', '邮件与消息工具'],
+    metrics: ['一份简历从收到到进入下一步会不会更快', '候选人跟进有没有更及时', '整个招聘流程有没有缩短'],
+    boundary: '录用判断和筛选标准必须合规并保留人工决策。'
+  },
+  {
+    id: 'education',
+    tag: '教育培训',
+    title: '教育与培训',
+    cut: '从课后答疑、学情追踪、作业提醒开始。',
+    risk: '中风险',
+    pains: ['课后高频问题重复出现，老师精力被切碎', '学员作业、打卡、进度分散，跟踪困难', '反馈和复盘靠人工汇总，效率低'],
+    scenes: ['课后问题分流与知识点答疑', '作业提醒与学习进度追踪', '班级反馈整理与复盘'],
+    starts: ['先做作业提醒和课后答疑', '再接学员档案与打卡数据', '评分和正式评价保留人工判断'],
+    systems: ['题库或课程系统', '学员档案', '打卡系统', '沟通渠道'],
+    metrics: ['学员提问后多久能得到回应', '作业和打卡完成情况有没有提升', '老师和助教反馈有没有更及时'],
+    boundary: '不建议直接给完整答案代替学习过程。'
+  },
+  {
+    id: 'legal',
+    tag: '法律服务',
+    title: '法律服务与合规审查',
+    cut: '从合同预审、条款比对、风险提示开始。',
+    risk: '高风险',
+    pains: ['合同和条款审阅重复劳动重', '模板版本多，差异比对费时费力', '风险提示依赖个人经验，容易遗漏'],
+    scenes: ['标准合同预审与异常条款提示', '模板版本差异比对', '历史案例和法条定位辅助'],
+    starts: ['先做条款比对和风险标注', '再做材料整理和案例检索', '正式意见输出必须律师复核'],
+    systems: ['文档管理系统', '模板库', '历史案例库', '内部审批系统'],
+    metrics: ['一份合同预审能不能更快完成', '律师人工复核时间有没有下降', '明显风险点有没有更少漏掉'],
+    boundary: '不输出正式法律意见，不替代律师签字。'
+  },
+  {
+    id: 'finance',
+    tag: '金融服务',
+    title: '金融服务与研究辅助',
+    cut: '从研究摘要、客户问答辅助、顾问提纲开始。',
+    risk: '高风险',
+    pains: ['研究材料多且更新快，整理准备成本高', '客户高频问答重复，顾问前置准备重', '合规要求高，任何结论都需要严格复核'],
+    scenes: ['研报摘要和观点整理', '客户高频问答辅助准备', '顾问会前提纲与材料归纳'],
+    starts: ['先做研究材料整理', '再做标准问答辅助', '投资建议和交易动作不得自动化'],
+    systems: ['资讯源', '研究库', '客户管理系统', '合规规则'],
+    metrics: ['研究材料整理会不会更快', '顾问会前准备时间有没有缩短', '输出内容是否更容易通过合规检查'],
+    boundary: '不替代投资建议和交易决策。'
+  },
+  {
+    id: 'supply-chain',
+    tag: '制造供应链',
+    title: '制造业与供应链',
+    cut: '从库存异常提醒、采购跟进、日报催办开始。',
+    risk: '中风险',
+    pains: ['库存、采购、交期异常发现不够及时', '跨部门催办成本高，状态同步慢', '日报周报依赖手工整理，难以持续'],
+    scenes: ['缺料和库存异常自动提醒', '采购进度催办与节点跟踪', '日报周报自动汇总'],
+    starts: ['先做异常提醒和日报汇总', '再接采购与库存系统', '采购审批和关键动作人工确认'],
+    systems: ['ERP', '采购系统', '库存系统', '邮件或 IM 工具'],
+    metrics: ['异常能不能更早被发现', '出问题后响应会不会更快', '延期和漏跟进情况有没有下降'],
+    boundary: '关键采购动作和审批权限保留人工确认。'
+  },
+  {
+    id: 'real-estate',
+    tag: '房产经纪',
+    title: '房产与经纪服务',
+    cut: '从线索接待、房源初匹配、看房后跟进开始。',
+    risk: '中风险',
+    pains: ['线索接待依赖个人经验，响应质量不稳定', '房源与客户需求匹配效率低', '看房后跟进容易断，转化损失大'],
+    scenes: ['线索首轮接待和需求采集', '房源初步匹配与推荐说明', '看房后跟进和预约推进'],
+    starts: ['先做客户需求采集', '再做房源初筛与预约提醒', '房源真实性和交易承诺人工确认'],
+    systems: ['房源库', '客户管理系统', '日程系统', '消息渠道'],
+    metrics: ['客户线索进来后回复会不会更快', '看房预约能不能更多转化成功', '看房后的跟进有没有更完整'],
+    boundary: '不能编造房源状态和交易承诺。'
+  },
+  {
+    id: 'public-service',
+    tag: '政务服务',
+    title: '政务与公共服务',
+    cut: '从政策问答、办事材料清单、进度查询开始。',
+    risk: '高风险',
+    pains: ['群众重复咨询多，窗口压力大', '政策口径复杂，答复一致性难保障', '材料清单和办理流程解释成本高'],
+    scenes: ['政策条文定位和办事条件问答', '材料清单生成与缺件提醒', '办理进度查询与统一回复'],
+    starts: ['先做材料清单和流程问答', '再接进度系统和消息入口', '对外口径始终以正式文件为准'],
+    systems: ['政策知识库', '办事指南库', '进度系统', '统一消息入口'],
+    metrics: ['群众自己就能解决的问题有没有变多', '平均等待时间有没有下降', '同一个问题反复来问的情况有没有减少'],
+    boundary: '对外口径必须以正式文件为准。'
+  },
+  {
+    id: 'health',
+    tag: '医疗健康',
+    title: '医疗健康与慢病管理',
+    cut: '从随访提醒、报告解读辅助、风险升级开始。',
+    risk: '高风险',
+    pains: ['随访任务多，漏随访和延迟随访风险高', '报告阅读和回访准备占用大量时间', '异常患者识别和升级依赖人工盯守'],
+    scenes: ['慢病随访提醒与未回访催办', '检查报告关键信息提取', '异常情况升级到医生或护士'],
+    starts: ['先做提醒和随访记录', '再做报告摘要与风险标注', '诊断、处方、剂量调整严格人工处理'],
+    systems: ['患者档案', '随访系统', '报告系统', '提醒渠道'],
+    metrics: ['随访任务有没有更容易按时完成', '提醒能不能真正送达到患者', '患者对随访和提醒的响应有没有提升'],
+    boundary: '不给诊断结论，不调整处方和剂量。'
+  }
 ];
+
+const avoidNow = [
+  '最终法律意见、医疗诊断、投资决策这类高风险结论',
+  '一上来就做多 Agent 编排和复杂系统打通',
+  '没有稳定流程、没有规则、没有指标的“展示型 AI”项目'
+];
+
+void avoidNow;
+
+const personalCaseCount = personalGroups.reduce((total, group) => total + group.items.length, 0);
+const personalCaseSignals: Record<string, string[]> = {
+  'daily-cases': ['低门槛', '高频使用', '保留人工确认'],
+  'workflow-cases': ['固定流程优先', '先小闭环', '保留人工确认'],
+  'content-cases': ['内容复用', '发布前复核', '持续沉淀'],
+  'life-cases': ['个人长期使用', '低风险', '先轻量记录'],
+  'service-cases': ['先小范围试跑', '服务转化', '保留人工判断']
+};
+
+const professionalCaseSignals: Record<string, string[]> = {
+  analytics: ['先小闭环', '保留人工复核', '固定流程更稳'],
+  'commerce-ops': ['闭环明确', '结果需复核', '适合持续监控'],
+  teaching: ['规则清楚', '适合批量处理', '结果需人工确认'],
+  research: ['知识密集', '保留事实核验', '适合长期积累'],
+  'multi-agent': ['进阶场景', '先单 Agent', '编排复杂度高']
+};
+
+const industrySolutionSignals: Record<string, string[]> = {
+  media: ['低风险', '需人工审校', '适合先做'],
+  commerce: ['中风险', '需系统接入', '保留人工兜底'],
+  hr: ['中风险', '合规优先', '关键结论人工确认'],
+  education: ['中风险', '规则明确', '关键反馈人工确认'],
+  legal: ['高风险', '严格复核', '不能替代专业结论'],
+  finance: ['高风险', '严格复核', '不能替代决策'],
+  'supply-chain': ['中风险', '需系统接入', '关键动作人工确认'],
+  'real-estate': ['中风险', '线索跟进型', '关键信息人工确认'],
+  'public-service': ['高风险', '正式口径优先', '对外信息需复核'],
+  health: ['高风险', '不能替代诊断', '结果需人工复核']
+};
+
+const professionalCaseCount = professionalCases.length;
+const industryCaseCount = industrySolutions.length;
 ---
 
 <MarketingLayout
   title="虾客AI 案例"
-  description="用技术小白也能看懂的方式，整理 OpenClaw 的真实使用场景，帮助判断它适不适合自己。"
+  description="从通用个人场景、专业工作流和行业解决方案三个层次，整理 OpenClaw 的真实落地案例。"
 >
   <main class="page" id="main-content">
-    <div class="container">
-      <section class="page-intro">
-        <div class="page-intro__grid">
-          <article class="page-intro__content">
-            <span class="eyebrow">案例</span>
-            <h1>先别急着研究功能，先看它能不能帮你做成事。</h1>
-            <p class="lead">
-              这一页不讲复杂原理，只回答最实际的问题：OpenClaw 适合落在哪些场景，哪些人最容易先用起来，最后能帮你省掉什么。
-            </p>
-            <div class="action-row">
-              <a class="button button-primary" href="#case-list">直接看案例</a>
-              <a class="button button-secondary" href={withBase('/service/')}>不会配就看安装交付服务</a>
-            </div>
-            <div class="intro-facts">
-              {introFacts.map(([title, text]) => (
-                <article class="intro-fact">
-                  <strong>{title}</strong>
-                  <span>{text}</span>
-                </article>
-              ))}
-            </div>
-          </article>
-
-          <aside class="page-intro__aside">
-            <span class="section-kicker">怎么看这页</span>
-            <ul class="simple-list">
-              {tips.map((item) => (
-                <li>{item}</li>
-              ))}
-            </ul>
-          </aside>
-        </div>
+    <div class="container cases-page">
+      <section class="cases-major-nav" aria-label="案例主分类">
+        <a class="cases-major-nav__button" href="#personal-cases">通用个人场景</a>
+        <a class="cases-major-nav__button" href="#professional-cases">专业场景案例</a>
+        <a class="cases-major-nav__button" href="#industry-solutions">行业解决方案</a>
       </section>
 
-      <section class="section" id="case-list">
-        <div class="section-header">
-          <div>
-            <span class="section-kicker">场景清单</span>
-            <h2>先从最像你日常生活或工作的那一类开始看。</h2>
-          </div>
-          <p class="section-copy">
-            不需要先理解所有技术词。只要先判断“这个场景是不是我真的会每天用到”，就够了。
-          </p>
+      <section class="section cases-major-section" id="personal-cases" data-tabs-root>
+        <div class="section-header cases-section-header">
+          <h2>通用个人场景</h2>
+          <p class="section-copy">{personalCaseCount} 个案例</p>
         </div>
 
-        <div class="directory-list">
-          {cases.map((item) => (
-            <article class="directory-row">
-              <div class="directory-row__main">
-                <span class="card-tag">{item.tag}</span>
-                <h3 class="directory-row__title">{item.title}</h3>
-                <p class="directory-row__summary">{item.summary}</p>
+        <div class="cases-subnav" role="tablist" aria-label="通用个人场景分类">
+          {personalGroups.map((group, index) => (
+            <button
+              class:list={['cases-subnav__button', index === 0 && 'is-active']}
+              id={`tab-${group.id}`}
+              type="button"
+              role="tab"
+              aria-controls={`panel-${group.id}`}
+              aria-selected={index === 0 ? 'true' : 'false'}
+              tabindex={index === 0 ? '0' : '-1'}
+              data-tab-target={group.id}
+            >
+              <span class="cases-subnav__label">{group.title}</span>
+              <span class="cases-subnav__count">{group.items.length} 个示例</span>
+            </button>
+          ))}
+        </div>
+
+        <div class="cases-panels">
+          {personalGroups.map((group, index) => (
+            <section
+              class:list={['cases-panel', index === 0 && 'is-active']}
+              id={`panel-${group.id}`}
+              role="tabpanel"
+              aria-labelledby={`tab-${group.id}`}
+              data-tab-panel={group.id}
+              hidden={index !== 0}
+            >
+              <header class="cases-panel__header">
+                <div class="cases-panel__heading">
+                  <span class="card-tag">{group.tag}</span>
+                  <h3>{group.title}</h3>
+                </div>
+                <span class="cases-panel__count">{group.items.length} 个案例</span>
+              </header>
+
+              <p class="cases-panel__summary">{group.summary}</p>
+
+              <div class="personal-case-grid">
+                {group.items.map((item) => (
+                  <article class="personal-case-card">
+                    <div class="personal-case-card__top">
+                      <span class="card-tag">{item.tag}</span>
+                      <h4>{item.title}</h4>
+                    </div>
+                    <p class="personal-case-card__summary">{item.summary}</p>
+                    <div class="case-signal-list" aria-label="案例提示标签">
+                      {(personalCaseSignals[group.id] ?? []).map((signal) => (
+                        <span class="case-signal">{signal}</span>
+                      ))}
+                    </div>
+                    <p class="personal-case-card__fit"><strong>适合谁</strong>{item.fit}</p>
+                    <div class="personal-case-card__block">
+                      <strong>建议先做</strong>
+                      <ul class="bullet-list">
+                        {item.starts.map((step) => (
+                          <li>{step}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <p class="personal-case-card__gain"><strong>最直接的收益</strong>{item.gain}</p>
+                  </article>
+                ))}
               </div>
-              <div class="directory-row__meta">
-                <p class="directory-row__meta-copy"><strong>适合时机：</strong>{item.fit}</p>
-                <p class="directory-row__meta-copy"><strong>能省下什么：</strong>{item.result}</p>
-              </div>
-              <div class="directory-row__action">
-                <span class="button button-secondary">参考</span>
-              </div>
-            </article>
+            </section>
           ))}
         </div>
       </section>
 
-      <section class="section">
-        <div class="split-grid">
-          <article class="summary-card">
-            <span class="section-kicker">给新客户的建议</span>
-            <h2>如果你只是想先判断值不值得做，案例页比参数页更重要。</h2>
-            <p class="card-copy">
-              真正影响你会不会长期使用的，不是模型名字，也不是一长串配置项，而是它能不能进入你原本的工作和生活流程。
-            </p>
-          </article>
+      <section class="section cases-major-section" id="professional-cases" data-tabs-root>
+        <div class="section-header cases-section-header">
+          <h2>专业场景案例</h2>
+          <p class="section-copy">{professionalCaseCount} 个案例</p>
+        </div>
 
-          <article class="note-card">
-            <span class="status-chip support">下一步</span>
-            <h3 class="card-title">看完案例以后，通常只需要做一个决定。</h3>
-            <p class="card-meta">
-              如果你已经知道“这就是我想要的方向”，那就去文档教程自己装，或者直接去安装交付服务页找我帮你落地。
-            </p>
-            <div class="action-row">
-              <a class="button button-primary" href={withBase('/docs/')}>自己开始装</a>
-              <a class="button button-secondary" href={withBase('/service/')}>找我做交付</a>
-            </div>
-          </article>
+        <div class="cases-subnav" role="tablist" aria-label="专业场景案例分类">
+          {professionalCases.map((item, index) => (
+            <button
+              class:list={['cases-subnav__button', index === 0 && 'is-active']}
+              id={`tab-${item.id}`}
+              type="button"
+              role="tab"
+              aria-controls={`panel-${item.id}`}
+              aria-selected={index === 0 ? 'true' : 'false'}
+              tabindex={index === 0 ? '0' : '-1'}
+              data-tab-target={item.id}
+            >
+              <span class="cases-subnav__label">{item.title}</span>
+              <span class="cases-subnav__count">1 个示例</span>
+            </button>
+          ))}
+        </div>
+
+        <div class="cases-panels">
+          {professionalCases.map((item, index) => (
+            <section
+              class:list={['cases-panel', index === 0 && 'is-active']}
+              id={`panel-${item.id}`}
+              role="tabpanel"
+              aria-labelledby={`tab-${item.id}`}
+              data-tab-panel={item.id}
+              hidden={index !== 0}
+            >
+              <header class="cases-panel__header">
+                <div class="cases-panel__heading">
+                  <span class="card-tag">{item.tag}</span>
+                  <h3>{item.title}</h3>
+                </div>
+                <span class="professional-card__level">{item.level}</span>
+              </header>
+
+              <p class="cases-panel__summary">{item.summary}</p>
+              <div class="case-signal-list" aria-label="案例提示标签">
+                {(professionalCaseSignals[item.id] ?? []).map((signal) => (
+                  <span class="case-signal">{signal}</span>
+                ))}
+              </div>
+
+              <div class="detail-grid">
+                <article class="panel-detail-card">
+                  <strong>适合谁</strong>
+                  <p>{item.fit}</p>
+                </article>
+                <article class="panel-detail-card">
+                  <strong>建议先做</strong>
+                  <ul class="bullet-list">
+                    {item.starts.map((step) => (
+                      <li>{step}</li>
+                    ))}
+                  </ul>
+                </article>
+                <article class="panel-detail-card">
+                  <strong>边界提醒</strong>
+                  <p>{item.boundary}</p>
+                </article>
+              </div>
+            </section>
+          ))}
         </div>
       </section>
+
+      <section class="section cases-major-section" id="industry-solutions" data-tabs-root>
+        <div class="section-header cases-section-header">
+          <h2>行业解决方案</h2>
+          <p class="section-copy">{industryCaseCount} 个行业</p>
+        </div>
+
+        <div class="cases-subnav" role="tablist" aria-label="行业解决方案分类">
+          {industrySolutions.map((item, index) => (
+            <button
+              class:list={['cases-subnav__button', index === 0 && 'is-active']}
+              id={`tab-${item.id}`}
+              type="button"
+              role="tab"
+              aria-controls={`panel-${item.id}`}
+              aria-selected={index === 0 ? 'true' : 'false'}
+              tabindex={index === 0 ? '0' : '-1'}
+              data-tab-target={item.id}
+            >
+              <span class="cases-subnav__label">{item.title}</span>
+              <span class="cases-subnav__count">1 个示例</span>
+            </button>
+          ))}
+        </div>
+
+        <div class="cases-panels">
+          {industrySolutions.map((item, index) => (
+            <section
+              class:list={['cases-panel', index === 0 && 'is-active']}
+              id={`panel-${item.id}`}
+              role="tabpanel"
+              aria-labelledby={`tab-${item.id}`}
+              data-tab-panel={item.id}
+              hidden={index !== 0}
+            >
+              <header class="cases-panel__header">
+                <div class="cases-panel__heading">
+                  <span class="card-tag">{item.tag}</span>
+                  <h3>{item.title}</h3>
+                </div>
+                <span class:list={['risk-chip', item.risk === '低风险' && 'is-low', item.risk === '中风险' && 'is-mid', item.risk === '高风险' && 'is-high']}>{item.risk}</span>
+              </header>
+
+              <p class="cases-panel__summary">{item.cut}</p>
+              <div class="case-signal-list" aria-label="案例提示标签">
+                {(industrySolutionSignals[item.id] ?? []).map((signal) => (
+                  <span class="case-signal">{signal}</span>
+                ))}
+              </div>
+
+              <div class="detail-grid">
+                <article class="panel-detail-card">
+                  <strong>核心痛点</strong>
+                  <ul class="bullet-list">
+                    {item.pains.map((pain) => (
+                      <li>{pain}</li>
+                    ))}
+                  </ul>
+                </article>
+                <article class="panel-detail-card">
+                  <strong>典型场景</strong>
+                  <ul class="bullet-list">
+                    {item.scenes.map((scene) => (
+                      <li>{scene}</li>
+                    ))}
+                  </ul>
+                </article>
+                <article class="panel-detail-card">
+                  <strong>建议起步</strong>
+                  <ul class="bullet-list">
+                    {item.starts.map((step) => (
+                      <li>{step}</li>
+                    ))}
+                  </ul>
+                </article>
+                <article class="panel-detail-card">
+                  <strong>需要接入</strong>
+                  <ul class="directory-inline-list">
+                    {item.systems.map((system) => (
+                      <li>{system}</li>
+                    ))}
+                  </ul>
+                </article>
+                <article class="panel-detail-card">
+                  <strong>怎么看有没有效果</strong>
+                  <ul class="directory-inline-list">
+                    {item.metrics.map((metric) => (
+                      <li>{metric}</li>
+                    ))}
+                  </ul>
+                </article>
+                <article class="panel-detail-card">
+                  <strong>边界提醒</strong>
+                  <p>{item.boundary}</p>
+                </article>
+              </div>
+            </section>
+          ))}
+        </div>
+      </section>
+
     </div>
   </main>
 
+  <script is:inline>
+    (() => {
+      const activate = (root, id) => {
+        const buttons = Array.from(root.querySelectorAll('[data-tab-target]'));
+        const panels = Array.from(root.querySelectorAll('[data-tab-panel]'));
+        const fallbackId = buttons[0] && buttons[0].dataset.tabTarget;
+        const resolvedId = panels.some((panel) => panel.dataset.tabPanel === id) ? id : fallbackId;
+
+        if (!resolvedId) return;
+
+        buttons.forEach((button) => {
+          const active = button.dataset.tabTarget === resolvedId;
+          button.classList.toggle('is-active', active);
+          button.setAttribute('aria-selected', String(active));
+          button.tabIndex = active ? 0 : -1;
+        });
+
+        panels.forEach((panel) => {
+          const active = panel.dataset.tabPanel === resolvedId;
+          panel.hidden = !active;
+          panel.setAttribute('aria-hidden', String(!active));
+          panel.classList.toggle('is-active', active);
+          panel.style.display = active ? '' : 'none';
+        });
+
+        root.dataset.activeTab = resolvedId;
+      };
+
+      const initRoot = (root) => {
+        const buttons = Array.from(root.querySelectorAll('[data-tab-target]'));
+        const activeButton = buttons.find(
+          (button) =>
+            button.classList.contains('is-active') || button.getAttribute('aria-selected') === 'true'
+        );
+
+        activate(root, (activeButton && activeButton.dataset.tabTarget) || root.dataset.activeTab);
+      };
+
+      const initAll = () => {
+        document.querySelectorAll('[data-tabs-root]').forEach((root) => {
+          initRoot(root);
+        });
+      };
+
+      const handleClick = (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+
+        const button = target.closest('[data-tab-target]');
+        if (!(button instanceof HTMLButtonElement)) return;
+
+        const root = button.closest('[data-tabs-root]');
+        const id = button.dataset.tabTarget;
+
+        if (!(root instanceof HTMLElement) || !id) return;
+
+        activate(root, id);
+      };
+
+      const handleKeydown = (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLButtonElement)) return;
+        if (!target.matches('[data-tab-target]')) return;
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+
+        const root = target.closest('[data-tabs-root]');
+        if (!(root instanceof HTMLElement)) return;
+
+        const buttons = Array.from(root.querySelectorAll('[data-tab-target]')).filter(
+          (button) => button instanceof HTMLButtonElement
+        );
+        const index = buttons.indexOf(target);
+        if (index === -1 || !buttons.length) return;
+
+        event.preventDefault();
+
+        const nextIndex =
+          event.key === 'ArrowRight'
+            ? (index + 1) % buttons.length
+            : (index - 1 + buttons.length) % buttons.length;
+        const nextButton = buttons[nextIndex];
+        const nextId = nextButton && nextButton.dataset.tabTarget;
+
+        if (!nextButton || !nextId) return;
+
+        activate(root, nextId);
+        nextButton.focus();
+      };
+
+      const queueInit = () => {
+        window.requestAnimationFrame(() => {
+          initAll();
+        });
+      };
+
+      if (!window.__casesTabsBound) {
+        window.__casesTabsBound = true;
+        document.addEventListener('click', handleClick);
+        document.addEventListener('keydown', handleKeydown);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', queueInit, { once: true });
+      } else {
+        queueInit();
+      }
+
+      document.addEventListener('astro:page-load', queueInit);
+      document.addEventListener('astro:after-swap', queueInit);
+    })();
+  </script>
+
+  <style>
+    .cases-page {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .cases-major-nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding-top: 0.25rem;
+    }
+
+    .cases-major-nav__button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 56px;
+      min-width: 14.5rem;
+      padding: 12px 24px;
+      border-radius: 999px;
+      border: 1px solid rgba(91, 68, 52, 0.12);
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(248, 242, 234, 0.95)),
+        radial-gradient(circle at top right, rgba(186, 99, 54, 0.08), transparent 36%);
+      box-shadow:
+        0 12px 28px rgba(73, 52, 38, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.74);
+      color: var(--accent-deep);
+      font-size: 1.02rem;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .cases-major-nav__button:hover,
+    .cases-major-nav__button:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(186, 99, 54, 0.2);
+      box-shadow:
+        0 16px 32px rgba(73, 52, 38, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .cases-major-section {
+      display: grid;
+      gap: 14px;
+    }
+
+    .cases-section-header {
+      align-items: end;
+      margin-bottom: 0;
+    }
+
+    .cases-section-header h2 {
+      margin: 0;
+    }
+
+    .cases-subnav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(248, 242, 234, 0.94));
+      box-shadow: 0 10px 24px rgba(73, 52, 38, 0.05);
+    }
+
+    .cases-subnav__button {
+      display: grid;
+      justify-items: start;
+      align-content: center;
+      gap: 4px;
+      min-height: 52px;
+      padding: 10px 14px;
+      border: 1px solid rgba(186, 99, 54, 0.1);
+      border-radius: 18px;
+      background: rgba(255, 251, 246, 0.92);
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+      line-height: 1.35;
+      text-align: left;
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        background-color 180ms ease,
+        color 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .cases-subnav__button:hover,
+    .cases-subnav__button:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(186, 99, 54, 0.2);
+      color: var(--accent-deep);
+      box-shadow: 0 8px 16px rgba(73, 52, 38, 0.08);
+    }
+
+    .cases-subnav__button.is-active {
+      border-color: rgba(186, 99, 54, 0.22);
+      background: linear-gradient(135deg, rgba(193, 94, 42, 0.12), rgba(229, 157, 77, 0.16));
+      color: var(--accent-deep);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .cases-subnav__label {
+      display: block;
+      color: inherit;
+    }
+
+    .cases-subnav__count {
+      display: inline-flex;
+      align-items: center;
+      color: rgba(105, 88, 76, 0.82);
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.01em;
+    }
+
+    .cases-subnav__button.is-active .cases-subnav__count {
+      color: rgba(123, 67, 37, 0.88);
+    }
+
+    .cases-panel {
+      display: grid;
+      gap: 16px;
+      padding: 18px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      border-radius: 26px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(248, 242, 234, 0.95)),
+        radial-gradient(circle at top right, rgba(186, 99, 54, 0.06), transparent 34%);
+      box-shadow:
+        0 14px 28px rgba(73, 52, 38, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.74);
+    }
+
+    .cases-panel[hidden] {
+      display: none !important;
+    }
+
+    .cases-panel__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(91, 68, 52, 0.08);
+    }
+
+    .cases-panel__heading {
+      display: grid;
+      gap: 8px;
+    }
+
+    .cases-panel__heading h3 {
+      margin: 0;
+      font-size: 1.24rem;
+      line-height: 1.18;
+    }
+
+    .cases-panel__summary {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .case-signal-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .case-signal {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(186, 99, 54, 0.12);
+      background: rgba(255, 249, 243, 0.9);
+      color: var(--accent-deep);
+      font-size: 0.76rem;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .cases-panel__count,
+    .professional-card__level {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      background: rgba(255, 252, 248, 0.88);
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .personal-case-grid,
+    .detail-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .personal-case-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .detail-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .personal-case-card,
+    .panel-detail-card {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      min-height: 100%;
+      padding: 16px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(250, 245, 239, 0.94));
+      box-shadow: 0 10px 22px rgba(73, 52, 38, 0.05);
+    }
+
+    .personal-case-card__top {
+      display: grid;
+      gap: 8px;
+    }
+
+    .personal-case-card__top h4 {
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.24;
+    }
+
+    .personal-case-card__summary,
+    .personal-case-card__fit,
+    .personal-case-card__gain,
+    .panel-detail-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.66;
+    }
+
+    .personal-case-card__fit,
+    .personal-case-card__gain {
+      display: grid;
+      gap: 4px;
+    }
+
+    .personal-case-card__fit strong,
+    .personal-case-card__gain strong,
+    .personal-case-card__block strong,
+    .panel-detail-card strong {
+      color: var(--accent-deep);
+      font-size: 0.82rem;
+    }
+
+    .personal-case-card__block {
+      display: grid;
+      gap: 8px;
+    }
+
+    .risk-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      color: var(--muted);
+      background: rgba(255, 252, 248, 0.88);
+    }
+
+    .risk-chip.is-low {
+      color: #2f6a4d;
+      background: rgba(61, 99, 82, 0.1);
+    }
+
+    .risk-chip.is-mid {
+      color: #7b5a22;
+      background: rgba(196, 144, 56, 0.12);
+    }
+
+    .risk-chip.is-high {
+      color: #8b3b2c;
+      background: rgba(186, 99, 54, 0.12);
+    }
+
+    @media (max-width: 1180px) {
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .cases-section-header {
+        flex-direction: column;
+        align-items: start;
+      }
+
+      .personal-case-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .cases-major-nav {
+        gap: 10px;
+      }
+
+      .cases-major-nav__button {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .cases-panel,
+      .personal-case-card,
+      .panel-detail-card {
+        padding: 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cases-major-nav__button,
+      .cases-subnav__button {
+        transition: none;
+      }
+    }
+  </style>
 </MarketingLayout>
