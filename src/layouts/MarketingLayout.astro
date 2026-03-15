@@ -8,6 +8,31 @@ export interface Props {
 }
 
 const { title, description = SITE_DESCRIPTION } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const routePath =
+  base && Astro.url.pathname.startsWith(base)
+    ? Astro.url.pathname.slice(base.length) || '/'
+    : Astro.url.pathname;
+
+const floatingSupport = routePath.startsWith('/docs')
+  ? {
+      prompt: '没找到需要内容，或教程有误？扫码反馈',
+      title: '文档反馈',
+      detail: '安装、配置、报错排查，或者文档哪里缺内容、写得不清楚，都可以直接发我。'
+    }
+  : routePath.startsWith('/cases')
+    ? {
+        prompt: '想聊落地细节或定制方案？点击扫码沟通',
+        title: '案例咨询',
+        detail: '告诉我你的行业、角色和目标，我可以帮你细化落地方式、接入细节和定制方向。'
+      }
+    : routePath.startsWith('/service')
+      ? {
+          prompt: '部署安装遇到问题？点击扫码沟通',
+          title: '部署支持',
+          detail: '环境准备、安装部署、配置排错和接入问题，都可以直接沟通。'
+        }
+      : null;
 ---
 
 <!doctype html>
@@ -39,6 +64,8 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
         --radius-lg: 18px;
         --radius-md: 14px;
         --max-width: 1180px;
+        --floating-tools-right: clamp(1.05rem, 2.4vw, 1.9rem);
+        --floating-tool-size: 64px;
       }
 
       * {
@@ -117,42 +144,219 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
 
       .back-to-top {
         position: fixed;
-        right: 1rem;
-        bottom: 1rem;
-        z-index: 40;
+        right: var(--floating-tools-right);
+        bottom: calc(1.15rem + env(safe-area-inset-bottom));
+        z-index: 45;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 44px;
-        min-height: 44px;
-        padding: 0.7rem 0.95rem;
-        border: 1px solid rgba(91, 68, 52, 0.14);
-        border-radius: 999px;
-        background: rgba(255, 252, 248, 0.94);
-        box-shadow: 0 12px 28px rgba(73, 52, 38, 0.1);
+        width: var(--floating-tool-size);
+        height: var(--floating-tool-size);
+        padding: 0;
+        border: 1px solid rgba(186, 99, 54, 0.14);
+        border-radius: 22px;
+        background:
+          linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(246, 236, 223, 0.94)),
+          radial-gradient(circle at top, rgba(229, 157, 77, 0.18), transparent 55%);
+        backdrop-filter: blur(18px);
         color: var(--accent-deep);
-        font-size: 0.84rem;
-        font-weight: 700;
+        box-shadow:
+          0 14px 30px rgba(73, 52, 38, 0.14),
+          0 3px 10px rgba(186, 99, 54, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.78);
         opacity: 0;
         pointer-events: none;
-        transform: translateY(10px);
+        transform: translate3d(0, 14px, 0) scale(0.94);
         transition:
-          opacity 180ms ease,
-          transform 180ms ease,
+          opacity 220ms ease,
+          transform 220ms ease,
           border-color 180ms ease,
+          background 180ms ease,
           box-shadow 180ms ease;
+      }
+
+      .back-to-top::before {
+        content: '';
+        position: absolute;
+        inset: -7px;
+        border-radius: 28px;
+        background: radial-gradient(circle, rgba(186, 99, 54, 0.12), transparent 68%);
+        opacity: 0;
+        transition: opacity 180ms ease;
+        pointer-events: none;
       }
 
       .back-to-top.is-visible {
         opacity: 1;
         pointer-events: auto;
-        transform: translateY(0);
+        transform: translate3d(0, 0, 0) scale(1);
       }
 
       .back-to-top:hover,
       .back-to-top:focus-visible {
         border-color: rgba(186, 99, 54, 0.24);
-        box-shadow: 0 14px 30px rgba(73, 52, 38, 0.14);
+        background:
+          linear-gradient(180deg, rgba(255, 253, 249, 1), rgba(248, 239, 228, 0.98)),
+          radial-gradient(circle at top, rgba(229, 157, 77, 0.24), transparent 58%);
+        box-shadow:
+          0 18px 36px rgba(73, 52, 38, 0.16),
+          0 5px 14px rgba(186, 99, 54, 0.12),
+          inset 0 1px 0 rgba(255, 255, 255, 0.82);
+        transform: translate3d(0, -2px, 0) scale(1.02);
+      }
+
+      .back-to-top:hover::before,
+      .back-to-top:focus-visible::before {
+        opacity: 1;
+      }
+
+      .back-to-top__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 999px;
+        background: rgba(186, 99, 54, 0.1);
+        line-height: 0;
+      }
+
+      .floating-support {
+        position: fixed;
+        right: var(--floating-tools-right);
+        bottom: calc(5.95rem + env(safe-area-inset-bottom));
+        z-index: 46;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        gap: 0.55rem;
+      }
+
+      .floating-support__trigger {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--floating-tool-size);
+        height: var(--floating-tool-size);
+        border: 1px solid rgba(61, 99, 82, 0.16);
+        border-radius: 22px;
+        background:
+          linear-gradient(180deg, rgba(250, 252, 249, 0.98), rgba(236, 246, 241, 0.94)),
+          radial-gradient(circle at top, rgba(61, 99, 82, 0.14), transparent 58%);
+        color: var(--support);
+        box-shadow:
+          0 16px 34px rgba(40, 68, 57, 0.14),
+          inset 0 1px 0 rgba(255, 255, 255, 0.78);
+        backdrop-filter: blur(18px);
+        transition:
+          transform 180ms ease,
+          border-color 180ms ease,
+          box-shadow 180ms ease,
+          background 180ms ease;
+      }
+
+      .floating-support__trigger:hover,
+      .floating-support__trigger:focus-visible {
+        border-color: rgba(61, 99, 82, 0.26);
+        background:
+          linear-gradient(180deg, rgba(253, 255, 252, 1), rgba(239, 248, 243, 0.98)),
+          radial-gradient(circle at top, rgba(61, 99, 82, 0.2), transparent 62%);
+        box-shadow:
+          0 18px 38px rgba(40, 68, 57, 0.16),
+          inset 0 1px 0 rgba(255, 255, 255, 0.84);
+        transform: translateY(-2px);
+      }
+
+      .floating-support__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 999px;
+        background: rgba(61, 99, 82, 0.12);
+        line-height: 0;
+      }
+
+      .floating-support__hint {
+        max-width: 168px;
+        padding: 0.68rem 0.82rem;
+        border: 1px solid rgba(61, 99, 82, 0.1);
+        border-radius: 18px;
+        background: rgba(255, 253, 249, 0.95);
+        color: var(--text);
+        box-shadow:
+          0 14px 28px rgba(73, 52, 38, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.82);
+        font-size: 0.78rem;
+        font-weight: 600;
+        line-height: 1.58;
+        letter-spacing: normal;
+        word-spacing: normal;
+      }
+
+      .floating-support__panel {
+        position: absolute;
+        right: 0;
+        bottom: calc(100% + 0.85rem);
+        width: min(260px, calc(100vw - 32px));
+        padding: 0.9rem;
+        border: 1px solid rgba(61, 99, 82, 0.14);
+        border-radius: 24px;
+        background:
+          linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(244, 249, 246, 0.96)),
+          radial-gradient(circle at top, rgba(61, 99, 82, 0.08), transparent 60%);
+        box-shadow:
+          0 22px 50px rgba(40, 68, 57, 0.16),
+          0 8px 24px rgba(73, 52, 38, 0.08);
+      }
+
+      .floating-support__panel[hidden] {
+        display: none !important;
+      }
+
+      .floating-support__panel::after {
+        content: '';
+        position: absolute;
+        right: 22px;
+        bottom: -8px;
+        width: 16px;
+        height: 16px;
+        background: rgba(248, 251, 249, 0.98);
+        border-right: 1px solid rgba(61, 99, 82, 0.14);
+        border-bottom: 1px solid rgba(61, 99, 82, 0.14);
+        transform: rotate(45deg);
+      }
+
+      .floating-support__panel-inner {
+        display: grid;
+        gap: 0.8rem;
+      }
+
+      .floating-support__panel-copy {
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .floating-support__panel-copy strong {
+        color: var(--support);
+        font-size: 0.94rem;
+      }
+
+      .floating-support__panel-copy p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.62;
+      }
+
+      .floating-support__qr {
+        width: 100%;
+        padding: 0.55rem;
+        border-radius: 18px;
+        border: 1px solid rgba(61, 99, 82, 0.1);
+        background: rgba(255, 255, 255, 0.92);
       }
 
       .container {
@@ -679,6 +883,11 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
       }
 
       @media (max-width: 640px) {
+        :root {
+          --floating-tools-right: 0.8rem;
+          --floating-tool-size: 58px;
+        }
+
         .container {
           width: min(calc(100% - 20px), var(--max-width));
         }
@@ -716,9 +925,28 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
         }
 
         .back-to-top {
-          right: 0.75rem;
-          bottom: 0.75rem;
-          padding-inline: 0.85rem;
+          bottom: calc(1rem + env(safe-area-inset-bottom));
+          border-radius: 20px;
+        }
+
+        .floating-support {
+          bottom: calc(5.5rem + env(safe-area-inset-bottom));
+          gap: 0.45rem;
+        }
+
+        .floating-support__trigger {
+          border-radius: 20px;
+        }
+
+        .floating-support__hint {
+          max-width: min(144px, calc(100vw - 92px));
+          padding: 0.6rem 0.72rem;
+          font-size: 0.72rem;
+        }
+
+        .floating-support__panel {
+          width: min(224px, calc(100vw - 24px));
+          padding: 0.82rem;
         }
       }
 
@@ -757,7 +985,53 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
 
       <slot />
 
-      <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部">顶部</button>
+      {floatingSupport && (
+        <div class="floating-support" id="floating-support">
+          <button
+            class="floating-support__trigger"
+            id="floating-support-trigger"
+            type="button"
+            aria-label={`${floatingSupport.title}二维码`}
+            aria-controls="floating-support-panel"
+            aria-expanded="false"
+          >
+            <span class="floating-support__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 9.5h10" />
+                <path d="M7 13h6.5" />
+                <path d="M6.5 18.5 7.2 15H7a5 5 0 0 1-5-5V8a5 5 0 0 1 5-5h10a5 5 0 0 1 5 5v2a5 5 0 0 1-5 5h-5.2L6.5 18.5Z" />
+              </svg>
+            </span>
+          </button>
+          <div class="floating-support__hint">{floatingSupport.prompt}</div>
+          <div class="floating-support__panel" id="floating-support-panel" hidden>
+            <div class="floating-support__panel-inner">
+              <div class="floating-support__panel-copy">
+                <strong>{floatingSupport.title}</strong>
+                <p>{floatingSupport.detail}</p>
+              </div>
+              <img
+                class="floating-support__qr"
+                src={`${base}/wechat-qr.png`}
+                alt="微信联系二维码"
+                width="549"
+                height="542"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部">
+        <span class="back-to-top__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19V5" />
+            <path d="m6 11 6-6 6 6" />
+          </svg>
+        </span>
+      </button>
     </div>
 
     <script is:inline>
@@ -776,6 +1050,35 @@ const { title, description = SITE_DESCRIPTION } = Astro.props;
 
         toggle();
         window.addEventListener('scroll', toggle, { passive: true });
+      })();
+    </script>
+    <script is:inline>
+      (() => {
+        const trigger = document.getElementById('floating-support-trigger');
+        const panel = document.getElementById('floating-support-panel');
+        const root = document.getElementById('floating-support');
+        if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement) || !(root instanceof HTMLElement)) return;
+
+        const setOpen = (open) => {
+          panel.hidden = !open;
+          trigger.setAttribute('aria-expanded', String(open));
+          root.dataset.open = String(open);
+        };
+
+        trigger.addEventListener('click', (event) => {
+          event.stopPropagation();
+          setOpen(panel.hidden);
+        });
+
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (!(target instanceof Node) || root.contains(target)) return;
+          setOpen(false);
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') setOpen(false);
+        });
       })();
     </script>
   </body>
