@@ -23,7 +23,7 @@ const coreRoutes = [
     tag: '先判断场景',
     title: '案例',
     href: withBase('/cases/'),
-    summary: '先看真实场景，再判断 OpenClaw 是否值得你继续投入时间和精力。',
+    summary: '先看别人怎么把 OpenClaw 用进内容、办公和个人工作流，再判断适不适合你。',
     bullets: ['内容运营', '办公协同', '个人助手'],
     action: '查看案例'
   },
@@ -31,16 +31,16 @@ const coreRoutes = [
     tag: '先查资料',
     title: '资源导航',
     href: withBase('/links/'),
-    summary: '把官网、官方文档、SkillHub、版本发布和精选文章集中在一页。',
-    bullets: ['官网与文档', 'SkillHub', 'Releases'],
+    summary: '官网、文档、技能市场、模型平台和常用工具，都集中在这里。',
+    bullets: ['官网与文档', '技能市场', '模型平台'],
     action: '打开资源导航'
   },
   {
     tag: '先解决落地',
-    title: '安装交付服务',
+    title: '安装与支持',
     href: withBase('/service/'),
-    summary: '自己安装、预约支持、排错协助，都从这里进入。',
-    bullets: ['自己安装', '服务说明', '联系入口'],
+    summary: '安装遇阻、环境复杂，或者需要协助时，直接从这里进入。',
+    bullets: ['安装支持', '排错协助', '联系入口'],
     action: '查看服务'
   }
 ];
@@ -48,16 +48,15 @@ const coreRoutes = [
 
 <MarketingLayout
   title="虾客AI"
-  description="围绕 OpenClaw 的文档教程、资源导航、案例和安装交付服务四个核心入口。"
+  description="围绕 OpenClaw 的文档教程、案例、资源导航和安装支持四个核心入口。"
 >
   <main class="page" id="main-content">
     <div class="container home-page">
       <section class="page-intro home-hero">
         <div class="home-hero__content">
-          <span class="eyebrow">虾客AI</span>
-          <h1>想了解、安装或用好 OpenClaw，就从这里选入口。</h1>
+          <h1>把 OpenClaw🦞 养起来、用顺手、真正派上用场。</h1>
           <p class="lead">
-            先判断你现在是想了解场景、准备安装，还是希望更快落地，然后直接进入对应页面。
+            看场景、学安装、查资料、找支持，直接进对应页面，不绕路。
           </p>
           <div class="action-row home-hero__actions">
             {primaryActions.map((item) => (
@@ -69,7 +68,7 @@ const coreRoutes = [
 
       <section class="section home-sections">
         <div class="home-sections__heading">
-          <h2>四个核心入口</h2>
+          <h2>直接进入</h2>
         </div>
 
         <div class="home-entry-grid">
@@ -104,11 +103,26 @@ const coreRoutes = [
     .home-hero__content {
       display: grid;
       gap: 16px;
-      max-width: 52rem;
+      max-width: 72rem;
+      margin: 0 auto;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .home-hero__content h1 {
+      max-width: 24ch;
+      font-size: clamp(1.9rem, 3vw, 2.8rem);
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+    }
+
+    .home-hero__content .lead {
+      max-width: 40rem;
     }
 
     .home-hero__actions {
       gap: 10px;
+      justify-content: center;
     }
 
     .home-sections {
@@ -188,6 +202,20 @@ const coreRoutes = [
       .home-hero,
       .home-entry-card {
         padding: 16px;
+      }
+
+      .home-hero__content {
+        justify-items: start;
+        text-align: left;
+      }
+
+      .home-hero__content h1,
+      .home-hero__content .lead {
+        max-width: none;
+      }
+
+      .home-hero__actions {
+        justify-content: flex-start;
       }
     }
 

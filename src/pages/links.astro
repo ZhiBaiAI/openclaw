@@ -9,34 +9,94 @@ const officialLinks = [
     title: 'OpenClaw 官网',
     tag: '官方入口',
     url: 'https://openclaw.ai/',
-    summary: '看产品定位、安装方式、支持平台和官方安装入口。'
+    summary: '获取官方入口、安装包、产品更新和公开动态。'
   },
   {
     title: 'OpenClaw 官方文档',
     tag: '官方文档',
     url: 'https://docs.openclaw.ai/',
-    summary: '查安装、配置、聊天渠道接入和更详细的官方说明。'
+    summary: '完整技术手册，适合查安装、配置、接入和高级参数。'
   },
   {
     title: 'GitHub 仓库',
     tag: '源码与讨论',
     url: 'https://github.com/openclaw/openclaw',
-    summary: '查看源码、Issue、讨论和最近动态。'
+    summary: '源码所在地，也是提 Issue、看讨论和跟进开发进展的主入口。'
   },
   {
-    title: 'GitHub Releases',
-    tag: '版本更新',
-    url: 'https://github.com/openclaw/openclaw/releases',
-    summary: '升级前先看版本说明、发布时间和变更记录。'
+    title: 'OpenClaw 中文文档',
+    tag: '中文社区',
+    url: 'https://openclaw.cc/',
+    summary: '社区维护的中文指南，更适合国内用户快速查阅。'
   }
 ];
 
-const toolLinks = [
+const skillLinks = [
   {
     title: '腾讯 SkillHub',
     tag: '技能入口',
     url: 'https://skillhub.tencent.com/',
-    summary: '需要扩展能力时，从这里找可用技能。'
+    summary: '国内常用的技能入口之一，适合继续找可用技能和生态资源。'
+  },
+  {
+    title: 'ClawHub',
+    tag: '官方技能市场',
+    url: 'https://clawhub.ai/',
+    summary: '官方技能注册表，适合集中浏览 OpenClaw 技能生态。'
+  },
+  {
+    title: 'Awesome OpenClaw Skills',
+    tag: '社区精选',
+    url: 'https://github.com/VoltAgent/awesome-openclaw-skills',
+    summary: '社区精选审计后的技能清单，适合优先从这里挑安全技能。'
+  },
+  {
+    title: 'Skills.sh',
+    tag: '跨平台技能市场',
+    url: 'https://skills.sh/',
+    summary: '更大的跨平台技能市场，SKILL.md 与 OpenClaw 通用。'
+  },
+  {
+    title: 'AgentSkills 规范',
+    tag: '技能标准',
+    url: 'https://agentskills.io/',
+    summary: '自建技能、发布技能或做技能变现时可参考的规范入口。'
+  }
+];
+
+const usecaseLinks = [
+  {
+    title: 'Awesome OpenClaw Usecases',
+    tag: '案例集合',
+    url: 'https://github.com/hesamsheikh/awesome-openclaw-usecases',
+    summary: '社区真实 Agent 应用案例合集，适合看别人怎么落地。'
+  },
+  {
+    title: '案例页',
+    tag: '站内入口',
+    url: withBase('/cases/'),
+    summary: '站内整理的个人场景、专业场景和行业解决方案入口。'
+  },
+  {
+    title: '文档教程',
+    tag: '站内入口',
+    url: withBase('/docs/'),
+    summary: '安装步骤、命令、FAQ 和参考配置都可以从这里继续。'
+  },
+  {
+    title: '部署支持',
+    tag: '站内入口',
+    url: withBase('/service/'),
+    summary: '环境准备、安装部署、排错支持和后续接入都在这里。'
+  }
+];
+
+const modelLinks = [
+  {
+    title: 'OpenRouter',
+    tag: '国际模型聚合',
+    url: 'https://openrouter.ai/',
+    summary: '适合统一接入多模型，并利用 fallback 机制做备选链。'
   },
   {
     title: 'MiniMax 平台',
@@ -45,58 +105,40 @@ const toolLinks = [
     summary: '如果准备在 OpenClaw 里接入 MiniMax，这里是平台入口。'
   },
   {
-    title: 'ClawHub',
-    tag: '生态入口',
-    url: 'https://clawhub.ai/',
-    summary: '补充看 OpenClaw 生态内容、案例和周边资源。'
-  }
-];
-
-const readingLinks = [
-  {
-    title: 'OpenClaw + QQ 入门文章',
-    tag: '外部文章',
-    url: 'https://cloud.tencent.com/developer/article/2625147',
-    summary: '更偏新手向，适合先跑通第一个聊天入口。'
+    title: 'DeepSeek 开放平台',
+    tag: '国产模型',
+    url: 'https://platform.deepseek.com/',
+    summary: '高性价比国产模型平台，适合国内常见接入方案。'
   },
   {
-    title: 'OpenClaw 接入微信',
-    tag: '外部文章',
-    url: 'https://cloud.tencent.com/developer/article/2626045',
-    summary: '适合想把 OpenClaw 用进高频沟通入口的人。'
+    title: '硅基流动 SiliconFlow',
+    tag: '模型聚合',
+    url: 'https://siliconflow.cn/',
+    summary: '国内模型聚合平台，适合统一调用多种开源模型。'
   },
   {
-    title: 'OpenClaw 接入飞书',
-    tag: '外部文章',
-    url: 'https://cloud.tencent.com/developer/article/2626151',
-    summary: '适合办公协同和团队沟通场景。'
+    title: '阿里云百炼',
+    tag: '模型聚合',
+    url: 'https://bailian.console.aliyun.com/cn-beijing?tab=coding-plan#/efm/index',
+    summary: '阿里云的模型与应用平台，也适合作为国内模型聚合接入入口。'
   },
   {
-    title: 'OpenClaw 接入钉钉',
-    tag: '外部文章',
-    url: 'https://cloud.tencent.com/developer/article/2626553',
-    summary: '适合通知、值守和企业协同类场景。'
-  }
-];
-
-const localRoutes = [
-  {
-    title: '文档教程',
-    tag: '站内入口',
-    url: withBase('/docs/'),
-    summary: '7 步总览、命令和 FAQ 都集中在站内。'
+    title: 'Kimi 大模型平台',
+    tag: '模型平台',
+    url: 'https://www.kimi.com/code?from=kfc_overview_topbar',
+    summary: 'Moonshot 的模型与编程平台入口，也适合作为国内模型接入选择。'
   },
   {
-    title: '案例',
-    tag: '站内入口',
-    url: withBase('/cases/'),
-    summary: '先看哪些场景值得做，再决定投入多少时间。'
+    title: 'Ollama',
+    tag: '本地模型',
+    url: 'https://ollama.ai/',
+    summary: '个人用户在本地运行开源模型时最常用的方案之一。'
   },
   {
-    title: '安装交付服务',
-    tag: '站内入口',
-    url: withBase('/service/'),
-    summary: '自己安装、交付服务、排错支持都统一在这里。'
+    title: 'LM Studio',
+    tag: '本地测试',
+    url: 'https://lmstudio.ai/',
+    summary: '带图形界面的本地模型管理工具，适合测试模型的工具调用支持。'
   }
 ];
 
@@ -105,36 +147,36 @@ const groups = [
     id: 'official',
     label: '官方',
     title: '官方入口',
-    note: '安装、配置、升级，优先以官方信息为准。',
+    note: '安装、升级、看发布和查权威说明，优先走官方入口。',
     links: officialLinks
   },
   {
-    id: 'tools',
-    label: '生态',
-    title: '工具与生态',
-    note: '需要扩展能力、补模型平台或看生态内容时，再来这里。',
-    links: toolLinks
+    id: 'skills',
+    label: '技能',
+    title: '技能与安全',
+    note: '找技能、筛技能、做技能和检查技能安全，集中看这一组。',
+    links: skillLinks
   },
   {
-    id: 'reading',
-    label: '文章',
-    title: '精选文章',
-    note: '更偏场景理解，适合补概念，不建议替代官方步骤。',
-    links: readingLinks
+    id: 'usecases',
+    label: '案例',
+    title: '案例与学习入口',
+    note: '先看别人怎么落地，再回到站内继续学和继续配。',
+    links: usecaseLinks
   },
   {
-    id: 'inside',
-    label: '站内',
-    title: '站内入口',
-    note: '看完外部链接后，通常会回到这几个站内页面继续操作。',
-    links: localRoutes
+    id: 'models',
+    label: '模型',
+    title: '模型与本地运行',
+    note: '准备接模型平台或本地跑模型时，从这组入口继续。',
+    links: modelLinks
   }
 ];
 ---
 
 <MarketingLayout
   title="虾客AI 资源导航"
-  description="集中整理官网、官方文档、SkillHub、版本更新和精选中文文章，作为 OpenClaw 的外部资源入口。"
+  description="集中整理 OpenClaw 官方入口、技能生态、案例学习和模型平台，作为常用外部资源导航。"
 >
   <main class="page" id="main-content">
     <div class="container nav-page">
@@ -142,7 +184,7 @@ const groups = [
         <div class="nav-hub__heading">
           <span class="eyebrow">资源导航</span>
           <h1>OpenClaw 常用入口</h1>
-          <p class="lead">把官网、文档、生态工具和相关文章按类别整理，查资料时可以直接进入对应入口。</p>
+          <p class="lead">把官网、文档、技能生态、案例入口和模型平台按类别整理，查资料时可以直接进入对应入口。</p>
         </div>
 
         <div class="nav-hub__tools">
