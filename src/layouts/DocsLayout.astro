@@ -4,22 +4,28 @@ import { DOCS_SIDEBAR, docHref } from '../data/docs.mjs';
 
 export interface Props {
   title: string;
+  seoTitle?: string;
   description?: string;
   currentId: string;
   currentSection?: string;
   headings?: Array<{ depth: number; slug: string; text: string }>;
   prevItem?: { id: string; label: string } | null;
   nextItem?: { id: string; label: string } | null;
+  keywords?: string[];
+  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
 const {
   title,
+  seoTitle = `${title} | OpenClaw 文档教程 | 虾客AI`,
   description = 'OpenClaw 文档教程',
   currentId,
   currentSection = '文档教程',
   headings = [],
   prevItem = null,
-  nextItem = null
+  nextItem = null,
+  keywords = [],
+  structuredData = []
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -30,7 +36,13 @@ const sidebarSections = DOCS_SIDEBAR.map((section) => ({
 }));
 ---
 
-<MarketingLayout title={`${title} | 虾客AI`} description={description}>
+<MarketingLayout
+  title={seoTitle}
+  description={description}
+  keywords={keywords}
+  ogType="article"
+  structuredData={structuredData}
+>
   <main class="page docs-page" id="main-content">
     <div class="container docs-shell">
       <aside class="docs-sidebar">

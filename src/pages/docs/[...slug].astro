@@ -2,6 +2,13 @@
 import { getCollection, render } from 'astro:content';
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import { DOCS_FLAT_ITEMS } from '../../data/docs.mjs';
+import {
+  articleSchema,
+  breadcrumbSchema,
+  faqSchema,
+  howToSchema,
+  mergeKeywords
+} from '../../data/seo.mjs';
 
 export async function getStaticPaths() {
   const docs = await getCollection('docs');
@@ -21,16 +28,111 @@ const currentItem = DOCS_FLAT_ITEMS.find((item) => item.id === entry.id);
 const currentIndex = DOCS_FLAT_ITEMS.findIndex((item) => item.id === entry.id);
 const prevItem = currentIndex > 0 ? DOCS_FLAT_ITEMS[currentIndex - 1] : null;
 const nextItem = currentIndex >= 0 && currentIndex < DOCS_FLAT_ITEMS.length - 1 ? DOCS_FLAT_ITEMS[currentIndex + 1] : null;
+const docPath = entry.id === 'home' ? '/docs/' : `/docs/${entry.id}/`;
+const howToSteps = headings
+  .filter((item) => item.depth === 2)
+  .map((item) => ({ name: item.text, path: `${docPath}#${item.slug}` }));
+
+const docFaqItems =
+  entry.id === 'faq/common-issues'
+    ? [
+        {
+          question: '安装脚本跑不动怎么办？',
+          answer:
+            '优先检查网络是否能访问安装脚本地址，以及 Node.js 版本是否满足 OpenClaw 运行要求。如果是 macOS 卡在 Homebrew，可以改看国内手动安装方案。'
+        },
+        {
+          question: '装好了，但聊天工具没有回复怎么办？',
+          answer:
+            '先核对 Bot Token 或接入参数、允许列表、待批准配对请求、模型接入状态，并查看后台日志有没有明显报错。'
+        },
+        {
+          question: '一开始能回复，过一会儿又不回复了怎么办？',
+          answer:
+            '大多是后台没有继续常驻。先确认设备是否休眠、关机或断网，以及后台服务是否退出。'
+        },
+        {
+          question: '想重新走配置流程怎么办？',
+          answer:
+            '可以重新进入完整向导，也可以只修改部分配置，按当前环境选择重新配置的方式。'
+        },
+        {
+          question: '授权后生成的 token 文件可以随便放吗？',
+          answer:
+            '不可以。授权生成的 token 文件等同于钥匙，不应提交到 Git，也不应发到公开场合，应妥善保存并设置合理权限。'
+        },
+        {
+          question: '为什么我觉得 OpenClaw 不像我的助手？',
+          answer:
+            '通常不是模型能力问题，而是规则还不够清楚。应补充和迭代 SOUL.md、USER.md 与 AGENTS.md。'
+        }
+      ]
+    : [];
+
+const docKeywords = mergeKeywords(
+  [entry.data.title],
+  [
+    'OpenClaw 文档',
+    'OpenClaw 中文教程',
+    currentItem?.section ? `OpenClaw ${currentItem.section}` : '',
+    entry.id.includes('install') ? 'OpenClaw 安装教程' : '',
+    entry.id.startsWith('faq/') ? 'OpenClaw 常见问题' : '',
+    entry.id.startsWith('reference/') ? 'OpenClaw 配置参考' : '',
+    entry.id.startsWith('guide/step-') ? 'OpenClaw 上手教程' : ''
+  ]
+);
+
+const docStructuredData = [
+  articleSchema({
+    site: Astro.site,
+    path: docPath,
+    headline: entry.data.title,
+    description: entry.data.description || 'OpenClaw 中文文档教程',
+    keywords: docKeywords,
+    section: currentItem?.section,
+    type: entry.id.startsWith('reference/') ? 'TechArticle' : 'Article'
+  }),
+  breadcrumbSchema(Astro.site, [
+    { name: '首页', path: '/' },
+    { name: '文档教程', path: '/docs/' },
+    { name: entry.data.title, path: docPath }
+  ]),
+  ...(entry.id.startsWith('guide/step-') && howToSteps.length > 0
+    ? [
+        howToSchema({
+          site: Astro.site,
+          path: docPath,
+          name: entry.data.title,
+          description: entry.data.description || 'OpenClaw 分步教程',
+          steps: howToSteps
+        })
+      ]
+    : []),
+  ...(docFaqItems.length > 0
+    ? [
+        faqSchema({
+          site: Astro.site,
+          path: docPath,
+          name: entry.data.title,
+          description: entry.data.description || 'OpenClaw 常见问题',
+          items: docFaqItems
+        })
+      ]
+    : [])
+];
 ---
 
 <DocsLayout
   title={entry.data.title}
+  seoTitle={`${entry.data.title} | OpenClaw 文档教程 | 虾客AI`}
   description={entry.data.description}
   currentId={entry.id}
   currentSection={currentItem?.section}
   headings={headings}
   prevItem={prevItem}
   nextItem={nextItem}
+  keywords={docKeywords}
+  structuredData={docStructuredData}
 >
   <Content />
 </DocsLayout>

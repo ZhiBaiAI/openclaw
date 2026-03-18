@@ -1,89 +1,190 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
+import { breadcrumbSchema, collectionPageSchema, itemListSchema } from '../data/seo.mjs';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const withBase = (path: string) => `${base}${path}`;
 
-const routes = [
+const heroFacts = [
+  ['个人可用', '个人部署、教学和定制也可以直接开始'],
+  ['团队可落地', '试点、协作、规则和交付口径一起推进'],
+  ['企业可扩展', '部署、治理、权限和后续扩编一并考虑']
+];
+
+const audienceCards = [
   {
-    id: 'self-install',
-    tag: '自己上手',
-    title: '我想自己安装，但希望路线清楚一点',
-    summary: '适合愿意自己折腾，但不想从一堆零散教程里拼流程的人。',
-    bullets: ['先走文档教程的 7 步流程', '遇到问题先查命令速查和 FAQ', '需要外部资料时再去资源导航']
+    title: '个人用户',
+    text: '适合想有人带着部署、带着教学，少走弯路更快用起来的人。'
   },
   {
-    id: 'delivery',
-    tag: '交付服务',
-    title: '我想尽快用起来，直接找你做交付',
-    summary: '适合没时间自己踩坑，或者已经知道自己不会配环境、不会接聊天入口的人。',
-    bullets: ['先说明设备和想用的场景', '优先跑通 1 到 2 个真实需求', '交付后继续保留文档和支持入口']
+    title: '团队试点',
+    text: '适合要先跑通一个岗位或一个场景，再逐步复制到更多入口和成员的小团队。'
   },
   {
-    id: 'daily-use',
-    tag: '日常使用',
-    title: '我已经在用了，想排错或继续扩展',
-    summary: '适合已交付用户和已经跑起来的用户，把这里当成支持和回看入口。',
-    bullets: ['先自查教程、命令和 FAQ', '再带着现象和日志来沟通', '需要案例或外部资源时直接跳转对应入口']
+    title: '企业项目',
+    text: '适合要把部署、权限、规则、系统接入和交付标准一起设计清楚的项目。'
+  }
+];
+
+const outcomeCards = [
+  {
+    title: '不是只部署一套环境',
+    text: '而是把入口、规则、模型、权限和交付结果一起串起来。'
+  },
+  {
+    title: '不是只做一轮演示',
+    text: '而是围绕真实场景，交付可以试用、可以复盘、可以继续扩的版本。'
+  },
+  {
+    title: '不是交付完就结束',
+    text: '而是把使用方法、教学陪跑和后续优化路径一起带起来。'
+  }
+];
+
+const serviceModules = [
+  {
+    tag: '部署交付',
+    title: '把环境、模型和入口先跑通',
+    summary: '适合个人、团队或企业从 1 个真实入口开始，先看到可用结果。',
+    items: ['私有化 / VPC / 混合部署', '模型接入与调用策略', '聊天入口与系统接入']
+  },
+  {
+    tag: '定制方案',
+    title: '把流程、规则和交付标准定清楚',
+    summary: '适合流程复杂、需要围绕业务目标设计规则、权限和结果口径的场景。',
+    items: ['流程拆解与场景设计', '规则、权限与审核设计', '可验收的输出模板']
+  },
+  {
+    tag: '教学陪跑',
+    title: '把人带上手，把试点带起来',
+    summary: '适合需要边做边学、边跑边调，最终自己也能继续使用和扩展的用户。',
+    items: ['操作教学', '试点复盘', '优化建议与后续扩展']
   }
 ];
 
 const deliverySteps = [
-  ['确认设备与入口', '先确认你准备使用的设备、聊天入口和优先场景，不做无效安装。'],
-  ['跑通最小可用版本', '优先把一个聊天入口、一个模型和一两个真实场景跑顺。'],
-  ['现场教你怎么用', '不是只装完就走，而是会带着你实际走一遍。'],
-  ['后续继续支持', '交付完成后，文档、命令速查、案例和支持方式仍然可以继续配合使用。']
+  {
+    index: '01',
+    title: '先定优先目标',
+    text: '明确你最想先跑通的场景、入口和结果，避免一开始铺太大。',
+    cue: '先让最关键的一条链路稳定跑起来'
+  },
+  {
+    index: '02',
+    title: '再定交付方案',
+    text: '同步确定部署方式、模型策略、规则边界和交付口径。',
+    cue: '先把方案设计清楚，再做接入'
+  },
+  {
+    index: '03',
+    title: '交付最小可用版本',
+    text: '先拿到一个能真实使用、能验证结果、能继续优化的版本。',
+    cue: '先可用，再做深做宽'
+  },
+  {
+    index: '04',
+    title: '教学、复盘与扩展',
+    text: '根据使用结果调整规则、补充入口，并决定是否继续复制扩展。',
+    cue: '把一次交付变成持续可用的方法'
+  }
 ];
 
-const selfInstall = [
-  '先进入文档教程，把 7 步流程从头看一遍。',
-  '遇到命令、配置或接入问题，先查常用命令速查和 FAQ。',
-  '需要找官网、官方文档、SkillHub 或版本更新，再去资源导航。'
+const valuePoints = [
+  '先围绕真实使用结果来设计，而不是只追求功能堆叠',
+  '先把规则、结果和入口定清楚，再做部署和定制',
+  '先让人会用、敢用，再谈复制和扩展'
 ];
 
-const serviceScope = [
-  '环境安装与基础配置',
-  '模型接入与聊天入口接入',
-  '基础规则整理与使用方式说明',
-  '1 到 2 个真实场景演示',
-  '交付后继续通过本站回看和排错'
+const fitUsers = [
+  {
+    title: '想更快用起来',
+    text: '不想自己从零摸部署、接入和规则，希望有人带着更快跑通。'
+  },
+  {
+    title: '场景比较复杂',
+    text: '需要把多个入口、流程、权限和结果标准一起设计清楚。'
+  },
+  {
+    title: '希望后续自己也能继续用',
+    text: '不想停留在交付当天，希望后面还能继续调整、复盘和扩展。'
+  }
 ];
 
-const supportChecklist = [
-  '你的设备类型和系统',
-  '你现在最想先跑通的 1 到 2 个场景',
-  '已经接入或准备接入的聊天工具',
-  '如果报错，尽量附上截图、现象和日志'
+const weHandle = [
+  '部署架构建议与落地',
+  '模型、入口、知识与规则接入',
+  '试点流程设计与交付',
+  '个人教学、团队陪跑与后续优化建议'
 ];
 
-const introFacts = [
-  ['3 条路线', '自己安装、直接交付、继续排错三类用户分开看。'],
-  ['先跑最小可用版本', '不追求一次堆满功能，先把一个入口跑顺。'],
-  ['联系前先备信息', '设备、场景、聊天入口和报错现象越清楚越省时间。']
+const youPrepare = [
+  '最优先要落地的 1 个场景、岗位或工作流',
+  '已有聊天入口、系统或资料来源',
+  '关键流程里的权限、审核和结果要求',
+  '这次最希望先验证的结果'
+];
+
+const contactPills = ['使用阶段', '场景目标', '接入入口', '部署方式'];
+
+const serviceKeywords = [
+  'OpenClaw 定制交付',
+  'OpenClaw 部署服务',
+  'OpenClaw 定制解决方案',
+  'OpenClaw 教学陪跑',
+  'OpenClaw 个人部署',
+  'OpenClaw 企业交付'
+];
+
+const serviceStructuredData = [
+  collectionPageSchema({
+    site: Astro.site,
+    path: '/service/',
+    name: 'OpenClaw 定制交付服务',
+    description: '围绕部署、定制解决方案、教学陪跑和试点扩展，提供适用于个人、团队和企业的 OpenClaw 定制交付服务。',
+    keywords: serviceKeywords,
+    about: ['OpenClaw 部署', 'OpenClaw 定制交付', 'OpenClaw 解决方案', 'OpenClaw 教学陪跑']
+  }),
+  itemListSchema({
+    site: Astro.site,
+    path: '/service/',
+    name: 'OpenClaw 定制交付页面导航',
+    items: [
+      { name: '适用对象', path: '/service/#audience' },
+      { name: '你会得到什么', path: '/service/#outcomes' },
+      { name: '交付内容', path: '/service/#modules' },
+      { name: '联系获取', path: '/service/#contact' }
+    ]
+  }),
+  breadcrumbSchema(Astro.site, [
+    { name: '首页', path: '/' },
+    { name: '定制交付', path: '/service/' }
+  ])
 ];
 ---
 
 <MarketingLayout
-  title="虾客AI 安装交付服务"
-  description="适合想自己安装、预约交付或在使用中需要支持的用户。"
+  title="OpenClaw 定制交付 | 个人、团队与企业的部署、定制方案和教学陪跑 | 鸭客AI"
+  description="围绕部署、定制解决方案、教学陪跑和试点扩展，提供适用于个人、团队和企业的 OpenClaw 定制交付服务。"
+  keywords={serviceKeywords}
+  structuredData={serviceStructuredData}
 >
   <main class="page" id="main-content">
-    <div class="container">
-      <section class="page-intro">
-        <div class="page-intro__grid">
-          <article class="page-intro__content">
-            <span class="eyebrow">安装交付服务</span>
-            <h1>自己安装、预约交付、使用支持，都可以先从这里开始。</h1>
+    <div class="container service-page">
+      <section class="page-intro service-hero">
+        <div class="page-intro__grid service-hero__grid">
+          <article class="page-intro__content service-hero__content">
+            <span class="eyebrow">定制交付</span>
+            <h1>不是只给团队做项目，个人、团队、企业都可以直接开始。</h1>
             <p class="lead">
-              不管你是准备自己动手、希望我直接帮你交付，还是已经在使用中遇到问题，这一页都会先告诉你该走哪条路、要准备什么、下一步去哪里。
+              无论你是想自己更快部署用起来，还是要为团队试点，或者要做企业级接入与交付，我们都可以围绕真实场景，完成部署、定制方案和教学陪跑。
             </p>
             <div class="action-row">
-              <a class="button button-primary" href="#self-install">自己安装路线</a>
-              <a class="button button-secondary" href="#delivery">交付服务说明</a>
-              <a class="button button-secondary" href="#contact">支持与联系</a>
+              <a class="button button-primary" href="#contact">获取定制方案</a>
+              <a class="button button-secondary" href="#modules">查看交付内容</a>
+              <a class="button button-secondary" href={withBase('/cases/')}>查看案例</a>
             </div>
             <div class="intro-facts">
-              {introFacts.map(([title, text]) => (
+              {heroFacts.map(([title, text]) => (
                 <article class="intro-fact">
                   <strong>{title}</strong>
                   <span>{text}</span>
@@ -92,166 +193,197 @@ const introFacts = [
             </div>
           </article>
 
-          <aside class="page-intro__aside">
-            <span class="section-kicker">适合谁</span>
-            <ul class="simple-list">
-              <li>新客户先判断自己装还是找我做交付。</li>
-              <li>希望少走弯路，先按一条稳定路线安装的人。</li>
-              <li>已经在使用，想继续排错或扩展的人。</li>
-            </ul>
+          <aside class="page-intro__aside service-hero__aside">
+            <span class="section-kicker">你最终会得到</span>
+            <div class="service-hero__aside-list">
+              <article class="service-hero__aside-item">
+                <strong>一版能真正用起来的方案</strong>
+                <p>不是空泛演示，而是围绕真实场景跑通的版本。</p>
+              </article>
+              <article class="service-hero__aside-item">
+                <strong>一套更清楚的规则和结果口径</strong>
+                <p>把流程、权限、输出和验收先定清楚，减少返工。</p>
+              </article>
+              <article class="service-hero__aside-item">
+                <strong>一条后续可继续走的路径</strong>
+                <p>个人能继续用，团队能继续协作，企业也能继续扩。</p>
+              </article>
+            </div>
           </aside>
         </div>
       </section>
 
-      <section class="section">
+      <section class="section" id="audience">
         <div class="section-header">
           <div>
-            <span class="section-kicker">三条路线</span>
-            <h2>先判断自己在哪一类，再继续往下走。</h2>
+            <span class="section-kicker">适用对象</span>
+            <h2>不是只给团队或企业，个人也可以直接做定制交付。</h2>
           </div>
-          <p class="section-copy">
-            不用一上来就看很长的说明。先找到自己的路线，后面的内容才真正有用。
-          </p>
+          <p class="section-copy">按你的使用阶段选择交付方式，而不是先被服务门槛挡在外面。</p>
         </div>
 
-        <div class="directory-list">
-          {routes.map((item) => (
-            <a class="directory-row" href={`#${item.id}`}>
-              <div class="directory-row__main">
-                <span class="card-tag">{item.tag}</span>
-                <h3 class="directory-row__title">{item.title}</h3>
-                <p class="directory-row__summary">{item.summary}</p>
-              </div>
-              <div class="directory-row__meta">
-                <ul class="directory-inline-list">
-                  {item.bullets.map((bullet) => (
-                    <li>{bullet}</li>
-                  ))}
-                </ul>
-              </div>
-              <div class="directory-row__action">
-                <span class="button button-secondary">查看路线</span>
-              </div>
-            </a>
+        <div class="card-grid service-audience-grid">
+          {audienceCards.map((item) => (
+            <article class="info-card service-audience-card">
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-meta">{item.text}</p>
+            </article>
           ))}
         </div>
       </section>
 
-      <section class="section section-anchor" id="self-install">
-        <div class="split-grid">
-          <article class="summary-card">
-            <span class="section-kicker">自己安装路线</span>
-            <h2>适合愿意自己动手，但不想迷路的人。</h2>
-            <ul class="bullet-list">
-              {selfInstall.map((item) => (
-                <li>{item}</li>
-              ))}
-            </ul>
-            <div class="action-row">
-              <a class="button button-primary" href={withBase('/docs/')}>进入文档教程</a>
-              <a class="button button-secondary" href={withBase('/links/')}>补外部资源</a>
-            </div>
-          </article>
+      <section class="section" id="outcomes">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">你会得到什么</span>
+            <h2>交付的不只是系统，而是更容易接住实际任务的结果。</h2>
+          </div>
+          <p class="section-copy">从部署到使用方式，都围绕“能不能真正用起来”来设计。</p>
+        </div>
 
-          <article class="note-card">
-            <span class="status-chip">建议顺序</span>
-            <h3 class="card-title">不要同时开十几个入口。</h3>
-            <p class="card-meta">
-              初次上手最容易犯的错，是一边翻官方文档、一边看第三方文章、一边到处问人，最后步骤反而乱掉。建议顺序是：本站教程优先，外部资料按需补充。
-            </p>
-          </article>
+        <div class="card-grid service-outcome-grid">
+          {outcomeCards.map((item) => (
+            <article class="info-card service-outcome-card">
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-meta">{item.text}</p>
+            </article>
+          ))}
         </div>
       </section>
 
-      <section class="section section-anchor" id="delivery">
+      <section class="section" id="modules">
         <div class="section-header">
           <div>
-            <span class="section-kicker">交付服务</span>
-            <h2>如果你看过还是觉得自己不会，直接走交付会更省时间。</h2>
+            <span class="section-kicker">交付内容</span>
+            <h2>部署、定制方案、教学陪跑，按你的场景组合推进。</h2>
           </div>
-          <p class="section-copy">
-            重点不是帮你“装一个程序”，而是让你真的能开始用，并且后续还能自己继续维护和扩展。
-          </p>
+          <p class="section-copy">你可以从个人部署开始，也可以直接进入团队试点或企业级交付。</p>
         </div>
 
-        <div class="card-grid">
-          {deliverySteps.map(([title, text]) => (
-            <article class="info-card">
-              <h3 class="card-title">{title}</h3>
-              <p class="card-meta">{text}</p>
+        <div class="card-grid service-module-grid">
+          {serviceModules.map((item) => (
+            <article class="note-card service-module-card">
+              <span class="card-tag">{item.tag}</span>
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-meta">{item.summary}</p>
+              <ul class="directory-inline-list">
+                {item.items.map((entry) => (
+                  <li>{entry}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section" id="path">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">交付路径</span>
+            <h2>先把目标定清，再把试点做成，再决定后面怎么扩。</h2>
+          </div>
+          <p class="section-copy">无论你是个人、团队还是企业，都适合从最关键的一步先开始。</p>
+        </div>
+
+        <div class="service-path">
+          {deliverySteps.map((item) => (
+            <article class="service-path__step">
+              <span class="service-path__index">{item.index}</span>
+              <strong>{item.title}</strong>
+              <p>{item.text}</p>
+              <span class="service-path__cue">{item.cue}</span>
             </article>
           ))}
         </div>
       </section>
 
       <section class="section">
-        <div class="split-grid">
-          <article class="summary-card">
-            <span class="section-kicker">通常会覆盖什么</span>
-            <h2>交付不是一次性装完，而是把最小可用流程带起来。</h2>
+        <div class="split-grid service-value-grid">
+          <article class="summary-card service-value-card">
+            <span class="section-kicker">我们的价值</span>
+            <h2>把部署、使用方式和交付节奏一起带起来。</h2>
             <ul class="bullet-list">
-              {serviceScope.map((item) => (
+              {weHandle.map((item) => (
                 <li>{item}</li>
               ))}
             </ul>
           </article>
 
-          <article class="note-card">
-            <span class="status-chip support">边界提醒</span>
-            <h3 class="card-title">先把一两个场景养熟，比一口气堆很多功能更重要。</h3>
+          <article class="note-card service-value-card support">
+            <span class="section-kicker">为什么更容易成交</span>
+            <div class="service-value-points">
+              {valuePoints.map((item) => (
+                <article class="service-value-point">
+                  <strong>{item}</strong>
+                </article>
+              ))}
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">适合现在开始的人</span>
+            <h2>这些情况，更适合直接进入定制交付。</h2>
+          </div>
+        </div>
+
+        <div class="card-grid service-fit-grid">
+          {fitUsers.map((item) => (
+            <article class="info-card service-fit-card">
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-meta">{item.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="split-grid service-prep-grid">
+          <article class="summary-card service-prep-card">
+            <span class="section-kicker">开始前准备</span>
+            <h2>准备这几项，沟通会更快，方案也会更准。</h2>
+            <ul class="bullet-list">
+              {youPrepare.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article class="note-card service-prep-card support">
+            <span class="section-kicker">建议方式</span>
+            <h3 class="card-title">先从 1 个最关键的场景开始。</h3>
             <p class="card-meta">
-              真正能长期用下去的 OpenClaw，不是功能越多越好，而是入口稳定、规则清楚、你知道每天怎么用，出了问题也知道怎么查。
+              先把最关键的一条链路跑顺，比一开始铺很多入口更容易看到结果，也更容易快速复盘和继续扩展。
             </p>
           </article>
         </div>
       </section>
 
-      <section class="section section-anchor" id="daily-use">
-        <div class="section-header">
-          <div>
-            <span class="section-kicker">已经在使用</span>
-            <h2>已经用起来后，先按这几个入口继续排查和补充。</h2>
-          </div>
-          <p class="section-copy">
-            建议先自查，再沟通。这样排错更快，也更容易把真正的问题说清楚。
-          </p>
-        </div>
-
-        <div class="mini-grid">
-          <a class="mini-card" href={withBase('/docs/')}>
-            <strong>先回文档教程</strong>
-            <span>重新梳理 7 步流程，很多问题都出在顺序没走对。</span>
-          </a>
-          <a class="mini-card" href={withBase('/docs/reference/common-commands/')}>
-            <strong>看常用命令速查</strong>
-            <span>命令、状态检查、重启与日志查询，先从这里查。</span>
-          </a>
-          <a class="mini-card" href={withBase('/cases/')}>
-            <strong>补看案例</strong>
-            <span>很多扩展思路，都是从具体案例里长出来的。</span>
-          </a>
-          <a class="mini-card" href={withBase('/links/')}>
-            <strong>补外部资源</strong>
-            <span>官网、SkillHub、Releases 和外部文章都集中在一页。</span>
-          </a>
-        </div>
-      </section>
-
       <section class="section section-anchor" id="contact">
-        <div class="split-grid support-grid">
-          <article class="summary-card">
-            <span class="section-kicker">联系前准备</span>
-            <h2>把这些信息准备好，沟通会顺很多。</h2>
-            <ul class="bullet-list">
-              {supportChecklist.map((item) => (
-                <li>{item}</li>
+        <div class="split-grid service-contact-grid">
+          <article class="summary-card service-contact-card">
+            <span class="section-kicker">联系获取</span>
+            <h2>扫码联系，获取适合你当前阶段的定制方案。</h2>
+            <p class="service-contact-card__lead">
+              无论你是个人想更快部署用起来，团队要先做试点，还是企业要做更完整的接入和交付，都可以直接沟通。带上你的场景、入口和优先目标，会更快进入方案阶段。
+            </p>
+            <div class="service-contact-pills">
+              {contactPills.map((item) => (
+                <span>{item}</span>
               ))}
-            </ul>
+            </div>
+            <div class="action-row">
+              <a class="button button-primary" href="#contact">立即联系</a>
+              <a class="button button-secondary" href={withBase('/cases/')}>先看案例</a>
+            </div>
           </article>
 
           <article class="note-card qr-card">
-            <span class="section-kicker">支持与联系</span>
-            <h3 class="card-title">需要预约交付或继续排错，直接扫码联系。</h3>
+            <span class="section-kicker">微信联系</span>
+            <h3 class="card-title">直接扫码沟通</h3>
             <img
               src={withBase('/wechat-qr.png')}
               alt="微信联系二维码"
@@ -260,9 +392,7 @@ const introFacts = [
               loading="lazy"
               decoding="async"
             />
-            <p class="card-meta">
-              添加时备注你的设备类型、当前阶段，以及最想先解决的事情，会更容易快速对上问题。
-            </p>
+            <p class="card-meta">说明你的场景、当前入口和希望优先交付的结果，我们会按你当前阶段给出建议。</p>
           </article>
         </div>
       </section>
@@ -270,8 +400,285 @@ const introFacts = [
   </main>
 
   <style>
+    .service-page {
+      display: grid;
+      gap: 1rem;
+    }
+
     .section-anchor {
       scroll-margin-top: 92px;
+    }
+
+    .service-hero {
+      overflow: hidden;
+      background:
+        linear-gradient(160deg, rgba(255, 254, 251, 0.99), rgba(245, 239, 231, 0.96)),
+        radial-gradient(circle at top right, rgba(35, 73, 60, 0.12), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(186, 99, 54, 0.14), transparent 28%);
+      border-color: rgba(62, 52, 44, 0.12);
+      box-shadow:
+        0 16px 36px rgba(55, 40, 30, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .service-hero__grid {
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+    }
+
+    .service-hero__content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-hero .intro-facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      max-width: 46rem;
+    }
+
+    .service-hero .intro-fact {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(186, 99, 54, 0.1);
+      background: rgba(255, 252, 247, 0.82);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .service-hero .intro-fact strong,
+    .service-hero .intro-fact span {
+      margin: 0;
+      line-height: 1;
+    }
+
+    .service-hero .intro-fact strong {
+      color: var(--accent-deep);
+      font-size: 0.82rem;
+    }
+
+    .service-hero .intro-fact span {
+      color: var(--muted);
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .service-hero__aside {
+      gap: 14px;
+      background:
+        linear-gradient(180deg, rgba(251, 253, 251, 0.98), rgba(238, 246, 241, 0.94)),
+        radial-gradient(circle at top right, rgba(35, 73, 60, 0.14), transparent 36%);
+      border-color: rgba(61, 99, 82, 0.14);
+      box-shadow:
+        0 12px 28px rgba(40, 68, 57, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .service-hero__aside-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .service-hero__aside-item {
+      display: grid;
+      gap: 6px;
+      padding: 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(61, 99, 82, 0.08);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(247, 251, 248, 0.78));
+    }
+
+    .service-hero__aside-item strong,
+    .service-hero__aside-item p {
+      margin: 0;
+    }
+
+    .service-hero__aside-item strong {
+      color: var(--support);
+      font-size: 0.94rem;
+    }
+
+    .service-hero__aside-item p {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    .service-audience-grid,
+    .service-outcome-grid,
+    .service-module-grid,
+    .service-fit-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .service-audience-card,
+    .service-outcome-card,
+    .service-module-card,
+    .service-fit-card {
+      min-height: 100%;
+    }
+
+    .service-path {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .service-path::before {
+      content: '';
+      position: absolute;
+      left: 3rem;
+      right: 3rem;
+      top: 1.4rem;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(186, 99, 54, 0.14), rgba(61, 99, 82, 0.16));
+      pointer-events: none;
+    }
+
+    .service-path__step {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      min-height: 100%;
+      padding: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(91, 68, 52, 0.12);
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(246, 240, 232, 0.95)),
+        radial-gradient(circle at top right, rgba(61, 99, 82, 0.08), transparent 40%);
+      box-shadow:
+        0 10px 24px rgba(73, 52, 38, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.76);
+    }
+
+    .service-path__index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.7rem;
+      height: 2.7rem;
+      border-radius: 16px;
+      border: 1px solid rgba(186, 99, 54, 0.14);
+      background:
+        linear-gradient(180deg, rgba(255, 250, 245, 0.96), rgba(251, 241, 232, 0.9)),
+        radial-gradient(circle at top left, rgba(186, 99, 54, 0.12), transparent 48%);
+      color: var(--accent-deep);
+      font-size: 0.88rem;
+      font-weight: 900;
+      box-shadow:
+        0 10px 20px rgba(73, 52, 38, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.76);
+    }
+
+    .service-path__step strong,
+    .service-path__step p,
+    .service-path__cue {
+      margin: 0;
+    }
+
+    .service-path__step strong {
+      color: var(--accent-deep);
+      font-size: 0.98rem;
+      font-weight: 800;
+    }
+
+    .service-path__step p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.62;
+    }
+
+    .service-path__cue {
+      color: var(--support);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .service-value-grid,
+    .service-prep-grid,
+    .service-contact-grid {
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
+      align-items: start;
+    }
+
+    .service-value-card.support,
+    .service-prep-card.support {
+      background:
+        linear-gradient(180deg, rgba(248, 252, 249, 0.98), rgba(236, 245, 239, 0.94)),
+        radial-gradient(circle at top right, rgba(35, 73, 60, 0.14), transparent 34%);
+      border-color: rgba(61, 99, 82, 0.14);
+      box-shadow:
+        0 12px 28px rgba(40, 68, 57, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .service-value-points {
+      display: grid;
+      gap: 10px;
+    }
+
+    .service-value-point {
+      display: grid;
+      gap: 4px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(61, 99, 82, 0.1);
+      background: rgba(255, 255, 255, 0.58);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.74);
+    }
+
+    .service-value-point strong {
+      color: var(--support);
+      font-size: 0.88rem;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .service-contact-card {
+      display: grid;
+      gap: 14px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(246, 240, 232, 0.95)),
+        radial-gradient(circle at top left, rgba(186, 99, 54, 0.08), transparent 34%);
+    }
+
+    .service-contact-card__lead {
+      margin: 0;
+      max-width: 34rem;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.66;
+    }
+
+    .service-contact-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .service-contact-pills span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--text);
+      font-size: 0.84rem;
+      font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .service-contact-card .action-row {
+      margin-top: 0.2rem;
     }
 
     .qr-card img {
@@ -286,8 +693,42 @@ const introFacts = [
       box-shadow: 0 16px 32px rgba(83, 58, 42, 0.08);
     }
 
-    .support-grid {
-      align-items: start;
+    @media (max-width: 1180px) {
+      .service-audience-grid,
+      .service-outcome-grid,
+      .service-module-grid,
+      .service-fit-grid,
+      .service-path {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .service-path::before {
+        display: none;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .service-hero__grid,
+      .service-value-grid,
+      .service-prep-grid,
+      .service-contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .service-audience-grid,
+      .service-outcome-grid,
+      .service-module-grid,
+      .service-fit-grid,
+      .service-path {
+        grid-template-columns: 1fr;
+      }
+
+      .service-hero .intro-fact {
+        width: 100%;
+        justify-content: space-between;
+      }
     }
   </style>
 </MarketingLayout>

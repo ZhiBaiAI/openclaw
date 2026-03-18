@@ -1,18 +1,61 @@
 ---
 import SiteHeader from '../components/shared/SiteHeader.astro';
 import { SITE_DESCRIPTION } from '../data/site.mjs';
+import {
+  DEFAULT_KEYWORDS,
+  DEFAULT_OG_IMAGE,
+  DEFAULT_OG_IMAGE_HEIGHT,
+  DEFAULT_OG_IMAGE_WIDTH,
+  SITE_LANGUAGE,
+  SITE_LOCALE,
+  SITE_NAME,
+  SITE_URL_FALLBACK,
+  absoluteUrl,
+  mergeKeywords,
+  organizationSchema,
+  websiteSchema
+} from '../data/seo.mjs';
 
 export interface Props {
   title: string;
   description?: string;
+  keywords?: string[];
+  canonical?: string;
+  image?: string;
+  imageAlt?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
-const { title, description = SITE_DESCRIPTION } = Astro.props;
+const {
+  title,
+  description = SITE_DESCRIPTION,
+  keywords = [],
+  canonical,
+  image = DEFAULT_OG_IMAGE,
+  imageAlt = `${SITE_NAME} OpenClaw 中文教程与案例导航`,
+  ogType = 'website',
+  noindex = false,
+  structuredData = []
+} = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const routePath =
   base && Astro.url.pathname.startsWith(base)
     ? Astro.url.pathname.slice(base.length) || '/'
     : Astro.url.pathname;
+const siteUrl = Astro.site ?? new URL(SITE_URL_FALLBACK);
+const canonicalUrl = absoluteUrl(siteUrl, canonical || routePath);
+const ogImageUrl = absoluteUrl(siteUrl, image);
+const pageKeywords = mergeKeywords(DEFAULT_KEYWORDS, keywords);
+const robotsContent = noindex
+  ? 'noindex,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1'
+  : 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1';
+const structuredDataItems = [
+  organizationSchema(siteUrl),
+  websiteSchema(siteUrl),
+  ...(Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : [])
+];
 
 const floatingSupport = routePath.startsWith('/docs')
   ? {
@@ -43,9 +86,43 @@ const floatingSupport = routePath.startsWith('/docs')
     <meta name="theme-color" content="#f6f2eb" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={pageKeywords.join(', ')} />
+    <meta name="robots" content={robotsContent} />
+    <meta name="googlebot" content={robotsContent} />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="author" content={SITE_NAME} />
+    <meta name="application-name" content={SITE_NAME} />
+    <meta name="format-detection" content="telephone=no, address=no, email=no" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang={SITE_LANGUAGE} href={canonicalUrl} />
+    <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content={SITE_LOCALE} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta property="og:image:width" content={String(DEFAULT_OG_IMAGE_WIDTH)} />
+    <meta property="og:image:height" content={String(DEFAULT_OG_IMAGE_HEIGHT)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    {
+      structuredDataItems.map((item) => (
+        <script is:inline type="application/ld+json" set:html={JSON.stringify(item)} />
+      ))
+    }
     <style is:global>
-      @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
-
       :root {
         --bg: #f6f2eb;
         --bg-soft: #fbf8f3;

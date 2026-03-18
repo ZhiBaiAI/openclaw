@@ -1,5 +1,6 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
+import { breadcrumbSchema, collectionPageSchema, itemListSchema } from '../data/seo.mjs';
 
 const personalGroups = [
   {
@@ -491,11 +492,47 @@ const industrySolutionSignals: Record<string, string[]> = {
 
 const professionalCaseCount = professionalCases.length;
 const industryCaseCount = industrySolutions.length;
+
+const caseKeywords = [
+  'OpenClaw 案例',
+  'OpenClaw 使用场景',
+  'OpenClaw 行业解决方案',
+  'OpenClaw 个人场景',
+  'OpenClaw 专业场景',
+  'OpenClaw 落地案例'
+];
+
+const caseStructuredData = [
+  collectionPageSchema({
+    site: Astro.site,
+    path: '/cases/',
+    name: 'OpenClaw 真实案例与行业解决方案',
+    description: '从个人场景、专业工作流和行业解决方案三个层次整理 OpenClaw 的真实落地案例。',
+    keywords: caseKeywords,
+    about: ['OpenClaw 案例', 'OpenClaw 个人场景', 'OpenClaw 专业场景', 'OpenClaw 行业解决方案']
+  }),
+  itemListSchema({
+    site: Astro.site,
+    path: '/cases/',
+    name: 'OpenClaw 案例分类',
+    items: [
+      { name: '通用个人场景', path: '/cases/#personal-cases' },
+      { name: '专业场景案例', path: '/cases/#professional-cases' },
+      { name: '行业解决方案', path: '/cases/#industry-solutions' }
+    ]
+  }),
+  breadcrumbSchema(Astro.site, [
+    { name: '首页', path: '/' },
+    { name: '案例', path: '/cases/' }
+  ])
+];
 ---
 
 <MarketingLayout
-  title="虾客AI 案例"
-  description="从通用个人场景、专业工作流和行业解决方案三个层次，整理 OpenClaw 的真实落地案例。"
+  title="OpenClaw 案例库 | 个人场景、专业工作流与行业解决方案 | 虾客AI"
+  description="从个人场景、专业工作流和行业解决方案三个层次，整理 OpenClaw 的真实落地案例，方便快速判断值不值得做、该从哪里开始。"
+  keywords={caseKeywords}
+  structuredData={caseStructuredData}
 >
   <main class="page" id="main-content">
     <div class="container cases-page">

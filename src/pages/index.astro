@@ -1,16 +1,26 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
+import { breadcrumbSchema, collectionPageSchema, itemListSchema } from '../data/seo.mjs';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const withBase = (path: string) => `${base}${path}`;
 
 const primaryActions = [
-  { label: '我先看案例', href: withBase('/cases/'), style: 'button-primary' },
+  { label: '我先看 AI 员工', href: withBase('/ai-employee/'), style: 'button-primary' },
+  { label: '我先看案例', href: withBase('/cases/'), style: 'button-secondary' },
   { label: '我开始安装', href: withBase('/docs/'), style: 'button-secondary' },
-  { label: '我想直接落地', href: withBase('/service/'), style: 'button-secondary' }
+  { label: '我想做定制交付', href: withBase('/service/'), style: 'button-secondary' }
 ];
 
 const coreRoutes = [
+  {
+    tag: '先看岗位',
+    title: 'AI 员工',
+    href: withBase('/ai-employee/'),
+    summary: '按岗位、渠道、治理和部署四个维度，判断 OpenClaw 能不能变成真正可上岗的 AI 员工。',
+    bullets: ['岗位模板', '治理边界', '上线方式'],
+    action: '查看 AI 员工页'
+  },
   {
     tag: '先开始动手',
     title: '文档教程',
@@ -37,18 +47,51 @@ const coreRoutes = [
   },
   {
     tag: '先解决落地',
-    title: '安装与支持',
+    title: '定制交付',
     href: withBase('/service/'),
-    summary: '安装遇阻、环境复杂，或者需要协助时，直接从这里进入。',
-    bullets: ['安装支持', '排错协助', '联系入口'],
-    action: '查看服务'
+    summary: '部署、定制解决方案、教学陪跑和联系入口，都从这里进入。',
+    bullets: ['部署交付', '定制方案', '教学陪跑'],
+    action: '查看定制交付'
   }
+];
+
+const homeKeywords = [
+  'OpenClaw 教程',
+  'OpenClaw AI 员工',
+  'OpenClaw 中文教程',
+  'OpenClaw 安装教程',
+  'OpenClaw 案例',
+  'OpenClaw 资源导航',
+  'OpenClaw 定制交付'
+];
+
+const homeStructuredData = [
+  collectionPageSchema({
+    site: Astro.site,
+    path: '/',
+    name: 'OpenClaw 中文教程、案例与安装入口',
+    description: '围绕 OpenClaw 的中文教程、案例、资源导航与定制交付总入口。',
+    keywords: homeKeywords,
+    about: ['OpenClaw', 'OpenClaw 教程', 'OpenClaw 定制交付', 'OpenClaw 案例']
+  }),
+  itemListSchema({
+    site: Astro.site,
+    path: '/',
+    name: 'OpenClaw 站点入口',
+    items: coreRoutes.map((item) => ({
+      name: item.title,
+      path: item.href
+    }))
+  }),
+  breadcrumbSchema(Astro.site, [{ name: '首页', path: '/' }])
 ];
 ---
 
 <MarketingLayout
-  title="虾客AI"
-  description="围绕 OpenClaw 的文档教程、案例、资源导航和安装支持四个核心入口。"
+  title="OpenClaw 中文教程、案例与安装入口 | 虾客AI"
+  description="围绕 OpenClaw 的中文教程、真实案例、资源导航与定制交付，帮助你更快上手、落地并真正用起来。"
+  keywords={homeKeywords}
+  structuredData={homeStructuredData}
 >
   <main class="page" id="main-content">
     <div class="container home-page">
@@ -139,7 +182,7 @@ const coreRoutes = [
 
     .home-entry-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 12px;
     }
 
@@ -190,12 +233,6 @@ const coreRoutes = [
       margin-top: auto;
       color: var(--accent-deep);
       font-weight: 700;
-    }
-
-    @media (max-width: 960px) {
-      .home-entry-grid {
-        grid-template-columns: 1fr;
-      }
     }
 
     @media (max-width: 640px) {

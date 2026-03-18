@@ -1,6 +1,6 @@
 ---
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const target = `${base}/service/#contact`;
+const target = new URL(`${base}/service/#contact`, Astro.site ?? 'https://claw.duckai.cn').toString();
 ---
 
 <!doctype html>
@@ -8,11 +8,12 @@ const target = `${base}/service/#contact`;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>虾客AI 安装交付服务</title>
+    <title>OpenClaw 定制交付跳转页 | 鸭客AI</title>
+    <meta name="robots" content="noindex,follow" />
     <meta http-equiv="refresh" content={`0;url=${target}`} />
     <link rel="canonical" href={target} />
   </head>
   <body>
-    <p>页面已合并到 <a href={target}>安装交付服务</a>。</p>
+    <p>页面已合并到 <a href={target}>定制交付</a>。</p>
   </body>
 </html>

@@ -1,5 +1,6 @@
 ---
 import MarketingLayout from '../layouts/MarketingLayout.astro';
+import { breadcrumbSchema, collectionPageSchema, itemListSchema } from '../data/seo.mjs';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const withBase = (path: string) => `${base}${path}`;
@@ -84,10 +85,10 @@ const usecaseLinks = [
     summary: '安装步骤、命令、FAQ 和参考配置都可以从这里继续。'
   },
   {
-    title: '部署支持',
+    title: '定制交付',
     tag: '站内入口',
     url: withBase('/service/'),
-    summary: '环境准备、安装部署、排错支持和后续接入都在这里。'
+    summary: '部署、定制解决方案、教学陪跑和联系入口都在这里。'
   }
 ];
 
@@ -172,11 +173,46 @@ const groups = [
     links: modelLinks
   }
 ];
+
+const linkKeywords = [
+  'OpenClaw 官网',
+  'OpenClaw 官方文档',
+  'OpenClaw GitHub',
+  'OpenClaw 技能市场',
+  'OpenClaw 模型平台',
+  'OpenClaw 资源导航'
+];
+
+const linkStructuredData = [
+  collectionPageSchema({
+    site: Astro.site,
+    path: '/links/',
+    name: 'OpenClaw 资源导航',
+    description: '集中整理 OpenClaw 官网、官方文档、GitHub、技能市场、案例入口和模型平台。',
+    keywords: linkKeywords,
+    about: ['OpenClaw 官网', 'OpenClaw 官方文档', 'OpenClaw 技能市场', '模型平台']
+  }),
+  itemListSchema({
+    site: Astro.site,
+    path: '/links/',
+    name: 'OpenClaw 常用入口分类',
+    items: groups.map((group) => ({
+      name: group.title,
+      path: `/links/#${group.id}`
+    }))
+  }),
+  breadcrumbSchema(Astro.site, [
+    { name: '首页', path: '/' },
+    { name: '资源导航', path: '/links/' }
+  ])
+];
 ---
 
 <MarketingLayout
-  title="虾客AI 资源导航"
-  description="集中整理 OpenClaw 官方入口、技能生态、案例学习和模型平台，作为常用外部资源导航。"
+  title="OpenClaw 资源导航 | 官网、文档、技能市场与模型平台 | 虾客AI"
+  description="集中整理 OpenClaw 官网、官方文档、GitHub、技能市场、案例入口和模型平台，查资料时可以直接进入对应入口。"
+  keywords={linkKeywords}
+  structuredData={linkStructuredData}
 >
   <main class="page" id="main-content">
     <div class="container nav-page">

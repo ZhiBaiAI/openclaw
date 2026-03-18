@@ -1,11 +1,12 @@
 export const SITE_NAME = '虾客AI';
 export const SITE_SLOGAN = 'AI江湖，从这里开始';
 export const SITE_DESCRIPTION =
-  '面向已交付客户和潜在客户的 OpenClaw 文档、案例、资源与支持中心。';
+  '围绕 OpenClaw 的中文教程、案例、资源导航与定制交付站点。';
 
 export const SITE_NAV_ITEMS = [
   { path: '/docs/', label: '文档教程' },
+  { path: '/ai-employee/', label: 'AI 员工' },
   { path: '/links/', label: '资源导航' },
   { path: '/cases/', label: '案例' },
-  { path: '/service/', label: '安装交付服务' }
+  { path: '/service/', label: '定制交付' }
 ];

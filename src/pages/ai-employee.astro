@@ -1,0 +1,1754 @@
+---
+import MarketingLayout from '../layouts/MarketingLayout.astro';
+import {
+  breadcrumbSchema,
+  collectionPageSchema,
+  itemListSchema
+} from '../data/seo.mjs';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => `${base}${path}`;
+const contactQrSrc = withBase('/wechat-qr.png');
+
+const introFacts = [
+  ['2-4 周试点', '先跑通一个岗位。'],
+  ['多入口接入', '聊天入口与业务系统统一接入。'],
+  ['可治理上线', '权限、审批、审计、回滚同步配置。']
+];
+
+const integrationBands = [
+  {
+    title: '沟通入口',
+    items: ['企业微信', '飞书', '钉钉', '邮件']
+  },
+  {
+    title: '业务系统',
+    items: ['CRM', '表格 / 多维表', '知识库', '审批流', '文件系统', '日历']
+  },
+  {
+    title: '控制能力',
+    items: ['权限', '审批', '审计', '灰度', '回滚', '成本控制']
+  }
+];
+
+const roleGroups = [
+  {
+    id: 'finance',
+    label: '财务后台',
+    eyebrow: '财务与报销',
+    title: '覆盖报销、对账、归档、报表这些高频后台动作。',
+    description: '单据更快，核对更稳。',
+    roles: ['发票与单据专员', '费用报销审核助理', '应收应付对账专员', '财务报表助理'],
+    inputs: ['邮箱发票', '报销单据', '对账表', '财务规则'],
+    outputs: ['归档清单', '异常提醒', '复核意见', '标准台账'],
+    signal: ['月末集中处理压力大', '单据来源分散', '人工重复录入多']
+  },
+  {
+    id: 'sales',
+    label: '销售增长',
+    eyebrow: '销售与线索',
+    title: '让线索分层、报价整理、会后推进形成统一节奏。',
+    description: '减少漏跟进与漏记录。',
+    roles: ['线索清洗专员', '销售跟进助理', '报价与方案助理', '续费与流失预警专员'],
+    inputs: ['线索表单', '聊天记录', '报价模板', '客户阶段'],
+    outputs: ['线索分层', '跟进清单', '报价草案', '续费预警'],
+    signal: ['线索多但跟进不齐', '会后动作容易断', '客户状态记录不完整']
+  },
+  {
+    id: 'support',
+    label: '客服交付',
+    eyebrow: '客服与工单',
+    title: '统一接待、分流、标准回复与工单升级流程。',
+    description: '响应更快，一致性更高。',
+    roles: ['全渠道客服专员', '工单分流专员', '售后回访助理', '知识库问答助理'],
+    inputs: ['客服话术', '工单规则', '知识库', '售后流程'],
+    outputs: ['问题分类', '标准回复', '升级建议', '回访摘要'],
+    signal: ['渠道太多', '重复问题太多', '人工分流成本高']
+  },
+  {
+    id: 'hr',
+    label: '人事行政',
+    eyebrow: '人事与行政',
+    title: '让招聘筛选、入职协同、行政流转更轻更快。',
+    description: '提醒、整理、核对自动完成。',
+    roles: ['招聘筛选专员', '面试协同助理', '入职与档案管理员', '考勤与排班助理'],
+    inputs: ['岗位 JD', '候选人简历', '入职材料', '排班规则'],
+    outputs: ['筛选结论', '排期建议', '档案清单', '异常提醒'],
+    signal: ['流程碎片化', '资料核对繁琐', '提醒依赖人工']
+  },
+  {
+    id: 'content',
+    label: '内容运营',
+    eyebrow: '内容与运营',
+    title: '覆盖选题、评论沉淀、日报复盘这些重复运营动作。',
+    description: '收集、整理、改写与提醒统一处理。',
+    roles: ['内容选题研究员', '评论与私信沉淀助理', '运营日报助理', 'SOP 巡检助理'],
+    inputs: ['评论与私信', '选题池', '日报模板', 'SOP'],
+    outputs: ['选题建议', '问题归类', '日报草稿', '巡检结果'],
+    signal: ['内容重复劳动多', '反馈没有沉淀', '日报复盘容易拖']
+  }
+];
+
+const rolloutSteps = [
+  ['01 选岗位', '明确输入、输出与验收标准。'],
+  ['02 接入口', '接入聊天入口、知识与业务系统。'],
+  ['03 设规则', '配置权限、审批与人工接管。'],
+  ['04 灰度上线', '小范围投产后复制扩编。']
+];
+
+const governanceCards = [
+  {
+    title: '可交付',
+    summary: '输出统一，方便复核与留档。',
+    bullets: ['明确输出模板', '保留上下文来源', '把验收口径写进流程']
+  },
+  {
+    title: '可治理',
+    summary: '权限、审批、知识边界统一控制。',
+    bullets: ['角色权限分层', '高风险动作先审批', '超边界自动转人工']
+  },
+  {
+    title: '可验证',
+    summary: '持续跟踪效率、正确率与人工介入。',
+    bullets: ['处理时长', '命中率 / 正确率', '人工介入比例']
+  },
+  {
+    title: '可运维',
+    summary: '质量、成本、稳定性与版本持续可见。',
+    bullets: ['监控告警', '灰度发布与回滚', '日志审计与定位']
+  }
+];
+
+const deploymentCards = [
+  {
+    title: '部署方式',
+    items: ['私有化部署（内网）', '专有云部署（VPC）', '混合部署（敏感本地，通用云端）']
+  },
+  {
+    title: '可替换组件',
+    items: ['模型服务', '向量检索与存储', '日志与审计系统']
+  },
+  {
+    title: '运维能力',
+    items: ['资源与成本控制', '灰度、回滚、版本管理', '稳定性监控与故障定位']
+  }
+];
+
+const modelCards = [
+  {
+    title: '按任务路由模型',
+    summary: '不同任务自动匹配不同模型，兼顾速度、质量和成本。'
+  },
+  {
+    title: '敏感任务单独看边界',
+    summary: '财务、人事、审批和对外承诺类任务独立配置安全边界和复核策略。'
+  },
+  {
+    title: '先看结果，再谈型号',
+    summary: '选择标准围绕稳定性、响应速度、成本和可控性展开。'
+  }
+];
+
+const startModes = [
+  {
+    tag: '先试点',
+    title: '从 1 个岗位开始',
+    summary: '先验证一个岗位闭环。',
+    bullets: ['投入小', '验证快', '风险低']
+  },
+  {
+    tag: '再扩编',
+    title: '按团队复制',
+    summary: '把岗位模板复制到团队。',
+    bullets: ['复制模板', '统一规则', '多团队管理']
+  },
+  {
+    tag: '做交付',
+    title: '按 SOP 定制上线',
+    summary: '围绕 SOP 完成接入与验收交付。',
+    bullets: ['项目交付', '系统接入', '按验收推进']
+  }
+];
+
+const finalCtaTraits = [
+  ['岗位清晰', '输入、输出和验收口径明确'],
+  ['入口固定', '聊天入口或业务系统已经在用'],
+  ['节奏可控', '适合先试点，再逐步扩编']
+];
+
+const aiEmployeeKeywords = [
+  'OpenClaw AI 员工',
+  'AI 员工解决方案',
+  'OpenClaw 岗位型 Agent',
+  'AI 员工 试点',
+  'AI 员工 部署',
+  'AI 员工 上线'
+];
+
+const aiEmployeeStructuredData = [
+  collectionPageSchema({
+    site: Astro.site,
+    path: '/ai-employee/',
+    name: 'AI 员工解决方案',
+    description: '围绕岗位、入口、规则、治理与上线方式，展示 AI 员工解决方案。',
+    keywords: aiEmployeeKeywords,
+    about: ['AI 员工', '岗位型 Agent', 'OpenClaw 落地', 'Agent 治理']
+  }),
+  itemListSchema({
+    site: Astro.site,
+    path: '/ai-employee/',
+    name: 'AI 员工页面导航',
+    items: [
+      { name: '岗位方案', path: '/ai-employee/#roles' },
+      { name: '上线路径', path: '/ai-employee/#rollout' },
+      { name: '部署与模型', path: '/ai-employee/#deployment' },
+      { name: '开始方式', path: '/ai-employee/#start' }
+    ]
+  }),
+  breadcrumbSchema(Astro.site, [
+    { name: '首页', path: '/' },
+    { name: 'AI 员工', path: '/ai-employee/' }
+  ])
+];
+---
+
+<MarketingLayout
+  title="AI 员工解决方案 | 虾客AI"
+  description="围绕岗位、入口、规则、治理与上线方式，展示面向团队与企业的 AI 员工产品与交付方案。"
+  keywords={aiEmployeeKeywords}
+  structuredData={aiEmployeeStructuredData}
+>
+  <main class="page" id="main-content">
+    <div class="container employee-page">
+      <section class="page-intro employee-hero">
+        <div class="page-intro__grid employee-hero__grid">
+          <article class="page-intro__content employee-hero__content">
+            <span class="eyebrow">AI 员工解决方案</span>
+            <h1>先让一个岗位稳定上岗，再把整支团队一点点替你跑起来。</h1>
+            <p class="lead">
+              让 AI 员工进入你的业务入口，接手高频流程，稳定输出结果，并在关键节点保留人工控制权。
+            </p>
+            <div class="action-row">
+              <button
+                class="button button-primary"
+                type="button"
+                data-contact-open
+                aria-haspopup="dialog"
+                aria-controls="employee-contact-dialog"
+              >
+                获取 AI 员工
+              </button>
+              <a class="button button-secondary" href="#roles">选择岗位方案</a>
+              <a class="button button-secondary" href="#rollout">查看上线路径</a>
+            </div>
+            <div class="intro-facts">
+              {introFacts.map(([title, text]) => (
+                <article class="intro-fact">
+                  <strong>{title}</strong>
+                  <span>{text}</span>
+                </article>
+              ))}
+            </div>
+          </article>
+
+          <aside class="page-intro__aside employee-cockpit">
+            <div class="employee-cockpit__top">
+              <span class="status-chip support">试点方案</span>
+              <strong>从一个清晰岗位启动，最快看到可落地的结果。</strong>
+            </div>
+            <div class="employee-cockpit__board">
+              <article class="employee-cockpit__item">
+                <span>优先岗位</span>
+                <b>报销审核 / 工单分流 / 销售跟进 / 招聘筛选</b>
+              </article>
+              <article class="employee-cockpit__item">
+                <span>接入入口</span>
+                <b>企业微信、飞书、邮件、CRM、表格、知识库</b>
+              </article>
+              <article class="employee-cockpit__item">
+                <span>上线控制</span>
+                <b>权限、审批、审计、回滚、人工接管</b>
+              </article>
+            </div>
+            <div class="employee-cockpit__cta">
+              <p class="employee-cockpit__hint">想直接开始，先扫码联系，按你的业务入口给出试点建议。</p>
+              <button
+                class="button button-primary employee-cockpit__button"
+                type="button"
+                data-contact-open
+                aria-haspopup="dialog"
+                aria-controls="employee-contact-dialog"
+              >
+                立即获取 AI 员工
+              </button>
+              <a class="employee-cockpit__link" href={withBase('/cases/')}>查看行业案例</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">支持接入</span>
+            <h2>直接接入现有入口与系统。</h2>
+          </div>
+          <p class="section-copy">入口、系统与控制能力统一接入。</p>
+        </div>
+
+        <div class="employee-integration-strip">
+          {integrationBands.map((group) => (
+            <article class="employee-integration-band">
+              <strong>{group.title}</strong>
+              <div class="employee-integration-band__items">
+                {group.items.map((item) => (
+                  <span class="employee-brand-pill">{item}</span>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section" id="roles" data-tabs-root>
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">岗位方案</span>
+            <h2>选择最适合率先上线的岗位。</h2>
+          </div>
+          <p class="section-copy">
+            从一个高频岗位开始。
+          </p>
+        </div>
+
+        <div class="employee-role-tabs" role="tablist" aria-label="AI 员工岗位分类">
+          {roleGroups.map((group, index) => (
+            <button
+              class:list={['employee-role-tabs__button', index === 0 && 'is-active']}
+              id={`role-tab-${group.id}`}
+              type="button"
+              role="tab"
+              aria-controls={`role-panel-${group.id}`}
+              aria-selected={index === 0 ? 'true' : 'false'}
+              tabindex={index === 0 ? '0' : '-1'}
+              data-tab-target={group.id}
+            >
+              <span class="employee-role-tabs__label">{group.label}</span>
+              <span class="employee-role-tabs__eyebrow">{group.eyebrow}</span>
+            </button>
+          ))}
+        </div>
+
+        <div class="employee-role-panels">
+          {roleGroups.map((group, index) => (
+            <section
+              class:list={['employee-role-panel', index === 0 && 'is-active']}
+              id={`role-panel-${group.id}`}
+              role="tabpanel"
+              aria-labelledby={`role-tab-${group.id}`}
+              data-tab-panel={group.id}
+              hidden={index !== 0}
+            >
+              <div class="employee-role-panel__hero">
+                <div class="employee-role-panel__copy">
+                  <span class="card-tag">{group.eyebrow}</span>
+                  <h3>{group.title}</h3>
+                  <p>{group.description}</p>
+                </div>
+                <div class="employee-role-panel__signals">
+                  {group.signal.map((item) => (
+                    <span class="case-signal">{item}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div class="employee-role-panel__grid">
+                <article class="panel-detail-card">
+                  <strong>可上岗角色</strong>
+                  <ul class="bullet-list">
+                    {group.roles.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </article>
+                <article class="panel-detail-card">
+                  <strong>常见输入</strong>
+                  <ul class="bullet-list">
+                    {group.inputs.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </article>
+                <article class="panel-detail-card">
+                  <strong>可交付结果</strong>
+                  <ul class="bullet-list">
+                    {group.outputs.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </article>
+              </div>
+            </section>
+          ))}
+        </div>
+      </section>
+
+      <section class="section" id="rollout">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">上线路径</span>
+            <h2>四步完成试点、上线与扩编。</h2>
+          </div>
+          <p class="section-copy">
+            统一标准，逐步复制。
+          </p>
+        </div>
+
+        <div class="employee-rollout">
+          {rolloutSteps.map(([title, text], index) => (
+            <article class="employee-rollout__step">
+              <span class="employee-rollout__index">{String(index + 1).padStart(2, '0')}</span>
+              <div class="employee-rollout__body">
+              <strong>{title}</strong>
+              <p>{text}</p>
+              <button
+                class="employee-rollout__cta"
+                type="button"
+                data-contact-open
+                aria-haspopup="dialog"
+                aria-controls="employee-contact-dialog"
+              >
+                这一步，直接联系
+              </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">治理与安全</span>
+            <h2>高价值岗位上线，治理先行。</h2>
+          </div>
+          <p class="section-copy">
+            关键岗位统一交付、治理、验证与运维标准。
+          </p>
+        </div>
+
+        <div class="card-grid employee-governance-grid">
+          {governanceCards.map((item) => (
+            <article class="note-card employee-governance-card">
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-meta">{item.summary}</p>
+              <ul class="bullet-list">
+                {item.bullets.map((bullet) => (
+                  <li>{bullet}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section" id="deployment">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">部署与模型</span>
+            <h2>部署边界、数据边界与模型策略同步确定。</h2>
+          </div>
+          <p class="section-copy">
+            按合规、审计与成本要求配置。
+          </p>
+        </div>
+
+        <div class="split-grid employee-deployment-grid">
+          <article class="summary-card employee-deployment-card">
+            <span class="section-kicker">部署清单</span>
+            <div class="mini-grid employee-deployment-mini-grid">
+              {deploymentCards.map((item) => (
+                <div class="mini-card">
+                  <strong>{item.title}</strong>
+                  <ul class="bullet-list employee-compact-list">
+                    {item.items.map((entry) => (
+                      <li>{entry}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article class="page-intro__aside employee-model-board">
+            <span class="section-kicker">模型策略</span>
+            <div class="employee-model-board__list">
+              {modelCards.map((item) => (
+                <article class="employee-model-board__item">
+                  <strong>{item.title}</strong>
+                  <p>{item.summary}</p>
+                </article>
+              ))}
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="start">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker">怎么开始</span>
+            <h2>按团队阶段选择启动方式。</h2>
+          </div>
+          <p class="section-copy">
+            试点、复制、定制三种方式。
+          </p>
+        </div>
+
+        <div class="card-grid employee-start-grid">
+          {startModes.map((item) => (
+            <article class="info-card employee-start-card">
+              <span class="card-tag">{item.tag}</span>
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-meta">{item.summary}</p>
+              <ul class="directory-inline-list">
+                {item.bullets.map((bullet) => (
+                  <li>{bullet}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="split-grid employee-cta-grid">
+          <article class="summary-card employee-cta-card">
+            <span class="section-kicker">下一步</span>
+            <h2>下一步，先把最关键的三件事落下去。</h2>
+            <p class="employee-cta-card__lead">
+              留下你的业务场景后，我们会按岗位、入口和试点节奏给出更合适的启动建议。
+            </p>
+            <ul class="bullet-list employee-cta-list">
+              <li>选 1 个高频岗位。</li>
+              <li>接 1 到 2 个高频入口。</li>
+              <li>保留人工复核后再扩编。</li>
+            </ul>
+            <div class="action-row">
+              <button
+                class="button button-primary"
+                type="button"
+                data-contact-open
+                aria-haspopup="dialog"
+                aria-controls="employee-contact-dialog"
+              >
+                获取 AI 员工
+              </button>
+              <a class="button button-secondary" href={withBase('/cases/')}>查看案例</a>
+            </div>
+          </article>
+
+          <article class="note-card employee-cta-note">
+            <span class="status-chip support">优先合作团队</span>
+            <h3 class="card-title">岗位明确、入口固定、交付标准清晰的团队。</h3>
+            <div class="employee-cta-note__list">
+              {finalCtaTraits.map(([title, text]) => (
+                <article class="employee-cta-note__item">
+                  <strong>{title}</strong>
+                  <p>{text}</p>
+                </article>
+              ))}
+            </div>
+            <p class="card-meta">
+              这类项目上线速度快，试点周期短，也更容易快速复制到更多岗位和团队。
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <div
+        class="employee-contact-dialog"
+        id="employee-contact-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="employee-contact-title"
+        hidden
+      >
+        <div class="employee-contact-dialog__backdrop" data-contact-close></div>
+        <div class="employee-contact-dialog__panel">
+          <button
+            class="employee-contact-dialog__close"
+            type="button"
+            aria-label="关闭获取 AI 员工弹层"
+            data-contact-close
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+          <div class="employee-contact-dialog__copy">
+            <span class="status-chip support">联系获取</span>
+            <h2 id="employee-contact-title">扫码联系，获取 AI 员工方案</h2>
+            <p>
+              扫码后直接沟通你的业务场景、优先岗位和接入入口，我们会按实际需求给出试点建议。
+            </p>
+          </div>
+          <img
+            class="employee-contact-dialog__qr"
+            src={contactQrSrc}
+            alt="微信联系二维码"
+            width="549"
+            height="542"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script is:inline>
+    (() => {
+      const activate = (root, id) => {
+        const buttons = Array.from(root.querySelectorAll('[data-tab-target]'));
+        const panels = Array.from(root.querySelectorAll('[data-tab-panel]'));
+        const fallbackId = buttons[0] && buttons[0].dataset.tabTarget;
+        const resolvedId = panels.some((panel) => panel.dataset.tabPanel === id) ? id : fallbackId;
+
+        if (!resolvedId) return;
+
+        buttons.forEach((button) => {
+          const active = button.dataset.tabTarget === resolvedId;
+          button.classList.toggle('is-active', active);
+          button.setAttribute('aria-selected', String(active));
+          button.tabIndex = active ? 0 : -1;
+        });
+
+        panels.forEach((panel) => {
+          const active = panel.dataset.tabPanel === resolvedId;
+          panel.hidden = !active;
+          panel.classList.toggle('is-active', active);
+        });
+      };
+
+      const initRoot = (root) => {
+        const activeButton = root.querySelector('[data-tab-target].is-active');
+        activate(root, activeButton && activeButton.dataset.tabTarget);
+      };
+
+      const handleClick = (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+
+        const button = target.closest('[data-tab-target]');
+        if (!(button instanceof HTMLButtonElement)) return;
+
+        const root = button.closest('[data-tabs-root]');
+        const id = button.dataset.tabTarget;
+        if (!(root instanceof HTMLElement) || !id) return;
+
+        activate(root, id);
+      };
+
+      const handleKeydown = (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLButtonElement)) return;
+        if (!target.matches('[data-tab-target]')) return;
+        if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+
+        const root = target.closest('[data-tabs-root]');
+        if (!(root instanceof HTMLElement)) return;
+
+        const buttons = Array.from(root.querySelectorAll('[data-tab-target]')).filter(
+          (button) => button instanceof HTMLButtonElement
+        );
+        const index = buttons.indexOf(target);
+        if (index === -1 || !buttons.length) return;
+
+        event.preventDefault();
+
+        const nextIndex =
+          event.key === 'ArrowRight'
+            ? (index + 1) % buttons.length
+            : (index - 1 + buttons.length) % buttons.length;
+        const nextButton = buttons[nextIndex];
+        const nextId = nextButton && nextButton.dataset.tabTarget;
+        if (!nextButton || !nextId) return;
+
+        activate(root, nextId);
+        nextButton.focus();
+      };
+
+      const initAll = () => {
+        document.querySelectorAll('[data-tabs-root]').forEach((root) => {
+          if (root instanceof HTMLElement) initRoot(root);
+        });
+      };
+
+      let lastTrigger = null;
+
+      const getDialog = () => document.getElementById('employee-contact-dialog');
+      const getDialogPanel = () => {
+        const dialog = getDialog();
+        return dialog instanceof HTMLElement ? dialog.querySelector('.employee-contact-dialog__panel') : null;
+      };
+
+      const openDialog = (trigger) => {
+        const dialog = getDialog();
+        if (!(dialog instanceof HTMLElement)) return;
+        lastTrigger = trigger instanceof HTMLElement ? trigger : null;
+        dialog.hidden = false;
+        document.documentElement.classList.add('has-employee-contact-dialog');
+        const closeButton = dialog.querySelector('.employee-contact-dialog__close');
+        if (closeButton instanceof HTMLElement) closeButton.focus();
+      };
+
+      const closeDialog = () => {
+        const dialog = getDialog();
+        if (!(dialog instanceof HTMLElement)) return;
+        dialog.hidden = true;
+        document.documentElement.classList.remove('has-employee-contact-dialog');
+        if (lastTrigger instanceof HTMLElement) lastTrigger.focus();
+      };
+
+      if (!window.__employeeTabsBound) {
+        window.__employeeTabsBound = true;
+        document.addEventListener('click', handleClick);
+        document.addEventListener('keydown', handleKeydown);
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+
+          const openButton = target.closest('[data-contact-open]');
+          if (openButton instanceof HTMLElement) {
+            openDialog(openButton);
+            return;
+          }
+
+          const closeButton = target.closest('[data-contact-close]');
+          if (closeButton instanceof HTMLElement) {
+            closeDialog();
+          }
+        });
+        document.addEventListener('keydown', (event) => {
+          const dialog = getDialog();
+          if (event.key !== 'Escape') return;
+          if (!(dialog instanceof HTMLElement) || dialog.hidden) return;
+          closeDialog();
+        });
+      }
+
+      const bindDialog = () => {
+        const dialog = getDialog();
+        const dialogPanel = getDialogPanel();
+        if (!(dialog instanceof HTMLElement) || !(dialogPanel instanceof HTMLElement)) return;
+        if (dialog.dataset.bound === 'true') return;
+
+        dialog.dataset.bound = 'true';
+        dialog.addEventListener('click', (event) => {
+          if (!(event.target instanceof Node)) return;
+          if (!dialogPanel.contains(event.target)) closeDialog();
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener(
+          'DOMContentLoaded',
+          () => {
+            initAll();
+            bindDialog();
+          },
+          { once: true }
+        );
+      } else {
+        initAll();
+        bindDialog();
+      }
+
+      document.addEventListener('astro:page-load', () => {
+        initAll();
+        bindDialog();
+      });
+      document.addEventListener('astro:after-swap', () => {
+        initAll();
+        bindDialog();
+      });
+    })();
+  </script>
+
+  <style>
+    .employee-page {
+      display: grid;
+      gap: 1.15rem;
+    }
+
+    .employee-hero .intro-facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      max-width: 44rem;
+    }
+
+    .employee-hero .intro-fact {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(186, 99, 54, 0.1);
+      background: rgba(255, 252, 247, 0.82);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .employee-hero .intro-fact strong,
+    .employee-hero .intro-fact span {
+      margin: 0;
+      line-height: 1;
+    }
+
+    .employee-hero .intro-fact strong {
+      font-size: 0.82rem;
+    }
+
+    .employee-hero .intro-fact span {
+      font-size: 0.78rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    :global(html.has-employee-contact-dialog) {
+      overflow: hidden;
+    }
+
+    .employee-page .section-copy {
+      max-width: 22rem;
+      font-size: 0.9rem;
+      line-height: 1.58;
+    }
+
+    .employee-page .card-meta,
+    .employee-page .employee-role-panel__copy p,
+    .employee-page .employee-rollout__step p,
+    .employee-page .employee-model-board__item p,
+    .employee-page .employee-cta-note .card-meta {
+      font-size: 0.88rem;
+      line-height: 1.56;
+    }
+
+    .employee-hero {
+      overflow: hidden;
+      background:
+        linear-gradient(160deg, rgba(255, 254, 251, 0.99), rgba(245, 239, 231, 0.96)),
+        radial-gradient(circle at top right, rgba(35, 73, 60, 0.14), transparent 32%),
+        radial-gradient(circle at bottom left, rgba(165, 101, 63, 0.16), transparent 30%);
+      border-color: rgba(62, 52, 44, 0.12);
+      box-shadow:
+        0 16px 36px rgba(55, 40, 30, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .employee-hero::before {
+      content: '';
+      position: absolute;
+      inset: 14px 14px auto auto;
+      width: 9rem;
+      height: 9rem;
+      border-radius: 34px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.08)),
+        radial-gradient(circle at center, rgba(61, 99, 82, 0.1), transparent 68%);
+      transform: rotate(14deg);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      pointer-events: none;
+    }
+
+    .employee-hero__grid {
+      grid-template-columns: minmax(0, 1.2fr) minmax(290px, 0.8fr);
+    }
+
+    .employee-hero__content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .employee-cockpit {
+      gap: 14px;
+      background:
+        linear-gradient(180deg, rgba(251, 253, 251, 0.98), rgba(238, 246, 241, 0.94)),
+        radial-gradient(circle at top right, rgba(35, 73, 60, 0.14), transparent 36%);
+      border-color: rgba(61, 99, 82, 0.14);
+      box-shadow:
+        0 12px 28px rgba(40, 68, 57, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .employee-cockpit__top {
+      display: grid;
+      gap: 10px;
+    }
+
+    .employee-cockpit__top strong {
+      color: var(--support);
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .employee-cockpit__board {
+      display: grid;
+      gap: 10px;
+    }
+
+    .employee-cockpit__item {
+      display: grid;
+      gap: 5px;
+      padding: 12px 13px;
+      border-radius: 20px;
+      border: 1px solid rgba(61, 99, 82, 0.08);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(247, 251, 248, 0.78));
+    }
+
+    .employee-cockpit__item span {
+      color: var(--support);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .employee-cockpit__item b {
+      color: var(--text);
+      font-size: 0.92rem;
+      line-height: 1.58;
+      font-weight: 700;
+    }
+
+    .employee-cockpit__link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 44px;
+      color: var(--support);
+      font-weight: 700;
+      padding-top: 0.1rem;
+    }
+
+    .employee-cockpit__cta {
+      display: grid;
+      gap: 10px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(61, 99, 82, 0.1);
+    }
+
+    .employee-cockpit__hint {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.58;
+    }
+
+    .employee-cockpit__button {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .employee-capability-grid,
+    .employee-governance-grid,
+    .employee-start-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .employee-integration-strip {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      padding: 18px;
+      border: 1px solid rgba(91, 68, 52, 0.12);
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(246, 239, 231, 0.94)),
+        radial-gradient(circle at bottom center, rgba(61, 99, 82, 0.08), transparent 36%);
+      box-shadow:
+        0 10px 24px rgba(73, 52, 38, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.76);
+    }
+
+    .employee-integration-strip::before {
+      content: '';
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 2.15rem;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(186, 99, 54, 0.08), rgba(61, 99, 82, 0.16));
+      pointer-events: none;
+    }
+
+    .employee-integration-band {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      min-height: 100%;
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      background:
+        linear-gradient(180deg, rgba(255, 252, 248, 0.96), rgba(250, 245, 239, 0.9));
+      box-shadow:
+        0 10px 18px rgba(73, 52, 38, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .employee-integration-band strong {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--accent-deep);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .employee-integration-band strong::before {
+      content: '';
+      width: 0.7rem;
+      height: 0.7rem;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.18) 36%),
+        linear-gradient(135deg, rgba(186, 99, 54, 0.78), rgba(61, 99, 82, 0.68));
+      box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.8);
+    }
+
+    .employee-integration-band__items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .employee-brand-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--text);
+      font-size: 0.84rem;
+      font-weight: 700;
+      line-height: 1;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .employee-governance-grid {
+      counter-reset: governance;
+      gap: 14px;
+    }
+
+    .employee-governance-card {
+      position: relative;
+      overflow: hidden;
+      padding-top: 3.1rem;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(247, 241, 233, 0.95)),
+        radial-gradient(circle at top right, rgba(61, 99, 82, 0.08), transparent 40%);
+      border-color: rgba(91, 68, 52, 0.12);
+      box-shadow:
+        0 12px 24px rgba(73, 52, 38, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.78);
+    }
+
+    .employee-governance-card::before {
+      counter-increment: governance;
+      content: '0' counter(governance);
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.5rem;
+      height: 2.1rem;
+      padding: 0 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(186, 99, 54, 0.12);
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--accent-deep);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .employee-governance-card .card-meta {
+      margin-bottom: 0.35rem;
+    }
+
+    .employee-governance-card .bullet-list li {
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .employee-role-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid rgba(91, 68, 52, 0.12);
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(246, 239, 231, 0.94));
+      box-shadow: 0 10px 24px rgba(73, 52, 38, 0.05);
+    }
+
+    .employee-role-tabs__button {
+      display: grid;
+      gap: 4px;
+      justify-items: start;
+      min-height: 4.2rem;
+      padding: 14px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(91, 68, 52, 0.12);
+      background:
+        linear-gradient(180deg, rgba(255, 252, 248, 0.94), rgba(250, 245, 239, 0.88));
+      color: var(--muted);
+      text-align: left;
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        background-color 180ms ease;
+    }
+
+    .employee-role-tabs__button:hover,
+    .employee-role-tabs__button:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(186, 99, 54, 0.18);
+      box-shadow: 0 8px 16px rgba(73, 52, 38, 0.06);
+    }
+
+    .employee-role-tabs__button.is-active {
+      border-color: rgba(61, 99, 82, 0.22);
+      background:
+        linear-gradient(135deg, rgba(61, 99, 82, 0.14), rgba(255, 252, 248, 0.96));
+      color: var(--text);
+      box-shadow:
+        0 10px 22px rgba(35, 73, 60, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.76);
+    }
+
+    .employee-role-tabs__label {
+      color: inherit;
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+
+    .employee-role-tabs__eyebrow {
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .employee-role-panels {
+      margin-top: 14px;
+    }
+
+    .employee-role-panel {
+      display: grid;
+      gap: 16px;
+      padding: 22px;
+      border: 1px solid rgba(91, 68, 52, 0.12);
+      border-radius: 30px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(247, 241, 233, 0.95)),
+        radial-gradient(circle at top right, rgba(35, 73, 60, 0.08), transparent 38%);
+      box-shadow:
+        0 12px 28px rgba(73, 52, 38, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.76);
+    }
+
+    .employee-role-panel[hidden] {
+      display: none !important;
+    }
+
+    .employee-role-panel__hero {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .employee-role-panel__copy {
+      display: grid;
+      gap: 8px;
+      max-width: 40rem;
+    }
+
+    .employee-role-panel__copy h3,
+    .employee-role-panel__copy p {
+      margin: 0;
+    }
+
+    .employee-role-panel__copy p {
+      color: var(--muted);
+      line-height: 1.68;
+    }
+
+    .employee-role-panel__signals {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      max-width: 22rem;
+    }
+
+    .employee-role-panel__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .employee-role-panel .panel-detail-card {
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 14px 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      background: rgba(255, 255, 255, 0.56);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .employee-role-panel .panel-detail-card strong {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      color: var(--accent-deep);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+    }
+
+    .employee-role-panel .panel-detail-card .bullet-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+    }
+
+    .employee-role-panel .panel-detail-card .bullet-list li {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      background: rgba(255, 253, 250, 0.88);
+      color: var(--text);
+      font-size: 0.82rem;
+      font-weight: 700;
+      line-height: 1.15;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .employee-role-panel__grid > :nth-child(3) .bullet-list li {
+      border-color: rgba(61, 99, 82, 0.14);
+      background: rgba(238, 246, 241, 0.82);
+      color: var(--support);
+    }
+
+    .employee-rollout {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .employee-rollout::before {
+      content: '';
+      position: absolute;
+      left: 3rem;
+      right: 3rem;
+      top: 1.45rem;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(186, 99, 54, 0.14), rgba(61, 99, 82, 0.16));
+      pointer-events: none;
+    }
+
+    .employee-rollout__step {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 24px;
+      border: 1px solid rgba(91, 68, 52, 0.12);
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(246, 240, 232, 0.95)),
+        radial-gradient(circle at top right, rgba(61, 99, 82, 0.08), transparent 40%);
+      box-shadow:
+        0 10px 24px rgba(73, 52, 38, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.76);
+    }
+
+    .employee-rollout__index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.7rem;
+      height: 2.7rem;
+      border-radius: 16px;
+      border: 1px solid rgba(186, 99, 54, 0.14);
+      background:
+        linear-gradient(180deg, rgba(255, 250, 245, 0.96), rgba(251, 241, 232, 0.9)),
+        radial-gradient(circle at top left, rgba(186, 99, 54, 0.12), transparent 48%);
+      color: var(--accent-deep);
+      font-size: 0.88rem;
+      font-weight: 900;
+      box-shadow:
+        0 10px 20px rgba(73, 52, 38, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.76);
+    }
+
+    .employee-rollout__body {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .employee-rollout__step strong {
+      color: var(--accent-deep);
+      font-size: 0.96rem;
+      font-weight: 800;
+    }
+
+    .employee-rollout__cta {
+      justify-self: start;
+      margin-top: 0.35rem;
+      min-height: 34px;
+      padding: 0.48rem 0.82rem;
+      border-radius: 999px;
+      border: 1px solid rgba(186, 99, 54, 0.16);
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--accent-deep);
+      font-size: 0.8rem;
+      font-weight: 700;
+      line-height: 1;
+      box-shadow:
+        0 6px 14px rgba(73, 52, 38, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .employee-rollout__cta:hover,
+    .employee-rollout__cta:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(186, 99, 54, 0.26);
+      box-shadow:
+        0 10px 20px rgba(73, 52, 38, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .employee-rollout__step p,
+    .employee-model-board__item p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.64;
+    }
+
+    .employee-deployment-grid,
+    .employee-cta-grid {
+      grid-template-columns: minmax(0, 1.12fr) minmax(290px, 0.88fr);
+      align-items: start;
+    }
+
+    .employee-deployment-card {
+      display: grid;
+      gap: 14px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(246, 239, 231, 0.95)),
+        radial-gradient(circle at top left, rgba(186, 99, 54, 0.1), transparent 38%);
+    }
+
+    .employee-deployment-mini-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .employee-deployment-mini-grid .mini-card {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      min-height: 100%;
+      padding: 14px 14px 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      background:
+        linear-gradient(180deg, rgba(255, 251, 246, 0.94), rgba(249, 243, 235, 0.88));
+      box-shadow:
+        0 10px 18px rgba(73, 52, 38, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .employee-deployment-mini-grid .mini-card strong {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2rem;
+      color: var(--accent-deep);
+      font-size: 0.88rem;
+    }
+
+    .employee-deployment-mini-grid .mini-card strong::before {
+      content: '';
+      width: 0.28rem;
+      height: 1.1rem;
+      margin-right: 0.55rem;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(186, 99, 54, 0.9), rgba(61, 99, 82, 0.78));
+    }
+
+    .employee-compact-list {
+      margin-top: 10px;
+    }
+
+    .employee-model-board {
+      gap: 14px;
+      background:
+        linear-gradient(180deg, rgba(248, 252, 249, 0.98), rgba(236, 245, 239, 0.94)),
+        radial-gradient(circle at top right, rgba(35, 73, 60, 0.14), transparent 34%);
+      border-color: rgba(61, 99, 82, 0.14);
+      box-shadow:
+        0 12px 28px rgba(40, 68, 57, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .employee-model-board__list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .employee-model-board__item {
+      display: grid;
+      gap: 6px;
+      padding: 12px 13px;
+      border-radius: 20px;
+      border: 1px solid rgba(186, 99, 54, 0.12);
+      background:
+        linear-gradient(180deg, rgba(255, 251, 246, 0.92), rgba(249, 243, 235, 0.86));
+      box-shadow:
+        0 8px 18px rgba(73, 52, 38, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .employee-model-board__item:nth-child(2) {
+      background:
+        linear-gradient(180deg, rgba(241, 248, 243, 0.94), rgba(232, 242, 236, 0.9));
+      border-color: rgba(61, 99, 82, 0.14);
+    }
+
+    .employee-model-board__item strong {
+      color: var(--accent-deep);
+      font-size: 0.9rem;
+    }
+
+    .employee-cta-card,
+    .employee-cta-note {
+      min-height: 100%;
+    }
+
+    .employee-cta-grid {
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .employee-cta-card {
+      display: grid;
+      gap: 14px;
+      padding: 24px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(246, 240, 232, 0.95)),
+        radial-gradient(circle at top left, rgba(186, 99, 54, 0.08), transparent 34%);
+      border-color: rgba(91, 68, 52, 0.12);
+      box-shadow:
+        0 14px 32px rgba(73, 52, 38, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .employee-cta-card h2,
+    .employee-cta-note .card-title {
+      margin: 0;
+    }
+
+    .employee-cta-card__lead {
+      margin: -0.2rem 0 0;
+      max-width: 34rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.64;
+    }
+
+    .employee-cta-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .employee-cta-list li {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(91, 68, 52, 0.1);
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--text);
+      font-size: 0.84rem;
+      font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .employee-cta-card .action-row {
+      margin-top: 0.2rem;
+    }
+
+    .employee-cta-card .action-row .button:first-child {
+      min-width: 168px;
+    }
+
+    .employee-cta-note {
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      padding: 24px;
+      background:
+        linear-gradient(180deg, rgba(251, 253, 251, 0.99), rgba(239, 246, 241, 0.95)),
+        radial-gradient(circle at top right, rgba(35, 73, 60, 0.12), transparent 34%);
+      border-color: rgba(61, 99, 82, 0.12);
+      box-shadow:
+        0 14px 32px rgba(40, 68, 57, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .employee-cta-note .card-meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    .employee-cta-note__list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .employee-cta-note__item {
+      display: grid;
+      gap: 4px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(61, 99, 82, 0.1);
+      background: rgba(255, 255, 255, 0.58);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.74);
+    }
+
+    .employee-cta-note__item strong,
+    .employee-cta-note__item p {
+      margin: 0;
+    }
+
+    .employee-cta-note__item strong {
+      color: var(--support);
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .employee-cta-note__item p {
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.56;
+    }
+
+    .employee-contact-dialog {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .employee-contact-dialog[hidden] {
+      display: none !important;
+    }
+
+    .employee-contact-dialog__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(34, 25, 19, 0.34);
+      backdrop-filter: blur(10px);
+    }
+
+    .employee-contact-dialog__panel {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 460px);
+      display: grid;
+      gap: 18px;
+      padding: 28px;
+      border-radius: 32px;
+      border: 1px solid rgba(91, 68, 52, 0.12);
+      background:
+        linear-gradient(180deg, rgba(255, 254, 251, 0.98), rgba(246, 239, 231, 0.96)),
+        radial-gradient(circle at top right, rgba(35, 73, 60, 0.12), transparent 34%);
+      box-shadow:
+        0 28px 80px rgba(43, 30, 22, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .employee-contact-dialog__close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(91, 68, 52, 0.12);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--accent-deep);
+      font-size: 1.5rem;
+      line-height: 1;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76);
+    }
+
+    .employee-contact-dialog__copy {
+      display: grid;
+      gap: 10px;
+      max-width: 24rem;
+    }
+
+    .employee-contact-dialog__copy h2,
+    .employee-contact-dialog__copy p {
+      margin: 0;
+    }
+
+    .employee-contact-dialog__copy p {
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.66;
+    }
+
+    .employee-contact-dialog__qr {
+      width: min(100%, 240px);
+      height: auto;
+      aspect-ratio: 549 / 542;
+      justify-self: center;
+      border-radius: 28px;
+      border: 1px solid rgba(193, 94, 42, 0.12);
+      background: rgba(255, 251, 244, 0.92);
+      padding: 12px;
+      box-shadow: 0 18px 36px rgba(83, 58, 42, 0.1);
+    }
+
+    @media (max-width: 1180px) {
+      .employee-capability-grid,
+      .employee-governance-grid,
+      .employee-start-grid,
+      .employee-role-panel__grid,
+      .employee-rollout,
+      .employee-deployment-mini-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .employee-rollout::before {
+        display: none;
+      }
+
+      .employee-integration-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .employee-integration-strip::before {
+        display: none;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .employee-hero__grid,
+      .employee-role-panel__hero,
+      .employee-capability-grid,
+      .employee-governance-grid,
+      .employee-start-grid,
+      .employee-role-panel__grid,
+      .employee-rollout,
+      .employee-deployment-grid,
+      .employee-deployment-mini-grid,
+      .employee-cta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .employee-role-panel__hero {
+        flex-direction: column;
+      }
+
+      .employee-role-panel__signals {
+        justify-content: flex-start;
+        max-width: none;
+      }
+
+      .employee-role-panel .panel-detail-card {
+        grid-template-columns: 1fr;
+      }
+
+      .employee-rollout__step {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .employee-role-tabs,
+      .employee-role-panel,
+      .employee-contact-dialog__panel {
+        padding: 14px;
+        border-radius: 22px;
+      }
+
+      .employee-hero .intro-fact {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .employee-role-tabs__button {
+        width: 100%;
+      }
+
+      .employee-contact-dialog {
+        padding: 16px;
+      }
+
+      .employee-contact-dialog__close {
+        top: 10px;
+        right: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .employee-role-tabs__button,
+      .employee-rollout__cta {
+        transition: none;
+      }
+    }
+  </style>
+</MarketingLayout>
