@@ -5,3 +5,9 @@ dist/
 coverage/
 .qoder/
 temp-starlight/
+test-results/
+temp-goclaw-analysis/
+temp-local-analysis/
+cookies.json
+.dev-server*.log
+astro-dev*.log
