@@ -24,6 +24,7 @@ export const DOCS_SIDEBAR = [
       { id: 'reference/openclaw-install-detailed', label: 'OpenClaw 安装详细教程' },
       { id: 'reference/soul-user-agents-workshop', label: 'SOUL USER AGENTS 三件套实战教程' },
       { id: 'reference/feishu-multi-bot-virtual-team', label: '飞书多机器人虚拟团队教程' },
+      { id: 'reference/personal-wechat-openclaw-setup', label: '个人微信官方接入小龙虾教程' },
       { id: 'reference/homebrew-manual-install-macos-cn', label: 'macOS 国内手动安装 Homebrew' },
       { id: 'reference/bailian-model-config-example', label: '百炼平台模型配置示例' },
       { id: 'reference/wecom-support-setup', label: '企业微信支持配置' },
