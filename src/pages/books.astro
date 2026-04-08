@@ -1,38 +1,13 @@
 ---
-import { statSync } from 'node:fs';
-import { basename, extname, resolve } from 'node:path';
+import { basename, extname } from 'node:path';
 import MarketingLayout from '../layouts/MarketingLayout.astro';
 import { breadcrumbSchema, collectionPageSchema, itemListSchema } from '../data/seo.mjs';
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const withBase = (path: string) => `${base}${path}`;
-
-type BookRecord = {
+type BookItem = {
   title: string;
   filename: string;
-  format: string;
-  sizeLabel: string;
   href: string;
-};
-
-type BookItem = BookRecord & {
   id: string;
-};
-
-const formatBytes = (bytes: number) => {
-  if (bytes < 1024) return `${bytes} B`;
-
-  const units = ['KB', 'MB', 'GB'];
-  let size = bytes / 1024;
-  let unitIndex = 0;
-
-  while (size >= 1024 && unitIndex < units.length - 1) {
-    size /= 1024;
-    unitIndex += 1;
-  }
-
-  const fractionDigits = size >= 100 ? 0 : size >= 10 ? 1 : 2;
-  return `${size.toFixed(fractionDigits)} ${units[unitIndex]}`;
 };
 
 const slugify = (value: string) =>
@@ -45,59 +20,23 @@ const slugify = (value: string) =>
 
 const bookModules = import.meta.glob('../book/*', { eager: true, import: 'default' });
 
-const bookRecords = Object.entries(bookModules)
-  .map(([modulePath, assetUrl]) => {
+const books = Object.entries(bookModules)
+  .map(([modulePath, assetUrl], index) => {
     if (typeof assetUrl !== 'string') return null;
 
     const filename = modulePath.split('/').pop() ?? modulePath;
     const extension = extname(filename);
     const title = basename(filename, extension).replace(/_/g, ' ').trim() || filename;
-    const filePath = resolve(process.cwd(), 'src', 'book', filename);
-    const sizeLabel = formatBytes(statSync(filePath).size);
 
     return {
       title,
       filename,
-      format: extension ? extension.slice(1).toUpperCase() : 'FILE',
-      sizeLabel,
-      href: assetUrl
-    } satisfies BookRecord;
+      href: assetUrl,
+      id: `${slugify(title)}-${index + 1}`
+    } satisfies BookItem;
   })
-  .filter((book): book is BookRecord => Boolean(book))
+  .filter((book): book is BookItem => Boolean(book))
   .sort((left, right) => left.title.localeCompare(right.title, 'zh-CN'));
-
-const books = bookRecords.map((book, index) => ({
-  ...book,
-  id: `${slugify(book.title)}-${index + 1}`
-})) satisfies BookItem[];
-
-const bookFormats = [...new Set(books.map((book) => book.format))];
-const heroFacts = [
-  ['自动整理', '把电子书放进 src/book，构建后书单会自动更新'],
-  ['当前书目', `${books.length} 本可下载电子书`],
-  ['文件格式', bookFormats.length ? bookFormats.join(' / ') : '等待上传']
-];
-
-const shelfNotes = [
-  '文件来源直接指向 src/book 下的原始电子书。',
-  '文件名会自动成为书名，适合按“书名.pdf”方式管理。',
-  '同一个页面可以持续扩充，不需要每次手动改书单。'
-];
-
-const processSteps = [
-  {
-    title: '把书放进去',
-    text: '把 PDF、EPUB 或其他电子书文件直接放进 src/book。'
-  },
-  {
-    title: '页面自动收录',
-    text: '构建时会扫描目录并生成下载卡片，不需要手写链接。'
-  },
-  {
-    title: '用户直接下载',
-    text: '每本书都有独立下载按钮，站内访问就能直接拿到文件。'
-  }
-];
 
 const bookKeywords = [
   'OpenClaw 电子书下载',
@@ -133,124 +72,31 @@ const bookStructuredData = [
 ---
 
 <MarketingLayout
-  title="电子书下载 | 站内资料与手册集中领取 | 虾客AI"
+  title="电子书下载 | 虾客AI"
   description="集中整理放在 src/book 目录下的电子书与资料，进入页面即可直接下载。"
   keywords={bookKeywords}
   structuredData={bookStructuredData}
 >
   <main class="page" id="main-content">
     <div class="container books-page">
-      <section class="page-intro books-hero">
-        <div class="page-intro__grid books-hero__grid">
-          <article class="page-intro__content books-hero__content">
-            <span class="eyebrow">电子书下载</span>
-            <h1>把手册和资料放在一个页面里，用户进来就能直接下载。</h1>
-            <p class="lead">
-              这个页面会读取 <strong>src/book</strong> 目录里的电子书文件，统一生成下载入口。后面继续往目录里加书，书单会跟着更新。
-            </p>
-            <div class="action-row">
-              <a class="button button-primary" href="#book-list">查看书单</a>
-              <a class="button button-secondary" href={withBase('/docs/')}>继续看文档</a>
-              <a class="button button-secondary" href={withBase('/service/')}>咨询定制交付</a>
-            </div>
-            <div class="intro-facts">
-              {heroFacts.map(([title, text]) => (
-                <article class="intro-fact">
-                  <strong>{title}</strong>
-                  <span>{text}</span>
-                </article>
-              ))}
-            </div>
+      <h1 class="books-title">电子书下载</h1>
+
+      {
+        books.length > 0 ? (
+          <section class="books-list" aria-label="电子书列表">
+            {books.map((book) => (
+              <article class="book-item" id={book.id}>
+                <h2 class="book-item__title">{book.title}</h2>
+                <a class="button button-primary" href={book.href} download={book.filename}>下载</a>
+              </article>
+            ))}
+          </section>
+        ) : (
+          <article class="summary-card books-empty">
+            <p>暂无可下载电子书。</p>
           </article>
-
-          <aside class="page-intro__aside books-hero__aside">
-            <span class="section-kicker">上架方式</span>
-            <div class="books-note-list">
-              {shelfNotes.map((item) => (
-                <article class="books-note-card">
-                  <p>{item}</p>
-                </article>
-              ))}
-            </div>
-          </aside>
-        </div>
-      </section>
-
-      <section class="section" id="book-list">
-        <div class="section-header">
-          <div>
-            <span class="section-kicker">下载目录</span>
-            <h2>当前可下载的电子书</h2>
-          </div>
-          <p class="section-copy">每条记录都直接对应 src/book 里的原始文件，点击按钮即可下载。</p>
-        </div>
-
-        {
-          books.length > 0 ? (
-            <div class="directory-list books-directory">
-              {books.map((book) => (
-                <article class="directory-row book-row" id={book.id}>
-                  <div class="directory-row__main">
-                    <span class="card-tag">{book.format}</span>
-                    <h3 class="directory-row__title">{book.title}</h3>
-                    <p class="directory-row__summary">原始文件名：{book.filename}</p>
-                  </div>
-
-                  <div class="directory-row__meta">
-                    <p class="directory-row__meta-copy">文件大小：{book.sizeLabel}</p>
-                    <ul class="directory-inline-list">
-                      <li>来源目录：src/book</li>
-                      <li>直链下载</li>
-                    </ul>
-                  </div>
-
-                  <div class="directory-row__action">
-                    <a class="button button-primary" href={book.href} download={book.filename}>下载电子书</a>
-                  </div>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <article class="summary-card books-empty">
-              <span class="section-kicker">还没有文件</span>
-              <h2>目前还没有可下载的电子书。</h2>
-              <p>
-                直接把电子书文件放到 <strong>src/book</strong> 目录里，重新构建站点后，这里就会自动出现下载入口。
-              </p>
-            </article>
-          )
-        }
-      </section>
-
-      <section class="section">
-        <div class="split-grid books-bottom-grid">
-          <article class="summary-card books-process-card">
-            <span class="section-kicker">维护方式</span>
-            <h2>不用反复手写链接，目录本身就是书单。</h2>
-            <div class="books-process-list">
-              {processSteps.map((item, index) => (
-                <article class="books-process-step">
-                  <span class="books-process-step__index">{String(index + 1).padStart(2, '0')}</span>
-                  <strong>{item.title}</strong>
-                  <p>{item.text}</p>
-                </article>
-              ))}
-            </div>
-          </article>
-
-          <article class="note-card books-help-card">
-            <span class="section-kicker">适合放什么</span>
-            <h3 class="card-title">手册、内部资料、案例包都可以放进来。</h3>
-            <p class="card-meta">
-              如果你准备把教程 PDF、行业资料、操作手册做成统一下载页，这个入口已经可以直接用。后续只需要继续维护目录里的文件即可。
-            </p>
-            <div class="action-row books-help-card__actions">
-              <a class="button button-secondary" href={withBase('/')}>返回首页</a>
-              <a class="button button-secondary" href={withBase('/links/')}>查看资源导航</a>
-            </div>
-          </article>
-        </div>
-      </section>
+        )
+      }
     </div>
   </main>
 
@@ -260,143 +106,73 @@ const bookStructuredData = [
       gap: 1rem;
     }
 
-    .books-hero {
-      overflow: hidden;
-      background:
-        linear-gradient(155deg, rgba(255, 254, 251, 0.99), rgba(245, 239, 231, 0.96)),
-        radial-gradient(circle at top right, rgba(186, 99, 54, 0.12), transparent 32%),
-        radial-gradient(circle at bottom left, rgba(61, 99, 82, 0.1), transparent 26%);
-    }
-
-    .books-hero__grid {
-      grid-template-columns: minmax(0, 1.14fr) minmax(300px, 0.86fr);
-    }
-
-    .books-hero__content strong {
-      color: var(--accent-deep);
-      font-weight: 800;
-    }
-
-    .books-hero__aside {
-      gap: 12px;
-      background:
-        linear-gradient(180deg, rgba(250, 252, 249, 0.98), rgba(236, 246, 241, 0.94)),
-        radial-gradient(circle at top right, rgba(61, 99, 82, 0.14), transparent 34%);
-      border-color: rgba(61, 99, 82, 0.14);
-    }
-
-    .books-note-list,
-    .books-process-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .books-note-card,
-    .books-process-step {
-      display: grid;
-      gap: 6px;
-      padding: 14px;
-      border-radius: 20px;
-      border: 1px solid rgba(61, 99, 82, 0.1);
-      background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(245, 250, 247, 0.8));
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
-    }
-
-    .books-note-card p,
-    .books-process-step p {
+    .books-title {
       margin: 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.64;
+      padding: 0 2px;
+      font-size: clamp(1.8rem, 3.4vw, 2.6rem);
     }
 
-    .books-directory {
-      gap: 14px;
+    .books-list {
+      display: grid;
+      gap: 12px;
     }
 
-    .book-row {
-      grid-template-columns: minmax(0, 1.25fr) minmax(220px, 0.86fr) auto;
-      gap: 14px;
-      scroll-margin-top: 7.5rem;
+    .book-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(250, 245, 239, 0.94));
+      box-shadow: 0 10px 24px rgba(73, 52, 38, 0.05);
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease;
     }
 
-    .book-row .button {
-      min-width: 9rem;
+    .book-item:hover,
+    .book-item:focus-within {
+      transform: translateY(-1px);
+      border-color: rgba(186, 99, 54, 0.18);
+      box-shadow: 0 12px 26px rgba(73, 52, 38, 0.08);
+    }
+
+    .book-item__title {
+      margin: 0;
+      font-size: clamp(1.05rem, 2vw, 1.28rem);
+      line-height: 1.24;
     }
 
     .books-empty {
-      display: grid;
-      gap: 10px;
-      padding: 22px;
+      padding: 20px;
     }
 
     .books-empty p {
       margin: 0;
     }
 
-    .books-bottom-grid {
-      align-items: start;
-    }
-
-    .books-process-card,
-    .books-help-card {
-      min-height: 100%;
-    }
-
-    .books-process-step {
-      border-color: rgba(186, 99, 54, 0.1);
-      background:
-        linear-gradient(180deg, rgba(255, 253, 249, 0.96), rgba(249, 243, 235, 0.9));
-    }
-
-    .books-process-step__index {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 2.5rem;
-      height: 2.5rem;
-      border-radius: 15px;
-      border: 1px solid rgba(186, 99, 54, 0.14);
-      background: rgba(255, 249, 242, 0.96);
-      color: var(--accent-deep);
-      font-size: 0.84rem;
-      font-weight: 900;
-    }
-
-    .books-process-step strong {
-      color: var(--accent-deep);
-      font-size: 0.96rem;
-    }
-
-    .books-help-card {
-      background:
-        linear-gradient(180deg, rgba(248, 252, 249, 0.98), rgba(236, 245, 239, 0.94)),
-        radial-gradient(circle at top right, rgba(61, 99, 82, 0.14), transparent 34%);
-      border-color: rgba(61, 99, 82, 0.14);
-      box-shadow:
-        0 12px 28px rgba(40, 68, 57, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.82);
-    }
-
-    .books-help-card__actions {
-      margin-top: 0.4rem;
-    }
-
-    @media (max-width: 960px) {
-      .books-hero__grid,
-      .books-bottom-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
     @media (max-width: 640px) {
-      .book-row {
+      .book-item,
+      .books-empty {
+        padding: 16px;
+      }
+
+      .book-item {
         grid-template-columns: 1fr;
       }
 
-      .book-row .button {
+      .book-item .button {
         width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .book-item {
+        transition: none;
       }
     }
   </style>
