@@ -8,6 +8,11 @@ type BookItem = {
   filename: string;
   href: string;
   id: string;
+  format: string;
+  kicker: string;
+  teaser: string;
+  tags: string[];
+  theme: string;
 };
 
 const slugify = (value: string) =>
@@ -20,6 +25,54 @@ const slugify = (value: string) =>
 
 const bookModules = import.meta.glob('../book/*', { eager: true, import: 'default' });
 
+const pickBookMeta = (title: string, format: string) => {
+  const tags = new Set<string>([format, '即点即下']);
+  let kicker = '精选资料';
+  let teaser = '适合下载留存，随时打开翻阅。';
+
+  if (/openclaw/i.test(title)) {
+    kicker = 'OpenClaw 专题';
+    teaser = '围绕 OpenClaw 使用与提效整理的手册资料。';
+    tags.add('OpenClaw');
+  }
+
+  if (/ai/i.test(title)) {
+    if (kicker === '精选资料') kicker = 'AI 提效';
+    teaser = teaser === '适合下载留存，随时打开翻阅。' ? '围绕 AI 工作流与效率提升整理的阅读资料。' : teaser;
+    tags.add('AI 提效');
+  }
+
+  if (/财务/.test(title)) {
+    kicker = '财务场景';
+    teaser = '更贴近财务工作节奏的效率提升与实操阅读资料。';
+    tags.add('财务专题');
+  }
+
+  if (/手册/.test(title)) {
+    tags.add('实用手册');
+  }
+
+  if (/秘籍/.test(title)) {
+    tags.add('技巧整理');
+  }
+
+  if (tags.size < 3) {
+    tags.add('推荐阅读');
+  }
+
+  return {
+    kicker,
+    teaser,
+    tags: [...tags].slice(0, 4)
+  };
+};
+
+const bookThemes = [
+  'linear-gradient(160deg, rgba(123, 67, 37, 0.96), rgba(186, 99, 54, 0.92), rgba(229, 157, 77, 0.8))',
+  'linear-gradient(160deg, rgba(48, 80, 67, 0.96), rgba(61, 99, 82, 0.92), rgba(116, 154, 132, 0.78))',
+  'linear-gradient(160deg, rgba(109, 76, 49, 0.96), rgba(156, 104, 61, 0.92), rgba(216, 166, 102, 0.78))'
+];
+
 const books = Object.entries(bookModules)
   .map(([modulePath, assetUrl], index) => {
     if (typeof assetUrl !== 'string') return null;
@@ -27,12 +80,19 @@ const books = Object.entries(bookModules)
     const filename = modulePath.split('/').pop() ?? modulePath;
     const extension = extname(filename);
     const title = basename(filename, extension).replace(/_/g, ' ').trim() || filename;
+    const format = extension ? extension.slice(1).toUpperCase() : 'FILE';
+    const meta = pickBookMeta(title, format);
 
     return {
       title,
       filename,
       href: assetUrl,
-      id: `${slugify(title)}-${index + 1}`
+      id: `${slugify(title)}-${index + 1}`,
+      format,
+      kicker: meta.kicker,
+      teaser: meta.teaser,
+      tags: meta.tags,
+      theme: bookThemes[index % bookThemes.length]
     } satisfies BookItem;
   })
   .filter((book): book is BookItem => Boolean(book))
@@ -84,10 +144,34 @@ const bookStructuredData = [
       {
         books.length > 0 ? (
           <section class="books-list" aria-label="电子书列表">
-            {books.map((book) => (
-              <article class="book-item" id={book.id}>
-                <h2 class="book-item__title">{book.title}</h2>
-                <a class="button button-primary" href={book.href} download={book.filename}>下载</a>
+            {books.map((book, index) => (
+              <article class="book-item" id={book.id} style={`--book-theme:${book.theme};`}>
+                <div class="book-item__cover">
+                  <span class="book-item__kicker">{book.kicker}</span>
+                  <span class="book-item__index">{String(index + 1).padStart(2, '0')}</span>
+                  <div class="book-item__cover-meta">
+                    <span>{book.format}</span>
+                    <span>可下载</span>
+                  </div>
+                </div>
+
+                <div class="book-item__body">
+                  <div class="book-item__copy">
+                    <h2 class="book-item__title">{book.title}</h2>
+                    <p class="book-item__teaser">{book.teaser}</p>
+                  </div>
+
+                  <ul class="book-item__tags" aria-label="电子书标签">
+                    {book.tags.map((tag) => (
+                      <li>{tag}</li>
+                    ))}
+                  </ul>
+
+                  <div class="book-item__footer">
+                    <span class="book-item__filename">{book.filename}</span>
+                    <a class="button button-primary" href={book.href} download={book.filename}>立即下载</a>
+                  </div>
+                </div>
               </article>
             ))}
           </section>
@@ -114,20 +198,22 @@ const bookStructuredData = [
 
     .books-list {
       display: grid;
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
     }
 
     .book-item {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 12px;
-      align-items: center;
-      padding: 16px 18px;
+      min-height: 100%;
       border: 1px solid var(--line);
-      border-radius: 22px;
+      border-radius: 26px;
       background:
-        linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(250, 245, 239, 0.94));
-      box-shadow: 0 10px 24px rgba(73, 52, 38, 0.05);
+        linear-gradient(180deg, rgba(255, 253, 249, 0.99), rgba(249, 243, 236, 0.95)),
+        radial-gradient(circle at top right, rgba(186, 99, 54, 0.08), transparent 34%);
+      box-shadow:
+        0 12px 28px rgba(73, 52, 38, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.74);
+      overflow: hidden;
       transition:
         transform 180ms ease,
         border-color 180ms ease,
@@ -136,15 +222,144 @@ const bookStructuredData = [
 
     .book-item:hover,
     .book-item:focus-within {
-      transform: translateY(-1px);
-      border-color: rgba(186, 99, 54, 0.18);
-      box-shadow: 0 12px 26px rgba(73, 52, 38, 0.08);
+      transform: translateY(-2px);
+      border-color: rgba(186, 99, 54, 0.2);
+      box-shadow:
+        0 16px 34px rgba(73, 52, 38, 0.09),
+        inset 0 1px 0 rgba(255, 255, 255, 0.78);
+    }
+
+    .book-item__cover {
+      position: relative;
+      display: grid;
+      gap: 18px;
+      min-height: 168px;
+      padding: 18px;
+      color: #fff8f0;
+      background: var(--book-theme);
+      overflow: hidden;
+    }
+
+    .book-item__cover::before {
+      content: '';
+      position: absolute;
+      inset: 10px 12px auto auto;
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+      pointer-events: none;
+    }
+
+    .book-item__cover::after {
+      content: '';
+      position: absolute;
+      inset: auto 0 0;
+      height: 64px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(23, 18, 14, 0.12));
+      pointer-events: none;
+    }
+
+    .book-item__kicker,
+    .book-item__cover-meta span {
+      position: relative;
+      z-index: 1;
+      width: fit-content;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(8px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .book-item__kicker {
+      padding: 7px 11px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .book-item__index {
+      position: relative;
+      z-index: 1;
+      display: block;
+      font-family: 'Fraunces', 'Noto Serif SC', serif;
+      font-size: clamp(2.8rem, 7vw, 4rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      text-shadow: 0 6px 20px rgba(28, 20, 13, 0.28);
+    }
+
+    .book-item__cover-meta {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .book-item__cover-meta span {
+      padding: 6px 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .book-item__body {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+    }
+
+    .book-item__copy {
+      display: grid;
+      gap: 10px;
     }
 
     .book-item__title {
       margin: 0;
-      font-size: clamp(1.05rem, 2vw, 1.28rem);
-      line-height: 1.24;
+      font-size: clamp(1.08rem, 2.2vw, 1.34rem);
+      line-height: 1.2;
+    }
+
+    .book-item__teaser {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.68;
+    }
+
+    .book-item__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .book-item__tags li {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(186, 99, 54, 0.12);
+      background: rgba(255, 251, 246, 0.94);
+      color: var(--accent-deep);
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .book-item__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 2px;
+    }
+
+    .book-item__filename {
+      color: var(--muted);
+      font-size: 0.8rem;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
     }
 
     .books-empty {
@@ -161,8 +376,14 @@ const bookStructuredData = [
         padding: 16px;
       }
 
-      .book-item {
-        grid-template-columns: 1fr;
+      .book-item__cover,
+      .book-item__body {
+        padding: 16px;
+      }
+
+      .book-item__footer {
+        flex-direction: column;
+        align-items: stretch;
       }
 
       .book-item .button {
